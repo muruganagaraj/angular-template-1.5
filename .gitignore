@@ -9,3 +9,4 @@ typings
 
 .idea
 *.iml
+assets/vendor/
