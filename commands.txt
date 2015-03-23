@@ -1,0 +1,9 @@
+List all NPM modules:
+npm -g ls --depth=0
+npm ls --depth=0
+
+Add new TypeScript definition file
+tsd query <library name> --resolve --overwrite --save --action install
+
+Bower GIT access blocked by firewall
+git config --global url."https://".insteadOf git://

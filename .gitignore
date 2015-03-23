@@ -1,0 +1,11 @@
+.dev
+.dist
+node_modules
+bower_components
+app/vendor
+build
+public
+typings
+
+.idea
+*.iml
