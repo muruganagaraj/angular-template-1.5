@@ -5,27 +5,19 @@ var browserSync = require('browser-sync');
 
 var $ = require('gulp-load-plugins')({lazy: true});
 
-gulp.task('ts:lint', function() {
-    log('Analyzing Typescript sources with TSLint');
-
-    return gulp
-        .src(config.files.appts)
-        .pipe($.tslint())
-        .pipe($.tslint.report('prose'));
+gulp.task('build-dev', [], function() {
+    //
 });
 
 gulp.task('ts:gen-defs', function() {
-    log(config.appTsDefinition);
-    log(config.files.appts);
-
-    var target = gulp.src(config.appTsDefinition);
-    var sources = gulp.src([config.files.appts], {read: false});
-    return target
-        .pipe($.inject(sources, {
+    var tsFiles = gulp.src([config.files.appts], {read: false});
+    return gulp
+        .src(config.appTsDefinition)
+        .pipe($.inject(tsFiles, {
             starttag: '//{',
             endtag: '//}',
             transform: function(filePath) {
-                return '/// <reference path="../..' + filePath + '" />';
+                return '/// <reference path="../' + filePath + '" />';
             }
         }))
         .pipe(gulp.dest(config.folders.typings));
@@ -45,11 +37,6 @@ gulp.task('styles', ['clean-styles'], function() {
 gulp.task('clean-styles', function(done) {
     var files = config.folders.devBuild + '**/*.css';
     clean(files, done);
-});
-
-gulp.task('watcher', function() {
-    log('Watching for changes in LESS files');
-    gulp.watch([config.files.allless], ['styles']);
 });
 
 gulp.task('wiredep', function() {
@@ -85,7 +72,7 @@ function startBrowserSync() {
         return;
     }
 
-    log('Starting browser-sync');
+    log('Starting browser-sync session');
 
     var options = {
         proxy: 'ng.training:' + 80,
@@ -95,10 +82,10 @@ function startBrowserSync() {
             config.folders.assets + '**/*.*'
         ],
         ghostMode: {
-            clicks: true,
+            clicks: false,
             location: false,
-            forms: true,
-            scroll: true
+            forms: false,
+            scroll: false
         },
         injectChanges: true,
         logFileChanges: true,
