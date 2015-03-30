@@ -22,11 +22,15 @@ module.exports = function () {
             allless: bowerFolder + '**/*.less',
             less: bowerFolder + 'bootstrap/less/bootstrap.less',
             appjs: [
-                appFolder + 'App.js',
-                appFolder + '**/*.js'
+                devBuildFolder + 'js/App.js',
+                devBuildFolder + 'js/**/*.js'
             ],
             appcss: devBuildFolder + '**/*.css',
-            appts: appFolder + '**/*.ts'
+            appts: [
+                typingsFolder + 'tsd.d.ts',
+                typingsFolder + 'app.d.ts',
+                appFolder + '**/*.ts'
+            ]
         },
 
         appTsDefinition: typingsFolder + 'app.d.ts',

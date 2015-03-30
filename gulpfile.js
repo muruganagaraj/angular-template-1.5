@@ -5,10 +5,6 @@ var browserSync = require('browser-sync');
 
 var $ = require('gulp-load-plugins')({lazy: true});
 
-gulp.task('build-dev', [], function() {
-    //
-});
-
 gulp.task('ts:gen-defs', function() {
     var tsFiles = gulp.src([config.files.appts], {read: false});
     return gulp
@@ -39,6 +35,32 @@ gulp.task('clean-styles', function(done) {
     clean(files, done);
 });
 
+gulp.task('scripts', ['clean-scripts'], function() {
+    log('Transpiling Typescript code to Javascript');
+
+    var tsResult = gulp
+        .src(config.files.appts)
+        .pipe($.sourcemaps.init())
+        .pipe($.typescript({
+            target: 'ES6',
+            declarationFiles: false,
+            noExternalResolve: false
+        }));
+
+    var merge = require('merge2');
+    return merge([
+        tsResult.dts.pipe(gulp.dest(config.folders.devBuild + 'js')),
+        tsResult.js
+            .pipe($.sourcemaps.write('.'))
+            .pipe(gulp.dest(config.folders.devBuild + 'js'))
+    ]);
+});
+
+gulp.task('clean-scripts', function(done) {
+    var files = config.folders.devBuild + '**/*.js';
+    clean(files, done);
+});
+
 gulp.task('wiredep', function() {
     log('Injecting script and CSS references');
 
@@ -47,20 +69,28 @@ gulp.task('wiredep', function() {
     return gulp
         .src(config.index)
         .pipe(wiredep(config.wiredepOptions))
-        .pipe($.inject(gulp.src(config.files.appjs)))
         .pipe(gulp.dest(config.folders.app))
 });
 
-gulp.task('inject', ['wiredep', 'styles'], function() {
+gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
     log('Injecting script and CSS references');
 
     return gulp
         .src(config.index)
         .pipe($.inject(gulp.src(config.files.appcss)))
+        .pipe($.inject(gulp.src(config.files.appjs)))
         .pipe(gulp.dest(config.folders.app))
 });
 
-gulp.task('serve-dev', ['inject'], function(done) {
+gulp.task('clean-dev', function(done) {
+    clean(config.folders.devBuild, done);
+});
+
+gulp.task('build-dev', ['clean-dev', 'inject'], function(done) {
+    done();
+});
+
+gulp.task('serve-dev', ['build-dev'], function(done) {
     startBrowserSync();
     done();
 });

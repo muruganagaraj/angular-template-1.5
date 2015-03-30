@@ -8,7 +8,7 @@ module main {
     export class MainController {
         static $inject = ['$scope'];
 
-        constructor(private $scope:: MainScope) {
+        constructor(private $scope: MainScope) {
             $scope.items = [];
             $scope.add = (item: string): void => {
                 $scope.items.push(new main.Item(item));
