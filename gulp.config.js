@@ -53,7 +53,11 @@ module.exports = function () {
                 standAlone: false,
                 root: 'app/'
             }
-        }
+        },
+
+        nodeServer: './server/server.js',
+        server: './server/',
+        port: 7709
     };
 
     return config;

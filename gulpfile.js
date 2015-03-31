@@ -1,15 +1,43 @@
 var gulp = require('gulp');
 var config = require('./gulp.config')();
 var del = require('del');
+var args = require('yargs').argv;
 var browserSync = require('browser-sync');
 
 var $ = require('gulp-load-plugins')({lazy: true});
 
+var port = process.env.PORT || config.port;
+
 ////////// Dev Tasks //////////
 
-gulp.task('serve-dev', ['build-dev'], function(done) {
-    startBrowserSync();
-    done();
+gulp.task('serve-dev', ['build-dev'], function() {
+    var nodeOptions = {
+        script: config.nodeServer,
+        delayTime: 1,
+        env: {
+            'PORT': port,
+            'NODE_ENV': 'dev'
+        },
+        watch: [config.server]
+    };
+    return $.nodemon(nodeOptions)
+        .on('restart', function(ev) {
+            console.log('Restarted ' + ev);
+            setTimeout(function() {
+                browserSync.notify('Reloading now...');
+                browserSync.reload({stream: false});
+            }, 1000);
+        })
+        .on('start', function() {
+            console.log('Started');
+            startBrowserSync();
+        })
+        .on('crash', function() {
+            console.log('Crashed')
+        })
+        .on('exit', function() {
+            console.log('Exited cleanly')
+        });
 });
 
 gulp.task('build-dev', ['clean-dev', 'inject'], function(done) {
@@ -117,14 +145,14 @@ gulp.task('ts-gen-defs', function() {
 ////////////////
 
 function startBrowserSync() {
-    if (browserSync.active){
+    if (args.nosync || browserSync.active){
         return;
     }
 
     log('Starting browser-sync session');
 
     var options = {
-        proxy: 'ng.training:' + 80,
+        proxy: 'localhost:' + port,
         port: 3000,
         files: [
             config.folders.app + '**/*.*',

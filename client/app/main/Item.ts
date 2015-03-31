@@ -2,12 +2,11 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 module main {
-  export class Item {
+    export class Item {
+        constructor(public content: string) {
+            this.createdAt = new Date();
+        }
 
-    constructor(public content:string) {
-      this.createdAt = new Date();
+        createdAt: Date;
     }
-
-    createdAt:Date;
-  }
 }
