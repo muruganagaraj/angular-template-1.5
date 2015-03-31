@@ -7,7 +7,7 @@ angular.module('app', [
 ]);
 
 angular.module('app')
-    .config(['$routeProvider', '$locationProvider', ($routeProvider:ng.route.IRouteProvider, $locationProvider:ng.ILocationProvider) => {
+    .config(['$routeProvider', '$locationProvider', ($routeProvider: ng.route.IRouteProvider, $locationProvider: ng.ILocationProvider) => {
         $routeProvider
             .when('/', {
                 templateUrl: '/client/app/main/main.html'
@@ -20,4 +20,4 @@ angular.module('app')
             });
         $locationProvider.html5Mode(true);
     }
-]);
+    ]);
