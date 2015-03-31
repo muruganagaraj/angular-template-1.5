@@ -27,7 +27,7 @@ gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
         .src(config.index)
         .pipe($.inject(gulp.src(config.files.appcss)))
         .pipe($.inject(gulp.src(config.files.appjs)))
-        .pipe(gulp.dest(config.folders.app))
+        .pipe(gulp.dest(config.folders.client));
 });
 
 gulp.task('wiredep', function() {
@@ -38,7 +38,7 @@ gulp.task('wiredep', function() {
     return gulp
         .src(config.index)
         .pipe(wiredep(config.wiredepOptions))
-        .pipe(gulp.dest(config.folders.app))
+        .pipe(gulp.dest(config.folders.client))
 });
 
 gulp.task('scripts', ['clean-scripts'], function() {

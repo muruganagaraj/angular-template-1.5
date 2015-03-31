@@ -1,21 +1,28 @@
 module.exports = function () {
-    var assetsFolder = './assets/';
-    var bowerFolder = assetsFolder + 'vendor/';
-    var appFolder = './app/';
+    var clientFolder = './client/';
+    var appFolder = clientFolder + 'app/';
+    var assetsFolder = clientFolder + 'assets/';
+    var bowerFolder = './bower_components/';
+
     var typingsFolder = './typings/';
 
-    var devBuildFolder = './.dev/';
+    var devBuildFolder = clientFolder + '.dev/';
+    var distBuildFolder = './.dist/';
 
     var config = {
         folders: {
+            client: clientFolder,
             app: appFolder,
             assets: assetsFolder,
             bower: bowerFolder,
             devBuild: devBuildFolder,
+            distBuild: distBuildFolder,
             typings: typingsFolder
         },
 
-        index: appFolder + 'index.html',
+        index: clientFolder + 'index.html',
+        appTsDefinition: appFolder + 'app.d.ts',
+        tsdTsDefinition: typingsFolder + 'tsd.d.ts',
 
         files: {
             alljs: appFolder + '**/*.js',
@@ -34,12 +41,8 @@ module.exports = function () {
             htmlTemplates: appFolder + '**/*.html'
         },
 
-        appTsDefinition: typingsFolder + 'app.d.ts',
-
         wiredepOptions: {
-            bowerJson: require('./bower.json'),
-            directory: './assets/vendor/',
-            ignorePath: '../..'
+            bowerJson: require('./bower.json')
         },
 
         templateCache: {

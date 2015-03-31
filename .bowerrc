@@ -1,5 +1,4 @@
 {
-  "directory": "assets/vendor",
   "strict-ssl": false,
   "scripts": {
     "postinstall": "gulp wiredep"
