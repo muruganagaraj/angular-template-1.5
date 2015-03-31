@@ -33,6 +33,7 @@ module.exports = function () {
                 devBuildFolder + 'js/**/*.js'
             ],
             appcss: devBuildFolder + '**/*.css',
+            customCss: assetsFolder + 'css/**/*.css',
             tsToCompile: [
                 typingsFolder + 'tsd.d.ts',
                 typingsFolder + 'app.d.ts',

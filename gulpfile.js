@@ -57,7 +57,7 @@ gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
 
     return gulp
         .src(config.index)
-        .pipe($.inject(gulp.src(config.files.appcss)))
+        .pipe($.inject(gulp.src(config.files.customCss)))
         .pipe($.inject(gulp.src(config.files.appjs)))
         .pipe(gulp.dest(config.folders.client));
 });
