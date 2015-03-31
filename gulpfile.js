@@ -5,34 +5,40 @@ var browserSync = require('browser-sync');
 
 var $ = require('gulp-load-plugins')({lazy: true});
 
-gulp.task('ts:gen-defs', function() {
-    var tsFiles = gulp.src([config.files.appts], {read: false});
-    return gulp
-        .src(config.appTsDefinition)
-        .pipe($.inject(tsFiles, {
-            starttag: '//{',
-            endtag: '//}',
-            transform: function(filePath) {
-                return '/// <reference path="../' + filePath + '" />';
-            }
-        }))
-        .pipe(gulp.dest(config.folders.typings));
+////////// Dev Tasks //////////
+
+gulp.task('serve-dev', ['build-dev'], function(done) {
+    startBrowserSync();
+    done();
 });
 
-gulp.task('styles', ['clean-styles'], function() {
-    log('Converting LESS files to CSS stylesheets');
-
-    return gulp
-        .src(config.files.less)
-        .pipe($.plumber())
-        .pipe($.less())
-        .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
-        .pipe(gulp.dest(config.folders.devBuild));
+gulp.task('build-dev', ['clean-dev', 'inject'], function(done) {
+    done();
 });
 
-gulp.task('clean-styles', function(done) {
-    var files = config.folders.devBuild + '**/*.css';
-    clean(files, done);
+gulp.task('clean-dev', function(done) {
+    clean(config.folders.devBuild, done);
+});
+
+gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
+    log('Injecting script and CSS references');
+
+    return gulp
+        .src(config.index)
+        .pipe($.inject(gulp.src(config.files.appcss)))
+        .pipe($.inject(gulp.src(config.files.appjs)))
+        .pipe(gulp.dest(config.folders.app))
+});
+
+gulp.task('wiredep', function() {
+    log('Injecting script and CSS references');
+
+    var wiredep = require('wiredep').stream;
+
+    return gulp
+        .src(config.index)
+        .pipe(wiredep(config.wiredepOptions))
+        .pipe(gulp.dest(config.folders.app))
 });
 
 gulp.task('scripts', ['clean-scripts'], function() {
@@ -61,38 +67,51 @@ gulp.task('clean-scripts', function(done) {
     clean(files, done);
 });
 
-gulp.task('wiredep', function() {
-    log('Injecting script and CSS references');
-
-    var wiredep = require('wiredep').stream;
+gulp.task('styles', ['clean-styles'], function() {
+    log('Converting LESS files to CSS stylesheets');
 
     return gulp
-        .src(config.index)
-        .pipe(wiredep(config.wiredepOptions))
-        .pipe(gulp.dest(config.folders.app))
+        .src(config.files.less)
+        .pipe($.plumber())
+        .pipe($.less())
+        .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
+        .pipe(gulp.dest(config.folders.devBuild));
 });
 
-gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
-    log('Injecting script and CSS references');
+gulp.task('clean-styles', function(done) {
+    var files = config.folders.devBuild + '**/*.css';
+    clean(files, done);
+});
 
+////////// Distribution tasks //////////
+
+gulp.task('ng-template-cache', function() {
+    log('Generating Angular template cache');
+
+    gulp
+        .src(config.files.htmlTemplates)
+        .pipe($.minifyHtml({empty: true}))
+        .pipe($.angularTemplatecache(
+            config.templateCache.file,
+            config.templateCache.options
+        ))
+        .pipe(gulp.dest(config.folders.devBuild))
+});
+
+////////// Misc Tasks //////////
+
+gulp.task('ts:gen-defs', function() {
+    var tsFiles = gulp.src([config.files.appts], {read: false});
     return gulp
-        .src(config.index)
-        .pipe($.inject(gulp.src(config.files.appcss)))
-        .pipe($.inject(gulp.src(config.files.appjs)))
-        .pipe(gulp.dest(config.folders.app))
-});
-
-gulp.task('clean-dev', function(done) {
-    clean(config.folders.devBuild, done);
-});
-
-gulp.task('build-dev', ['clean-dev', 'inject'], function(done) {
-    done();
-});
-
-gulp.task('serve-dev', ['build-dev'], function(done) {
-    startBrowserSync();
-    done();
+        .src(config.appTsDefinition)
+        .pipe($.inject(tsFiles, {
+            starttag: '//{',
+            endtag: '//}',
+            transform: function(filePath) {
+                return '/// <reference path="../' + filePath + '" />';
+            }
+        }))
+        .pipe(gulp.dest(config.folders.typings));
 });
 
 ////////////////

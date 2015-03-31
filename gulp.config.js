@@ -30,7 +30,8 @@ module.exports = function () {
                 typingsFolder + 'tsd.d.ts',
                 typingsFolder + 'app.d.ts',
                 appFolder + '**/*.ts'
-            ]
+            ],
+            htmlTemplates: appFolder + '**/*.html'
         },
 
         appTsDefinition: typingsFolder + 'app.d.ts',
@@ -39,6 +40,15 @@ module.exports = function () {
             bowerJson: require('./bower.json'),
             directory: './assets/vendor/',
             ignorePath: '../..'
+        },
+
+        templateCache: {
+            file: 'templates.js',
+            options: {
+                module: 'app.core',
+                standAlone: false,
+                root: 'app/'
+            }
         }
     };
 
