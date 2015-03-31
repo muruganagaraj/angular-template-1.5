@@ -8,6 +8,12 @@ var $ = require('gulp-load-plugins')({lazy: true});
 
 var port = process.env.PORT || config.port;
 
+////////// Task Listing & Default Task //////////
+
+gulp.task('help', $.taskListing);
+
+gulp.task('default', ['help']);
+
 ////////// Dev Tasks //////////
 
 gulp.task('serve-dev', ['build-dev'], function() {
@@ -40,9 +46,7 @@ gulp.task('serve-dev', ['build-dev'], function() {
         });
 });
 
-gulp.task('build-dev', ['clean-dev', 'inject'], function(done) {
-    done();
-});
+gulp.task('build-dev', ['clean-dev', 'inject']);
 
 gulp.task('clean-dev', function(done) {
     clean(config.folders.devBuild, done);
@@ -142,7 +146,7 @@ gulp.task('ts-gen-defs', function() {
         .pipe(gulp.dest(config.folders.typings));
 });
 
-////////////////
+////////// Helper Functions //////////
 
 function startBrowserSync() {
     if (args.nosync || browserSync.active){

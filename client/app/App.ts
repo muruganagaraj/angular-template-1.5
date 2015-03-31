@@ -12,6 +12,9 @@ angular.module('app')
             .when('/', {
                 templateUrl: '/client/app/main/main.html'
             })
+            .when('/other', {
+                templateUrl: '/client/app/other/other.html'
+            })
             .otherwise({
                 redirectTo: '/'
             });

@@ -25,6 +25,7 @@
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
     "gulp-sourcemaps": "^1.5.1",
+    "gulp-task-listing": "^1.0.0",
     "gulp-tslint": "^1.4.4",
     "gulp-typescript": "^2.5.0",
     "gulp-util": "^3.0.4",

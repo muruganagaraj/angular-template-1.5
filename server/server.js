@@ -11,7 +11,11 @@ if (environment === 'dev') {
     app.use('/client/.dev', express.static('./client/.dev/'));
     app.use('/client/app', express.static('./client/app/'));
     app.use('/client/assets', express.static('./client/assets/'));
-    app.use('/*', express.static('./client/index.html'));
+    app.get('/*', function(req, res) {
+        res.sendFile('index.html', {
+            root: './client/'
+        });
+    });
 }
 
 app.listen(port);
