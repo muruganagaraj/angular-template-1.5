@@ -2,8 +2,8 @@ module.exports = function () {
     var clientFolder = './client/';
     var appFolder = clientFolder + 'app/';
     var assetsFolder = clientFolder + 'assets/';
-    var bowerFolder = './bower_components/';
 
+    var bowerFolder = './bower_components/';
     var typingsFolder = './typings/';
 
     var devBuildFolder = clientFolder + '.dev/';
@@ -21,7 +21,7 @@ module.exports = function () {
         },
 
         index: clientFolder + 'index.html',
-        appTsDefinition: appFolder + 'app.d.ts',
+        appTsDefinition: typingsFolder + 'app.d.ts',
         tsdTsDefinition: typingsFolder + 'tsd.d.ts',
 
         files: {
@@ -33,11 +33,12 @@ module.exports = function () {
                 devBuildFolder + 'js/**/*.js'
             ],
             appcss: devBuildFolder + '**/*.css',
-            appts: [
+            tsToCompile: [
                 typingsFolder + 'tsd.d.ts',
                 typingsFolder + 'app.d.ts',
                 appFolder + '**/*.ts'
             ],
+            appts: appFolder + '**/*.ts',
             htmlTemplates: appFolder + '**/*.html'
         },
 

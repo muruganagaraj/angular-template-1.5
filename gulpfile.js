@@ -45,7 +45,7 @@ gulp.task('scripts', ['clean-scripts'], function() {
     log('Transpiling Typescript code to Javascript');
 
     var tsResult = gulp
-        .src(config.files.appts)
+        .src(config.files.tsToCompile)
         .pipe($.sourcemaps.init())
         .pipe($.typescript({
             target: 'ES6',
@@ -100,7 +100,7 @@ gulp.task('ng-template-cache', function() {
 
 ////////// Misc Tasks //////////
 
-gulp.task('ts:gen-defs', function() {
+gulp.task('ts-gen-defs', function() {
     var tsFiles = gulp.src([config.files.appts], {read: false});
     return gulp
         .src(config.appTsDefinition)
@@ -108,7 +108,7 @@ gulp.task('ts:gen-defs', function() {
             starttag: '//{',
             endtag: '//}',
             transform: function(filePath) {
-                return '/// <reference path="../' + filePath + '" />';
+                return '/// <reference path="..' + filePath + '" />';
             }
         }))
         .pipe(gulp.dest(config.folders.typings));

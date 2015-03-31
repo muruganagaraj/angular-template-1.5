@@ -1,3 +1,6 @@
+/// <reference path="../../../typings/tsd.d.ts" />
+/// <reference path="../../../typings/app.d.ts" />
+
 module main {
     export interface MainScope extends ng.IScope {
         content: string;
