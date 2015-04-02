@@ -44,15 +44,16 @@ module.exports = function () {
         },
 
         wiredepOptions: {
-            bowerJson: require('./bower.json')
+            bowerJson: require('./bower.json'),
+            ignorePath: '..'
         },
 
         templateCache: {
             file: 'templates.js',
             options: {
-                module: 'app.core',
+                module: 'app',
                 standAlone: false,
-                root: 'app/'
+                root: '/client/app/'
             }
         },
 

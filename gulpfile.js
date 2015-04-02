@@ -117,6 +117,35 @@ gulp.task('clean-styles', function(done) {
 
 ////////// Distribution tasks //////////
 
+gulp.task('build-dist', ['clean-dist', 'build-dev', 'ng-template-cache', 'copy-to-dist'], function () {
+    var templateCacheFile = config.folders.devBuild + config.templateCache.file;
+    var templateCacheSrc = gulp.src(templateCacheFile, {read: false});
+    var templateCacheOptions = {
+        starttag: '<!-- inject:template:js -->'
+    };
+
+    var assets = $.useref.assets({searchPath: './'});
+
+    return gulp
+        .src(config.index)
+        .pipe($.plumber())
+        .pipe($.inject(templateCacheSrc, templateCacheOptions))
+        .pipe(assets)
+        .pipe(assets.restore())
+        .pipe($.useref())
+        .pipe(gulp.dest(config.folders.distBuild));
+});
+
+gulp.task('clean-dist', function(done) {
+    clean(config.folders.distBuild, done);
+});
+
+gulp.task('copy-to-dist', function () {
+    return gulp
+        .src(config.folders.app + '**/*.html')
+        .pipe(gulp.dest(config.folders.distBuild + 'client/app/'));
+});
+
 gulp.task('ng-template-cache', function() {
     log('Generating Angular template cache');
 
@@ -148,6 +177,36 @@ gulp.task('ts-gen-defs', function() {
 
 ////////// Helper Functions //////////
 
+function serve(isDev) {
+    var nodeOptions = {
+        script: config.nodeServer,
+        delayTime: 1,
+        env: {
+            'PORT': port,
+            'NODE_ENV': isDev ? 'dev' : 'dist'
+        },
+        watch: [config.server]
+    };
+    return $.nodemon(nodeOptions)
+        .on('restart', function(ev) {
+            console.log('Restarted ' + ev);
+            setTimeout(function() {
+                browserSync.notify('Reloading now...');
+                browserSync.reload({stream: false});
+            }, 1000);
+        })
+        .on('start', function() {
+            console.log('Started');
+            startBrowserSync();
+        })
+        .on('crash', function() {
+            console.log('Crashed')
+        })
+        .on('exit', function() {
+            console.log('Exited cleanly')
+        });
+}
+
 function startBrowserSync() {
     if (args.nosync || browserSync.active){
         return;
@@ -155,6 +214,7 @@ function startBrowserSync() {
 
     log('Starting browser-sync session');
 
+    //TODO: Add gulp watchers here
     var options = {
         proxy: 'localhost:' + port,
         port: 3000,

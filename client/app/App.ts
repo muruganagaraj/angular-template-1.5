@@ -3,7 +3,7 @@
 
 angular.module('app', [
     'ngRoute',
-    'ngSanitize',
+    'ngSanitize'
 ]);
 
 angular.module('app')

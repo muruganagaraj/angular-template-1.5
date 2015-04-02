@@ -28,6 +28,7 @@
     "gulp-task-listing": "^1.0.0",
     "gulp-tslint": "^1.4.4",
     "gulp-typescript": "^2.5.0",
+    "gulp-useref": "^1.1.1",
     "gulp-util": "^3.0.4",
     "jshint-stylish": "^1.0.1",
     "merge2": "^0.3.2",

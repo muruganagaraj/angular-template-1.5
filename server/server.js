@@ -16,6 +16,8 @@ if (environment === 'dev') {
             root: './client/'
         });
     });
+} else if (environment == 'dist') {
+
 }
 
 app.listen(port);
