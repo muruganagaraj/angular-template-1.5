@@ -1,4 +1,5 @@
 module.exports = function () {
+    var rootFolder = './';
     var clientFolder = './client/';
     var appFolder = clientFolder + 'app/';
     var assetsFolder = clientFolder + 'assets/';
@@ -9,8 +10,15 @@ module.exports = function () {
     var devBuildFolder = clientFolder + '.dev/';
     var distBuildFolder = './.dist/';
 
+    var appTypescriptFiles = appFolder + '**/*.ts';
+
+    var bowerJsonFile = rootFolder + 'bower.json';
+    var tsdTsDefinitionFile = typingsFolder + 'tsd.d.ts';
+    var appTsDefinitionFile = typingsFolder + 'app.d.ts';
+
     var config = {
         folders: {
+            root: rootFolder,
             client: clientFolder,
             app: appFolder,
             assets: assetsFolder,
@@ -21,30 +29,34 @@ module.exports = function () {
         },
 
         index: clientFolder + 'index.html',
-        appTsDefinition: typingsFolder + 'app.d.ts',
-        tsdTsDefinition: typingsFolder + 'tsd.d.ts',
+        tsdTsDefinition: tsdTsDefinitionFile,
+        appTsDefinition: appTsDefinitionFile,
 
         files: {
-            alljs: appFolder + '**/*.js',
-            allless: bowerFolder + '**/*.less',
-            less: bowerFolder + 'bootstrap/less/bootstrap.less',
-            appjs: [
+            less: [
+                bowerFolder + 'bootstrap/less/bootstrap.less',
+                assetsFolder + 'css/styles.less'
+            ],
+            appJs: [
                 devBuildFolder + 'js/App.js',
                 devBuildFolder + 'js/**/*.js'
             ],
-            appcss: devBuildFolder + '**/*.css',
-            customCss: assetsFolder + 'css/**/*.css',
+            customCss: devBuildFolder + 'css/**/*.css',
             tsToCompile: [
-                typingsFolder + 'tsd.d.ts',
-                typingsFolder + 'app.d.ts',
-                appFolder + '**/*.ts'
+                tsdTsDefinitionFile,
+                appTsDefinitionFile,
+                appTypescriptFiles
             ],
-            appts: appFolder + '**/*.ts',
-            htmlTemplates: appFolder + '**/*.html'
+            appts: appTypescriptFiles,
+            htmlTemplates: appFolder + '**/*.html',
+            packagesForVersionBump: [
+                rootFolder + 'package.json',
+                bowerJsonFile
+            ]
         },
 
         wiredepOptions: {
-            bowerJson: require('./bower.json'),
+            bowerJson: require(bowerJsonFile),
             ignorePath: '..'
         },
 
@@ -57,9 +69,11 @@ module.exports = function () {
             }
         },
 
-        nodeServer: './server/server.js',
-        server: './server/',
-        port: 7709
+        server: {
+            entryPoint: './server/server.js',
+            watch: './server/',
+            port: 7709
+        }
     };
 
     return config;

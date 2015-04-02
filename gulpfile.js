@@ -6,7 +6,7 @@ var browserSync = require('browser-sync');
 
 var $ = require('gulp-load-plugins')({lazy: true});
 
-var port = process.env.PORT || config.port;
+var port = process.env.PORT || config.server.port;
 
 ////////// Task Listing & Default Task //////////
 
@@ -17,33 +17,7 @@ gulp.task('default', ['help']);
 ////////// Dev Tasks //////////
 
 gulp.task('serve-dev', ['build-dev'], function() {
-    var nodeOptions = {
-        script: config.nodeServer,
-        delayTime: 1,
-        env: {
-            'PORT': port,
-            'NODE_ENV': 'dev'
-        },
-        watch: [config.server]
-    };
-    return $.nodemon(nodeOptions)
-        .on('restart', function(ev) {
-            console.log('Restarted ' + ev);
-            setTimeout(function() {
-                browserSync.notify('Reloading now...');
-                browserSync.reload({stream: false});
-            }, 1000);
-        })
-        .on('start', function() {
-            console.log('Started');
-            startBrowserSync();
-        })
-        .on('crash', function() {
-            console.log('Crashed')
-        })
-        .on('exit', function() {
-            console.log('Exited cleanly')
-        });
+    serve(true);
 });
 
 gulp.task('build-dev', ['clean-dev', 'inject']);
@@ -53,17 +27,17 @@ gulp.task('clean-dev', function(done) {
 });
 
 gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
-    log('Injecting script and CSS references');
+    log('Injecting local script and CSS references.');
 
     return gulp
         .src(config.index)
         .pipe($.inject(gulp.src(config.files.customCss)))
-        .pipe($.inject(gulp.src(config.files.appjs)))
+        .pipe($.inject(gulp.src(config.files.appJs)))
         .pipe(gulp.dest(config.folders.client));
 });
 
 gulp.task('wiredep', function() {
-    log('Injecting script and CSS references');
+    log('Wiring up external script dependencies.');
 
     var wiredep = require('wiredep').stream;
 
@@ -107,7 +81,7 @@ gulp.task('styles', ['clean-styles'], function() {
         .pipe($.plumber())
         .pipe($.less())
         .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
-        .pipe(gulp.dest(config.folders.devBuild));
+        .pipe(gulp.dest(config.folders.devBuild + 'css'));
 });
 
 gulp.task('clean-styles', function(done) {
@@ -126,13 +100,26 @@ gulp.task('build-dist', ['clean-dist', 'build-dev', 'ng-template-cache', 'copy-t
 
     var assets = $.useref.assets({searchPath: './'});
 
+    var cssFilter = $.filter('**/*.css');
+    var jsFilter = $.filter('**/*.js');
+
     return gulp
         .src(config.index)
         .pipe($.plumber())
         .pipe($.inject(templateCacheSrc, templateCacheOptions))
         .pipe(assets)
+        .pipe(cssFilter)
+        .pipe($.csso())
+        .pipe(cssFilter.restore())
+        .pipe(jsFilter)
+        .pipe($.uglify())
+        .pipe(jsFilter.restore())
+        .pipe($.rev())
         .pipe(assets.restore())
         .pipe($.useref())
+        .pipe($.revReplace())
+        .pipe(gulp.dest(config.folders.distBuild))
+        .pipe($.rev.manifest())
         .pipe(gulp.dest(config.folders.distBuild));
 });
 
@@ -141,9 +128,10 @@ gulp.task('clean-dist', function(done) {
 });
 
 gulp.task('copy-to-dist', function () {
-    return gulp
-        .src(config.folders.app + '**/*.html')
-        .pipe(gulp.dest(config.folders.distBuild + 'client/app/'));
+    /** Enable only if we're not pre-caching all templates **/
+    //return gulp
+    //    .src(config.files.htmlTemplates)
+    //    .pipe(gulp.dest(config.folders.distBuild + 'client/app/'));
 });
 
 gulp.task('ng-template-cache', function() {
@@ -175,17 +163,37 @@ gulp.task('ts-gen-defs', function() {
         .pipe(gulp.dest(config.folders.typings));
 });
 
+gulp.task('bump', function () {
+    var message = 'Bumping versions ';
+    var type = args.type;
+    var version = args.version;
+    var options = {};
+    if (version) {
+        options.version = version;
+        message += 'to ' + version;
+    } else {
+        options.type = type;
+        message += 'for a ' + type;
+    }
+    log(message);
+
+    return gulp
+        .src(config.files.packagesForVersionBump)
+        .pipe($.bump(options))
+        .pipe(gulp.dest(config.folders.root));
+});
+
 ////////// Helper Functions //////////
 
 function serve(isDev) {
     var nodeOptions = {
-        script: config.nodeServer,
+        script: config.server.entryPoint,
         delayTime: 1,
         env: {
             'PORT': port,
             'NODE_ENV': isDev ? 'dev' : 'dist'
         },
-        watch: [config.server]
+        watch: [config.server.watch]
     };
     return $.nodemon(nodeOptions)
         .on('restart', function(ev) {
@@ -239,7 +247,7 @@ function startBrowserSync() {
 }
 
 function clean(path, done) {
-    log('Cleaning: ' + $.util.colors.blue(path));
+    log('Cleaning: ' + path);
     del(path, done);
 }
 
@@ -251,6 +259,6 @@ function log(message) {
             }
         }
     } else {
-        $.util.log($.util.colors.blue(message));
+        $.util.log($.util.colors.bgYellow(message));
     }
 }
