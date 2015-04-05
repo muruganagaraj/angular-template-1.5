@@ -186,6 +186,9 @@ gulp.task('bump', function () {
 ////////// Helper Functions //////////
 
 function serve(isDev) {
+    gulp.watch(config.files.tsToCompile, ['scripts']);
+    gulp.watch(config.files.less, ['styles']);
+
     var nodeOptions = {
         script: config.server.entryPoint,
         delayTime: 1,
@@ -239,7 +242,7 @@ function startBrowserSync() {
         injectChanges: true,
         logFileChanges: true,
         logLevel: 'debug',
-        logPrefix: 'gulp-patterns',
+        logPrefix: 'browser-sync',
         notify: true,
         reloadDelay: 1000
     };

@@ -19,5 +19,4 @@ angular.module('app')
                 redirectTo: '/'
             });
         $locationProvider.html5Mode(true);
-    }
-    ]);
+    }]);
