@@ -12,7 +12,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "assets/vendor",
     "test",
     "tests"
   ],
@@ -22,6 +21,10 @@
     "bootstrap": "~3.3.4",
     "angular-sanitize": "~1.3.15",
     "angular-route": "~1.3.15",
-    "modernizr": "~2.8.3"
+    "modernizr": "~2.8.3",
+    "angular-bootstrap": "~0.12.1"
+  },
+  "resolutions": {
+    "angular": "~1.3.15"
   }
 }

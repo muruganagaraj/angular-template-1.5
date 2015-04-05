@@ -186,9 +186,6 @@ gulp.task('bump', function () {
 ////////// Helper Functions //////////
 
 function serve(isDev) {
-    gulp.watch(config.files.tsToCompile, ['scripts']);
-    gulp.watch(config.files.less, ['styles']);
-
     var nodeOptions = {
         script: config.server.entryPoint,
         delayTime: 1,
@@ -225,13 +222,17 @@ function startBrowserSync() {
 
     log('Starting browser-sync session');
 
-    //TODO: Add gulp watchers here
+    gulp.watch(config.files.tsToCompile, ['scripts']);
+    gulp.watch(config.files.less, ['styles']);
+
     var options = {
         proxy: 'localhost:' + port,
         port: 3000,
         files: [
             config.folders.app + '**/*.*',
-            config.folders.assets + '**/*.*'
+            config.folders.assets + '**/*.*',
+            '!' + config.folders.app + '**/*.js',
+            '!' + config.folders.app + '**/*.js.map'
         ],
         ghostMode: {
             clicks: false,
