@@ -2,24 +2,33 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 module main {
-    export interface MainScope extends ng.IScope {
-        content: string;
+    export interface IMainViewModel {
+        data: string;
         items: Item[];
         add(item: string): void;
         navigate(): void;
+        clear(): void;
     }
 
-    export class MainController {
-        static $inject = ['$scope', '$location'];
+    export class MainController implements IMainViewModel {
+        static $inject = ['$location'];
 
-        constructor(private $scope: MainScope, private location: ng.ILocationService) {
-            $scope.items = [];
-            $scope.add = (item: string): void => {
-                $scope.items.push(new main.Item(item));
-            };
-            $scope.navigate = (): void => {
-                location.path('/other');
-            }
+        constructor(private location: ng.ILocationService) {
+        }
+
+        data: string;
+        items: Item[] = [];
+
+        add(item: string) : void {
+            this.items.push(new main.Item(item));
+        }
+
+        navigate(): void {
+            this.location.path('/other');
+        }
+
+        clear(): void {
+            this.items = [];
         }
     }
 }
