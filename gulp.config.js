@@ -72,7 +72,8 @@ module.exports = function () {
         server: {
             entryPoint: './server/server.js',
             watch: './server/',
-            port: 7709
+            port: 7709,
+            browserSyncPort: 8209
         }
     };
 

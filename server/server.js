@@ -17,7 +17,13 @@ if (environment === 'dev') {
         });
     });
 } else if (environment == 'dist') {
-
+    app.use('/js', express.static('./.dist/js/'));
+    app.use('/css', express.static('./.dist/css/'));
+    app.get('/*', function(req, res) {
+        res.sendFile('index.html', {
+            root: './.dist/'
+        });
+    });
 }
 
 app.listen(port);

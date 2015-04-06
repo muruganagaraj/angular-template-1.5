@@ -91,6 +91,10 @@ gulp.task('clean-styles', function(done) {
 
 ////////// Distribution tasks //////////
 
+gulp.task('serve-dist', ['build-dist'], function() {
+    serve(false);
+});
+
 gulp.task('build-dist', ['clean-dist', 'build-dev', 'ng-template-cache', 'copy-to-dist'], function () {
     var templateCacheFile = config.folders.devBuild + config.templateCache.file;
     var templateCacheSrc = gulp.src(templateCacheFile, {read: false});
@@ -198,14 +202,18 @@ function serve(isDev) {
     return $.nodemon(nodeOptions)
         .on('restart', function(ev) {
             console.log('Restarted ' + ev);
-            setTimeout(function() {
-                browserSync.notify('Reloading now...');
-                browserSync.reload({stream: false});
-            }, 1000);
+            if (isDev) {
+                setTimeout(function () {
+                    browserSync.notify('Reloading now...');
+                    browserSync.reload({stream: false});
+                }, 1000);
+            }
         })
         .on('start', function() {
             console.log('Started');
-            startBrowserSync();
+            if (isDev) {
+                startBrowserSync();
+            }
         })
         .on('crash', function() {
             console.log('Crashed')
@@ -215,7 +223,7 @@ function serve(isDev) {
         });
 }
 
-function startBrowserSync() {
+function startBrowserSync(serverPort) {
     if (args.nosync || browserSync.active){
         return;
     }
@@ -227,7 +235,7 @@ function startBrowserSync() {
 
     var options = {
         proxy: 'localhost:' + port,
-        port: 3000,
+        port: config.server.browserSyncPort,
         files: [
             config.folders.app + '**/*.*',
             config.folders.assets + '**/*.*',
