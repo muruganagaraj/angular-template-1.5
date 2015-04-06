@@ -16,11 +16,12 @@ module main {
         constructor(private location: ng.ILocationService) {
         }
 
-        data: string;
+        private _data: string;
         items: Item[] = [];
 
         add(item: string) : void {
-            this.items.push(new main.Item(item));
+            var itemToPush: string = `Item: ${item}`;
+            this.items.push(new main.Item(itemToPush));
         }
 
         navigate(): void {
@@ -29,6 +30,15 @@ module main {
 
         clear(): void {
             this.items = [];
+        }
+
+
+        public get data(): string {
+            return this._data;
+        }
+
+        public set data(value: string) {
+            this._data = value;
         }
     }
 }
