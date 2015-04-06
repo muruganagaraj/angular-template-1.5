@@ -63,6 +63,7 @@ gulp.task('scripts', ['clean-scripts'], function() {
     return merge([
         tsResult.dts.pipe(gulp.dest(config.folders.devBuild + 'js')),
         tsResult.js
+            .pipe($.babel())
             .pipe($.sourcemaps.write('.'))
             .pipe(gulp.dest(config.folders.devBuild + 'js'))
     ]);
@@ -141,7 +142,10 @@ gulp.task('copy-to-dist', function () {
     //    .src(config.files.htmlTemplates)
     //    .pipe(gulp.dest(config.folders.distBuild + 'client/app/'));
 
-    //TODO: Add code to copy images, fonts, etc.
+    return gulp
+        .src(config.files.glyphiconFonts)
+        .pipe($.plumber())
+        .pipe(gulp.dest(config.folders.distBuild + 'fonts/'));
 });
 
 gulp.task('ng-template-cache', function() {

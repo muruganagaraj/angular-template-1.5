@@ -1,14 +1,15 @@
 module.exports = function () {
     var rootFolder = './';
-    var clientFolder = './client/';
+
+    var clientFolder = rootFolder + 'client/';
     var appFolder = clientFolder + 'app/';
     var assetsFolder = clientFolder + 'assets/';
 
-    var bowerFolder = './bower_components/';
-    var typingsFolder = './typings/';
+    var bowerFolder = rootFolder + 'bower_components/';
+    var typingsFolder = rootFolder + 'typings/';
 
     var devBuildFolder = clientFolder + '.dev/';
-    var distBuildFolder = './.dist/';
+    var distBuildFolder = rootFolder + '.dist/';
 
     var appTypescriptFiles = appFolder + '**/*.ts';
 
@@ -52,7 +53,8 @@ module.exports = function () {
             packagesForVersionBump: [
                 rootFolder + 'package.json',
                 bowerJsonFile
-            ]
+            ],
+            glyphiconFonts: bowerFolder + 'bootstrap/dist/fonts/**/*.*'
         },
 
         wiredepOptions: {
@@ -70,8 +72,8 @@ module.exports = function () {
         },
 
         server: {
-            entryPoint: './server/server.js',
-            watch: './server/',
+            entryPoint: rootFolder + 'server/server.js',
+            watch: rootFolder + 'server/',
             port: 7709,
             browserSyncPort: 8209
         }
