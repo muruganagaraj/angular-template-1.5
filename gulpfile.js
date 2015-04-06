@@ -74,7 +74,7 @@ gulp.task('clean-scripts', function(done) {
 });
 
 gulp.task('styles', ['clean-styles'], function() {
-    log('Converting LESS files to CSS stylesheets');
+    log('Compiling LESS files to CSS stylesheets');
 
     return gulp
         .src(config.files.less)
@@ -96,6 +96,8 @@ gulp.task('serve-dist', ['build-dist'], function() {
 });
 
 gulp.task('build-dist', ['clean-dist', 'build-dev', 'ng-template-cache', 'copy-to-dist'], function () {
+    log('Building a distribution build in the .dist folder.');
+
     var templateCacheFile = config.folders.devBuild + config.templateCache.file;
     var templateCacheSrc = gulp.src(templateCacheFile, {read: false});
     var templateCacheOptions = {
@@ -132,14 +134,18 @@ gulp.task('clean-dist', function(done) {
 });
 
 gulp.task('copy-to-dist', function () {
+    log('Copying images, fonts and non-cached HTML templates to the dist folder.');
+
     /** Enable only if we're not pre-caching all templates **/
     //return gulp
     //    .src(config.files.htmlTemplates)
     //    .pipe(gulp.dest(config.folders.distBuild + 'client/app/'));
+
+    //TODO: Add code to copy images, fonts, etc.
 });
 
 gulp.task('ng-template-cache', function() {
-    log('Generating Angular template cache');
+    log('Generating Angular template cache.');
 
     gulp
         .src(config.files.htmlTemplates)
@@ -154,6 +160,8 @@ gulp.task('ng-template-cache', function() {
 ////////// Misc Tasks //////////
 
 gulp.task('ts-gen-defs', function() {
+    log('Generating a single Typescript definition file (app.d.ts) for all custom Typescript files.');
+
     var tsFiles = gulp.src([config.files.appts], {read: false});
     return gulp
         .src(config.appTsDefinition)
