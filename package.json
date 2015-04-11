@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "postinstall": "gulp create-git-hooks ts-gen-defs"
   },
   "author": "Jeevan James",
   "license": "APL",
