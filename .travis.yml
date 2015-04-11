@@ -3,7 +3,7 @@ node_js:
   - '0.12'
 
 before_install:
-  - npm install -g typescript bower tsd gulp
+  - npm install -g typescript
   - npm install -g bower
   - npm install -g tsd
   - npm install -g gulp
@@ -12,7 +12,7 @@ script:
   - npm install
   - bower install
   - tsd reinstall --overwrite --save
-  - gulp ng-gen-defs
+  - gulp ts-gen-defs
   - gulp tslint
   - gulp build-dist
 

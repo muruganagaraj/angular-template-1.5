@@ -48,4 +48,4 @@ module main {
     }
 }
 
-angular.module('app').controller('MainController', main.MainController);
+angular.module('app').controller("MainController", main.MainController);
