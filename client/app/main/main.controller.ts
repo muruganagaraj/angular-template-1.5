@@ -21,8 +21,8 @@ module main {
 
         add(item: string): void {
             var itemToPush: string;
-            if (item == '1') {
-                itemToPush = "One";
+            if (item === '1') {
+                itemToPush = 'One';
             } else {
                 itemToPush = `Item: ${item}`;
             }
@@ -30,7 +30,7 @@ module main {
         }
 
         navigate(): void {
-            this.location.path("/other");
+            this.location.path('/other');
         }
 
         clear(): void {
@@ -48,4 +48,4 @@ module main {
     }
 }
 
-angular.module("app").controller('MainController', main.MainController);
+angular.module('app').controller('MainController', main.MainController);

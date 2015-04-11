@@ -206,6 +206,12 @@ gulp.task('bump', function () {
         .pipe(gulp.dest(config.folders.root));
 });
 
+gulp.task('git-hook', function () {
+    return gulp
+        .src('./.pre-commit')
+        .pipe($.symlink('./.git/hooks/pre-commit', {force: true}));
+});
+
 ////////// Helper Functions //////////
 
 function serve(isDev) {
