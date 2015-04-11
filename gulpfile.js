@@ -225,10 +225,17 @@ gulp.task('bump', function () {
 });
 
 gulp.task('create-git-hooks', function () {
-    log('Creating GIT hooks.')
-    return gulp
-        .src('./.pre-commit')
-        .pipe($.symlink('./.git/hooks/pre-commit', {force: true}));
+    log('Creating GIT hooks.');
+
+    var merge = require('merge2');
+    return merge([
+        gulp
+            .src('./.pre-commit')
+            .pipe($.symlink('./.git/hooks/pre-commit', {force: true})),
+        gulp
+            .src('./.post-commit')
+            .pipe($.symlink('./.git/hooks/post-commit', {force: true})),
+    ]);
 });
 
 ////////// Helper Functions //////////
