@@ -21,7 +21,7 @@ module main {
 
         add(item: string): void {
             var itemToPush: string;
-            if (item === '1') {
+            if (item == '1') {
                 itemToPush = 'One';
             } else {
                 itemToPush = `Item: ${item}`;
