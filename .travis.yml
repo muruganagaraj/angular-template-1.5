@@ -5,13 +5,11 @@ node_js:
 before_install:
   - npm install -g typescript
   - npm install -g bower
-  - npm install -g tsd
   - npm install -g gulp
 
 script:
   - npm install
   - bower install
-  - tsd reinstall --overwrite --save
   - gulp ts-gen-defs
   - gulp tslint
   - gulp build-dist
