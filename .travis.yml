@@ -12,6 +12,8 @@ script:
   - npm install
   - bower install
   - tsd reinstall --overwrite --save
+  - gulp ng-gen-defs
+  - gulp tslint
   - gulp build-dist
 
 notifications:

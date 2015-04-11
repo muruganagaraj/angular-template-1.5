@@ -9,7 +9,7 @@ module main {
     }
 }
 
-angular.module("app")
-    .factory("myService", (): main.MyService=> {
+angular.module('app')
+    .factory('myService', (): main.MyService => {
         return new main.MyService();
     });

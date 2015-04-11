@@ -11,16 +11,21 @@ module main {
     }
 
     export class MainController implements IMainViewModel {
-        static $inject = ['$location'];
+        static $inject: string[] = ['$location'];
 
         constructor(private location: ng.ILocationService) {
         }
 
-        private _data: string;
         items: Item[] = [];
+        private _data: string;
 
-        add(item: string) : void {
-            var itemToPush: string = `Item: ${item}`;
+        add(item: string): void {
+            var itemToPush: string;
+            if (item === '1') {
+                itemToPush = 'One';
+            } else {
+                itemToPush = `Item: ${item}`;
+            }
             this.items.push(new main.Item(itemToPush));
         }
 
@@ -43,4 +48,4 @@ module main {
     }
 }
 
-angular.module('app').controller("MainController", main.MainController);
+angular.module('app').controller('MainController', main.MainController);

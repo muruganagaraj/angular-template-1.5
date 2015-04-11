@@ -163,6 +163,13 @@ gulp.task('ng-template-cache', function() {
 
 ////////// Misc Tasks //////////
 
+gulp.task('tslint', [], function () {
+    return gulp
+        .src(config.files.tsToCompile)
+        .pipe($.tslint())
+        .pipe($.tslint.report('verbose'));
+});
+
 gulp.task('ts-gen-defs', function() {
     log('Generating a single Typescript definition file (app.d.ts) for all custom Typescript files.');
 
