@@ -30,7 +30,7 @@ module main {
         }
 
         navigate(): void {
-            this.location.path('/other');
+            this.location.path("/other");
         }
 
         clear(): void {
@@ -48,4 +48,4 @@ module main {
     }
 }
 
-angular.module('app').controller('MainController', main.MainController);
+angular.module("app").controller('MainController', main.MainController);
