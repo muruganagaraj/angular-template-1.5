@@ -1,0 +1,13 @@
+{
+  "local": {
+    "config": {
+      "apiUrl": "http://localhost/api"
+    }
+  },
+
+    "production": {
+      "config": {
+        "apiUrl": "http://theserver.com/api"
+    }
+  }
+}

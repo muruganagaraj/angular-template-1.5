@@ -30,6 +30,7 @@ module.exports = function () {
         },
 
         index: clientFolder + 'index.html',
+        config: clientFolder + 'config.json',
         tsdTsDefinition: tsdTsDefinitionFile,
         appTsDefinition: appTsDefinitionFile,
 
@@ -40,13 +41,15 @@ module.exports = function () {
             ],
             appJs: [
                 devBuildFolder + 'js/App.js',
+                devBuildFolder + 'js/config.js',
                 devBuildFolder + 'js/**/*.js'
             ],
             customCss: devBuildFolder + 'css/**/*.css',
             tsToCompile: [
                 tsdTsDefinitionFile,
                 appTsDefinitionFile,
-                appTypescriptFiles
+                appTypescriptFiles,
+                '!' + appFolder + 'App.config.ts'
             ],
             appts: appTypescriptFiles,
             htmlTemplates: appFolder + '**/*.html',

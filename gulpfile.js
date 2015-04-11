@@ -26,7 +26,7 @@ gulp.task('clean-dev', function(done) {
     clean(config.folders.devBuild, done);
 });
 
-gulp.task('inject', ['wiredep', 'scripts', 'styles'], function() {
+gulp.task('inject', ['wiredep', 'scripts', 'styles', 'config'], function() {
     log('Injecting local script and CSS references.');
 
     return gulp
@@ -45,6 +45,24 @@ gulp.task('wiredep', function() {
         .src(config.index)
         .pipe(wiredep(config.wiredepOptions))
         .pipe(gulp.dest(config.folders.client))
+});
+
+gulp.task('config', function() {
+    log('Generating AngularJS constants file to store configuration.');
+
+    var configEnv = args.env;
+    var environment = 'local';
+    if (configEnv) {
+        environment = configEnv;
+    }
+
+    return gulp
+        .src(config.config)
+        .pipe($.ngConfig('app', {
+            environment: environment,
+            createModule: false
+        }))
+        .pipe(gulp.dest(config.folders.devBuild + 'js/'));
 });
 
 gulp.task('scripts', ['clean-scripts'], function() {

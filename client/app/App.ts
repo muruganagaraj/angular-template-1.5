@@ -21,3 +21,7 @@ angular.module('app')
             });
         $locationProvider.html5Mode(true);
     }]);
+
+interface IConfig {
+    apiUrl: string;
+}
