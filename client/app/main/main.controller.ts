@@ -22,7 +22,7 @@ module main {
         add(item: string): void {
             var itemToPush: string;
             if (item == '1') {
-                itemToPush = 'One';
+                itemToPush = "One";
             } else {
                 itemToPush = `Item: ${item}`;
             }
