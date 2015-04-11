@@ -3,11 +3,11 @@
 
 module main {
     export class OtherController {
-        static $inject = ['$scope', '$location'];
+        static $inject: string[] = ['$scope', '$location'];
 
         constructor(private $scope: ng.IScope) {
         }
     }
 }
 
-angular.module('app').controller("OtherController", main.OtherController);
+angular.module('app').controller('OtherController', main.OtherController);
