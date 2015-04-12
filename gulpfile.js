@@ -295,7 +295,7 @@ function startBrowserSync(serverPort) {
 
     log('Starting browser-sync session');
 
-    gulp.watch(config.files.tsToCompile, ['scripts']);
+    gulp.watch(config.files.tsToCompile, ['scripts', 'config']);
     gulp.watch(config.files.less, ['styles']);
 
     var options = {

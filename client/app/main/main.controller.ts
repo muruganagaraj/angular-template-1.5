@@ -11,9 +11,9 @@ module main {
     }
 
     export class MainController implements IMainViewModel {
-        static $inject: string[] = ['$location'];
+        static $inject: string[] = ['$location', 'config'];
 
-        constructor(private location: ng.ILocationService) {
+        constructor(private location: ng.ILocationService, private config: IConfig) {
         }
 
         items: Item[] = [];
@@ -22,7 +22,7 @@ module main {
         add(item: string): void {
             var itemToPush: string;
             if (item === '1') {
-                itemToPush = 'One';
+                itemToPush = this.config.apiUrl;
             } else {
                 itemToPush = `Item: ${item}`;
             }
