@@ -88,7 +88,7 @@ gulp.task('scripts', ['clean-scripts'], function() {
 });
 
 gulp.task('clean-scripts', function(done) {
-    var files = config.folders.devBuild + '**/*.js';
+    var files = config.folders.devBuild + 'js/';
     clean(files, done);
 });
 
@@ -104,7 +104,7 @@ gulp.task('styles', ['clean-styles'], function() {
 });
 
 gulp.task('clean-styles', function(done) {
-    var files = config.folders.devBuild + '**/*.css';
+    var files = config.folders.devBuild + 'css/';
     clean(files, done);
 });
 
