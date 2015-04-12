@@ -179,14 +179,28 @@ gulp.task('ng-template-cache', function() {
         .pipe(gulp.dest(config.folders.devBuild))
 });
 
-////////// Misc Tasks //////////
+////////// Vetting Tasks //////////
+gulp.task('vet', ['vet-compile-ts', 'vet-tslint']);
 
-gulp.task('tslint', [], function () {
+gulp.task('vet-compile-ts', function() {
+    return gulp
+        .src(config.files.tsToCompile)
+        .pipe($.typescript({
+            target: 'ES6',
+            declarationFiles: false,
+            noExternalResolve: false
+        }));
+});
+
+gulp.task('vet-tslint', [], function () {
     return gulp
         .src(config.files.tsToCompile)
         .pipe($.tslint())
         .pipe($.tslint.report('verbose'));
 });
+
+
+////////// Misc Tasks //////////
 
 gulp.task('ts-gen-defs', function() {
     log('Generating a single Typescript definition file (app.d.ts) for all custom Typescript files.');
