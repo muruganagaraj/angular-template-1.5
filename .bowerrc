@@ -1,6 +1,0 @@
-{
-  "strict-ssl": false,
-  "scripts": {
-    "postinstall": "gulp wiredep"
-  }
-}
