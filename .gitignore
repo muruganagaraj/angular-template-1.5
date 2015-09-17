@@ -1,0 +1,29 @@
+# IDE setting files
+.idea/
+.settings/
+
+# NPM and Bower
+bower_components/
+node_modules/
+
+# Build output
+.dist/
+client/.dev/
+
+# Index.html file
+client/index.html
+
+# JavaScript and map files, except in the assets folder
+client/**/*.js
+client/**/*.js.map
+!client/assets/**/*.js
+!client/assets/**/*.js.map
+
+# LESS files, except in the assets folder
+client/**/*.css
+!client/assets/**/*.css
+
+# Typescript definition files
+typings/app.d.ts
+typings/**/*.js
+typings/**/*.js.map

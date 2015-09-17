@@ -1,7 +1,1 @@
-Angular Training
-================
-1. Development environment set-up
-	- Node and NPM
-	- Gulp.js
-	- Bower.js
-	- Git
+Template for developing a large application using AngularJS 1.4 and Typescript 1.5, with a full automation process set-up using Gulp.
