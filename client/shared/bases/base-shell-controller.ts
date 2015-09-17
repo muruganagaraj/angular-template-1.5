@@ -12,8 +12,4 @@ namespace shared.bases {
 
         public title: string;
     }
-
-    interface IExtendedState extends angular.ui.IState {
-        title: string;
-    }
 }

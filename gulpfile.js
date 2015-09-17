@@ -24,6 +24,7 @@ gulp.task('serve', ['build'], () => {
 
 gulp.task('build', done => {
     sequence('clean_dev',
+        'initialize_shell_html',
         ['inject_vendor', 'compile_scripts', 'compile_styles', 'create_config'],
         ['inject_custom', 'copy_static_to_dev'],
         done);
@@ -32,6 +33,21 @@ gulp.task('build', done => {
 gulp.task('clean_dev', function(done) {
     clean(config.folders.devBuild, done);
 });
+
+gulp.task('initialize_shell_html', done => {
+    log('Generating the index.html file.');
+    sequence('delete_shell_html', 'copy_shell_html_template', done);
+});
+
+gulp.task('delete_shell_html', done => {
+    clean(config.shell, done);
+});
+
+gulp.task('copy_shell_html_template', () =>
+    gulp.src(config.folders.client + 'index.html.template')
+        .pipe($.rename('index.html'))
+        .pipe(gulp.dest(config.folders.client))
+);
 
 gulp.task('inject_vendor', function() {
     log('Wiring up Bower script dependencies.');
