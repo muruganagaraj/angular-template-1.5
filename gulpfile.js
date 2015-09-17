@@ -24,17 +24,18 @@ gulp.task('serve', ['build'], () => {
 
 gulp.task('build', done => {
     sequence('clean_dev',
-        'initialize_shell_html',
-        ['inject_vendor', 'compile_scripts', 'compile_styles', 'create_config'],
-        ['inject_custom', 'copy_static_to_dev'],
+        'generate_shell_html',
+        ['inject_bower_scripts', 'compile_scripts', 'compile_styles'],
+        'create_config',
+        ['inject_custom_scripts', 'copy_static_to_dev'],
         done);
 });
 
-gulp.task('clean_dev', function(done) {
+gulp.task('clean_dev', done => {
     clean(config.folders.devBuild, done);
 });
 
-gulp.task('initialize_shell_html', done => {
+gulp.task('generate_shell_html', done => {
     log('Generating the index.html file.');
     sequence('delete_shell_html', 'copy_shell_html_template', done);
 });
@@ -49,17 +50,16 @@ gulp.task('copy_shell_html_template', () =>
         .pipe(gulp.dest(config.folders.client))
 );
 
-gulp.task('inject_vendor', function() {
+gulp.task('inject_bower_scripts', () => {
     log('Wiring up Bower script dependencies.');
 
-    var wiredep = require('wiredep').stream;
-
+    let wiredep = require('wiredep').stream;
     return gulp.src(config.shell)
         .pipe(wiredep(config.wiredepOptions))
         .pipe(gulp.dest(config.folders.client))
 });
 
-gulp.task('compile_scripts', ['generate-app-def'], function() {
+gulp.task('compile_scripts', ['generate-app-def'], () => {
     log('Transpiling Typescript code to JavaScript');
 
     let tasks = config.modules.map(mod => {
@@ -76,7 +76,7 @@ gulp.task('compile_scripts', ['generate-app-def'], function() {
     return merge(tasks);
 });
 
-gulp.task('compile_styles', function() {
+gulp.task('compile_styles', () => {
     log('Compiling LESS files to CSS stylesheets');
 
     let tasks = config.modules.map(mod =>
@@ -88,7 +88,7 @@ gulp.task('compile_styles', function() {
     return merge(tasks);
 });
 
-gulp.task('create_config', function() {
+gulp.task('create_config', () => {
     log('Generating AngularJS constants file to store environment-specific configuration.');
 
     let environment = args.env || config.config.defaultEnv;
@@ -100,7 +100,7 @@ gulp.task('create_config', function() {
         .pipe(gulp.dest(config.folders.devBuildScripts));
 });
 
-gulp.task('inject_custom', function() {
+gulp.task('inject_custom_scripts', () => {
     log('Injecting local script and CSS references.');
 
     let configSrc = gulp.src(config.config.defaultOutput);
@@ -133,7 +133,7 @@ gulp.task('inject_custom', function() {
     return injectTask;
 });
 
-gulp.task('copy_static_to_dev', function() {
+gulp.task('copy_static_to_dev', () => {
     log('Copying static JavaScript, CSS and style asset files to dev build folder.');
 
     let jsCssTasks = config.modules.reduce((tsks, mod) => {
@@ -160,7 +160,7 @@ gulp.task('copy_static_to_dev', function() {
 ////////// App definition file generation tasks //////////
 
 gulp.task('generate-app-def', done => {
-    log('Generating a single Typescript definition file (' + config.definitions.appFileName + ') for all custom Typescript files.');
+    log(`Generating a single Typescript definition file (${config.definitions.appFileName}) for all custom Typescript files.`);
     sequence('app_def_delete',
         'app_def_copy_template',
         'app_def_generate',
@@ -178,10 +178,9 @@ gulp.task('app_def_copy_template', () =>
 );
 
 gulp.task('app_def_generate', () => {
-    let tsFiles = config.modules.reduce(function(files, mod) {
-        files = files.concat(mod.tsToCompile);
-        return files;
-    }, []);
+    let tsFiles = config.modules.reduce((files, mod) =>
+        files.concat(mod.tsToCompile)
+    , []);
     let tsFilesSrc = gulp.src(tsFiles, {read: false});
     return gulp.src(config.definitions.appFile)
         .pipe($.inject(tsFilesSrc, {
@@ -193,6 +192,87 @@ gulp.task('app_def_generate', () => {
         }))
         .pipe(gulp.dest(config.folders.typings));
 });
+
+////////// Serve & watch tasks and helper function //////////
+
+gulp.task('ts_watch_handler', function(done) {
+    sequence('compile_scripts', 'inject_custom', 'watch_handler_done', done);
+});
+
+gulp.task('less_watch_handler', function(done) {
+    sequence('compile_styles', 'inject_custom', 'watch_handler_done', done);
+});
+
+gulp.task('config_watch_handler', ['create_config']);
+
+gulp.task('watch_handler_done', function(done) {
+    log('Changes handled! Please reload browser.', $.util.colors.bgGreen);
+    done();
+});
+
+function serve(isDev) {
+    //Before serving, keep watch for changes to any Typescript or LESS files,
+    //so they are automatically recompiled. This applies only to DEV mode.
+    if (isDev) {
+        var tsToWatch = config.modules.reduce(function(files, mod) {
+            return files.concat(mod.tsToCompile);
+        }, []);
+        gulp.watch(tsToWatch, ['ts_watch_handler']);
+        var lessToWatch = config.modules.reduce(function(files, mod) {
+            return files.concat(mod.lessToWatch);
+        }, []);
+        gulp.watch(lessToWatch, ['less_watch_handler']);
+        gulp.watch(config.config.src, ['config_watch_handler']);
+    }
+
+    var launch = args.launch;
+
+    var open = require('open');
+
+    //If the customHost option is specified, assume that an external web server
+    //is already set-up on the config.server.customHostPort port and simply open
+    //the browser on that port.
+    var customHost = args.customHost;
+    if (customHost) {
+        if (launch) {
+            open('http://localhost:' + config.server.customHostPort);
+        }
+        return;
+    }
+
+    var nodeOptions = {
+        script: config.server.entryPoint,
+        delayTime: 1,
+        env: {
+            'PORT': port,
+            'NODE_ENV': isDev ? 'dev' : 'dist'
+        },
+        watch: ['./server/server.js']
+    };
+    return $.nodemon(nodeOptions)
+        .on('restart', function(ev) {
+            console.log('[nodemon] Restarted ' + ev);
+        })
+        .on('start', function() {
+            log('[nodemon] Starting on port ' + port);
+            if (launch || (typeof launch !== 'undefined')) {
+                if (launch === 1) {
+                    open('http://localhost:' + port);
+                } else if (typeof launch === 'string') {
+                    open('http://localhost:' + port + launch);
+                }
+            } else {
+                open('http://localhost:' + port);
+            }
+
+        })
+        .on('crash', function() {
+            log('[nodemon] Crashed')
+        })
+        .on('exit', function() {
+            log('[nodemon] Exited cleanly')
+        });
+}
 
 ////////// Helper functions //////////
 

@@ -2,16 +2,20 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 namespace shared.bases {
+    /**
+     * Base controller class that establishes the default constructor parameters and an abstract
+     * getParent() method that derived classes must override to specify the parent controller.
+     */
     export abstract class BaseController<TParentController> {
-        constructor(public $scope: ng.IScope,
+        constructor(public $scope: angular.IScope,
                     public res: Resources) {
         }
 
         protected abstract getParent(): TParentController;
     }
 
-    export class BaseRootController<TShellController> extends BaseController<TShellController> {
-        constructor($scope: IBaseRootControllerScope<TShellController>, res: Resources) {
+    export abstract class LayoutController<TShellController> extends BaseController<TShellController> {
+        constructor($scope: ILayoutControllerScope<TShellController>, res: Resources) {
             super($scope, res);
         }
 
@@ -20,30 +24,48 @@ namespace shared.bases {
         }
 
         protected getParent(): TShellController {
-            return (<IBaseRootControllerScope<TShellController>>this.$scope).shell;
+            return (<ILayoutControllerScope<TShellController>>this.$scope).shell;
         }
     }
 
-    export interface IBaseRootControllerScope<TShellController> extends ng.IScope {
+    export interface ILayoutControllerScope<TShellController> extends angular.IScope {
         shell: TShellController;
     }
 
-    export class BaseNestedController<TParentController> extends BaseController<TParentController> {
-        constructor($scope: IBaseNestedControllerScope<TParentController>,
+    export abstract class PageController<TLayoutController> extends BaseController<TLayoutController> {
+        constructor($scope: IPageControllerScope<TLayoutController>, res: Resources) {
+            super($scope, res);
+        }
+
+        public get layout(): TLayoutController {
+            return this.getParent();
+        }
+
+        protected getParent(): TLayoutController {
+            return (<IPageControllerScope<TLayoutController>>this.$scope).layout;
+        }
+    }
+
+    export interface IPageControllerScope<TLayoutController> extends angular.IScope {
+        layout: TLayoutController;
+    }
+
+    export abstract class NestedPageController<TPageController> extends BaseController<TPageController> {
+        constructor($scope: INestedPageControllerScope<TPageController>,
                     private parentControllerAs: string,
                     res: Resources) {
             super($scope, res);
         }
 
-        public get parent(): TParentController {
+        public get parent(): TPageController {
             return this.getParent();
         }
 
-        protected getParent(): TParentController {
+        protected getParent(): TPageController {
             return this.$scope[this.parentControllerAs];
         }
     }
 
-    export interface IBaseNestedControllerScope<TParentController> extends ng.IScope {
+    export interface INestedPageControllerScope<TPageController> extends angular.IScope {
     }
 }

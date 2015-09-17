@@ -6,8 +6,8 @@ namespace app {
 
     angular.module(moduleName, [
         /* App modules */
-        app.common.moduleName,
-        shared.moduleName,
+        'app-common',
+        'shared',
 
         /* Angular modules */
         'ngSanitize',
@@ -18,7 +18,7 @@ namespace app {
         /* Angular-UI modules */
         'ui.router',
         'ui.bootstrap',
-        'ui-grid',
+        'ui.grid',
         'ui.grid.autoResize',
         'ui.grid.expandable',
         'ui.grid.pagination',

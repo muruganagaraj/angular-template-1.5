@@ -31,10 +31,10 @@
         <!-- endinject -->
         <!-- endbuild -->
 
-        <!-- build:js js/app.common.js -->
-        <!-- inject:app.common:js -->
+        <!-- build:js js/app-common.js -->
+        <!-- inject:app-common:js -->
         <!-- endinject -->
-        <!-- inject:app.common-templates:js -->
+        <!-- inject:app-common-templates:js -->
         <!-- endinject -->
         <!-- endbuild -->
 
