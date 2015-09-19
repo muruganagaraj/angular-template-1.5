@@ -2,9 +2,7 @@
 /// <reference path="../../typings/app.d.ts" />
 
 namespace shared {
-    export const moduleName: string = 'shared';
+    angular.module('shared', []);
 
-    angular.module(moduleName, []);
-
-    export const sharedModule: () => angular.IModule = () => angular.module(moduleName);
+    export const sharedModule: () => angular.IModule = () => angular.module('shared');
 }

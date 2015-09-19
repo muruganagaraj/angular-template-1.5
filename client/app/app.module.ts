@@ -2,9 +2,7 @@
 /// <reference path="../../typings/app.d.ts" />
 
 namespace app {
-    export const moduleName: string = 'app';
-
-    angular.module(moduleName, [
+    angular.module('app', [
         /* App modules */
         'app-common',
         'shared',
@@ -20,7 +18,15 @@ namespace app {
         'ui.bootstrap'
     ]);
 
-    export const appModule: () => angular.IModule = () => angular.module(moduleName);
+    export const appModule: angular.IModule = angular.module('app');
+
+    export function registerController(
+        controllerConstructor: Function,
+        route: IExtendedState,
+        ...secondaryRoutes: IExtendedState[]): angular.IModule {
+
+        return registerControllers(controllerConstructor, route, secondaryRoutes, app.appModule, 'appConstants');
+    }
 
     export interface IConfig {
         apiBaseUrl: string;

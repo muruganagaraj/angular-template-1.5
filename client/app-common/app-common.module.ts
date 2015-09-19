@@ -2,9 +2,7 @@
 /// <reference path="../../typings/app.d.ts" />
 
 namespace app.common {
-    export const moduleName: string = 'app-common';
-
-    angular.module(moduleName, [
+    angular.module('app-common', [
         'shared',
 
         /* Angular modules */
@@ -17,5 +15,12 @@ namespace app.common {
         'ui.router'
     ]);
 
-    export const appCommonModule: () => angular.IModule = () => angular.module(moduleName);
+    export const appCommonModule: angular.IModule = angular.module('app-common');
+
+    export function registerController(
+        controllerConstructor: Function,
+        route: IExtendedState,
+        ...secondaryRoutes: IExtendedState[]): angular.IModule {
+        return registerControllers(controllerConstructor, route, secondaryRoutes, app.common.appCommonModule, 'appCommonConstants');
+    }
 }

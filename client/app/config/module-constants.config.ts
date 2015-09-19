@@ -2,7 +2,7 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 namespace app.config {
-    appModule().constant('appConstants', <IAppConstants>{
+    appModule.constant('appConstants', <IAppConstants>{
         templateUrlRoot: '/client/app/'
     });
 

@@ -9,5 +9,5 @@ namespace app.common.shell {
         }
     }
 
-    appCommonModule().controller('shellController', ShellController);
+    appCommonModule.controller('shellController', ShellController);
 }
