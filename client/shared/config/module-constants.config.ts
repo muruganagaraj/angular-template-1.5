@@ -1,9 +1,8 @@
-/// <reference path="../../typings/lib.d.ts" />
-/// <reference path="../../typings/app.d.ts" />
+/// <reference path="../../../typings/lib.d.ts" />
+/// <reference path="../../../typings/app.d.ts" />
 
-namespace shared {
+namespace shared.config {
     sharedModule().constant('sharedConstants', <ISharedConstants>{
-        componentPrefix: 'app',
         templateUrlRoot: '/client/shared/'
     });
 

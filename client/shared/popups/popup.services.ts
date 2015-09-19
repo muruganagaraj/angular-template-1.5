@@ -15,7 +15,7 @@ namespace shared.popups {
         /* @ngInject */
         constructor($modal: angular.ui.bootstrap.IModalService,
                     $window: angular.IWindowService,
-                    private sharedConstants: ISharedConstants) {
+                    private sharedConstants: config.ISharedConstants) {
             super($modal, $window);
         }
 

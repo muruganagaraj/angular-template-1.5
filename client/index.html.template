@@ -1,53 +1,57 @@
 <!doctype html>
 <html lang="en" ng-app="app" ng-controller="shellController as shell">
-    <head>
-        <base href="/">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title app-title="shell.title">Default Title</title>
-        <link rel="icon" type="image/png" href="/images/favicon.png">
-        <!-- build:css css/app.css -->
-        <!-- inject:css -->
-        <!-- endinject -->
-        <!-- endbuild -->
-    </head>
-    <body>
-        <div ui-view></div>
-        <!-- build:js js/lib.js -->
-        <!-- bower:js -->
-        <!-- endbower -->
-        <!-- endbuild -->
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title app-title="shell.title">Default Title</title>
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <!-- build:css css/app.css -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- endbuild -->
+</head>
+<body>
+    <div ui-view></div>
+    <script type="text/javascript">
+    var appComponentPrefix = 'app';
+    var sharedComponentPrefix = 'shared';
+    </script>
+    <!-- build:js js/lib.js -->
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- endbuild -->
 
-        <!-- build:js js/modules.js -->
-        <!-- inject:js -->
-        <!-- endinject -->
-        <!-- endbuild -->
+    <!-- build:js js/modules.js -->
+    <!-- inject:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
 
-        <!-- build:js js/shared.js -->
-        <!-- inject:shared:js -->
-        <!-- endinject -->
-        <!-- inject:shared-templates:js -->
-        <!-- endinject -->
-        <!-- endbuild -->
+    <!-- build:js js/shared.js -->
+    <!-- inject:shared:js -->
+    <!-- endinject -->
+    <!-- inject:shared-templates:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
 
-        <!-- build:js js/app-common.js -->
-        <!-- inject:app-common:js -->
-        <!-- endinject -->
-        <!-- inject:app-common-templates:js -->
-        <!-- endinject -->
-        <!-- endbuild -->
+    <!-- build:js js/app-common.js -->
+    <!-- inject:app-common:js -->
+    <!-- endinject -->
+    <!-- inject:app-common-templates:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
 
-        <!-- build:js js/app.js -->
-        <!-- inject:app:js -->
-        <!-- endinject -->
-        <!-- inject:app-templates:js -->
-        <!-- endinject -->
-        <!-- endbuild -->
+    <!-- build:js js/app.js -->
+    <!-- inject:app:js -->
+    <!-- endinject -->
+    <!-- inject:app-templates:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
 
-        <!-- build:js js/config.js -->
-        <!-- inject:config:js -->
-        <!-- endinject -->
-        <!-- endbuild -->
-    </body>
+    <!-- build:js js/config.js -->
+    <!-- inject:config:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
+</body>
 </html>

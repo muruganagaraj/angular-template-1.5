@@ -1,6 +1,20 @@
 /// <reference path="../../../typings/lib.d.ts" />
 /// <reference path="../../../typings/app.d.ts" />
 
+declare let appComponentPrefix: string;
+declare let sharedComponentPrefix: string;
+
+/**
+ * Registers a route (and optional secondary routes) and registers the associated controller.
+ * 
+ * @param {Function} controllerConstructor - The controller class to register.
+ * @param {IExtendedState} route - The primary route to register.
+ * @param {IExtendedState[]} secondaryRoutes - Optional secondary routes for the controller.
+ * @param {angular.IModule} module - The Angular module to register the controller and configure the route(s)
+ * @param {string} constantsName - The name of the constants Angular constant (of type IConstants) that contains the template URL root.
+ *
+ * @returns {angular.IModule} The Angular module in which the controller is registered.
+ */
 function registerControllers(
     controllerConstructor: Function,
     route: IExtendedState,

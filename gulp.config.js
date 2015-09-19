@@ -49,7 +49,9 @@ module.exports = function () {
             bowerFolder + 'font-awesome/less/font-awesome.less',
             assetsFolder + 'less/styles.less'
         ],
-        lessToWatch: assetsFolder + 'less/styles.less',
+        lessToWatch: [
+            assetsFolder + 'less/styles.less'
+        ],
         cssToCopy: [],
 
         htmls: {
@@ -159,11 +161,11 @@ module.exports = function () {
 
             firstJs: [
                 devBuildScriptsFolder + 'app/app.module.js',
-                devBuildScriptsFolder + 'app/module-*.config.js',
+                devBuildScriptsFolder + 'app/config/*.js',
                 devBuildScriptsFolder + 'app-common/app-common.module.js',
-                devBuildScriptsFolder + 'app-common/module-*.config.js',
+                devBuildScriptsFolder + 'app-common/config/*.js',
                 devBuildScriptsFolder + 'shared/shared.module.js',
-                devBuildScriptsFolder + 'shared/module-*.config.js'
+                devBuildScriptsFolder + 'shared/config/*.js'
             ],
         },
 

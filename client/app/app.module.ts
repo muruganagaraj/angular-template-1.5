@@ -17,14 +17,7 @@ namespace app {
 
         /* Angular-UI modules */
         'ui.router',
-        'ui.bootstrap',
-        'ui.grid',
-        'ui.grid.autoResize',
-        'ui.grid.expandable',
-        'ui.grid.pagination',
-        'ui.grid.pinning',
-        'ui.grid.resizeColumns',
-        'ui.grid.selection'
+        'ui.bootstrap'
     ]);
 
     export const appModule: () => angular.IModule = () => angular.module(moduleName);

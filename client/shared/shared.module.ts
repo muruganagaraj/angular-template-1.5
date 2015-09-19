@@ -6,5 +6,5 @@ namespace shared {
 
     angular.module(moduleName, []);
 
-    export const sharedModule: () => ng.IModule = () => angular.module(moduleName);
+    export const sharedModule: () => angular.IModule = () => angular.module(moduleName);
 }

@@ -1,9 +1,8 @@
-/// <reference path="../../typings/lib.d.ts" />
-/// <reference path="../../typings/app.d.ts" />
+/// <reference path="../../../typings/lib.d.ts" />
+/// <reference path="../../../typings/app.d.ts" />
 
-namespace app {
+namespace app.config {
     appModule().constant('appConstants', <IAppConstants>{
-        componentPrefix: 'app',
         templateUrlRoot: '/client/app/'
     });
 

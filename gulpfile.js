@@ -108,7 +108,7 @@ gulp.task('inject_custom_scripts', () => {
         starttag: '<!-- inject:config:js -->'
     };
 
-    let cssSrc = gulp.src(config.injections.css);
+    let cssSrc = gulp.src(config.injections.css, {read: false});
 
     let firstJsSrc = gulp.src(config.injections.firstJs);
 
@@ -196,14 +196,16 @@ gulp.task('app_def_generate', () => {
 ////////// Serve & watch tasks and helper function //////////
 
 gulp.task('ts_watch_handler', function(done) {
-    sequence('compile_scripts', 'inject_custom', 'watch_handler_done', done);
+    sequence('compile_scripts', 'inject_custom_scripts', 'watch_handler_done', done);
 });
 
 gulp.task('less_watch_handler', function(done) {
-    sequence('compile_styles', 'inject_custom', 'watch_handler_done', done);
+    sequence('compile_styles', 'inject_custom_scripts', 'watch_handler_done', done);
 });
 
-gulp.task('config_watch_handler', ['create_config']);
+gulp.task('config_watch_handler', function(done) {
+    sequence('create_config', done);
+});
 
 gulp.task('watch_handler_done', function(done) {
     log('Changes handled! Please reload browser.', $.util.colors.bgGreen);
@@ -211,28 +213,44 @@ gulp.task('watch_handler_done', function(done) {
 });
 
 function serve(isDev) {
-    //Before serving, keep watch for changes to any Typescript or LESS files,
-    //so they are automatically recompiled. This applies only to DEV mode.
+
+    function startsWith(str, checkStr) {
+        if (!checkStr) {
+            return true;
+        }
+        if (checkStr.length > str.length) {
+            return false;
+        }
+        return str.indexOf(checkStr) === 0;
+    }
+
+    //Before serving, keep watch for changes to any Typescript or LESS files, so they are
+    //automatically recompiled. This applies only to DEV mode.
+    //Note: There is an issue with gulp.watch that prevents it from detecting new or deleted files
+    //if the glob is absolute or starts with './'. Hence the code below to fix it.
+    //See: http://stackoverflow.com/a/26851844
     if (isDev) {
-        var tsToWatch = config.modules.reduce(function(files, mod) {
-            return files.concat(mod.tsToCompile);
+        let tsToWatch = config.modules.reduce((files, mod) => {
+            let fixedFiles = mod.tsToCompile.map(ts => startsWith(ts, './') ? ts.substr(2) : ts);
+            return files.concat(fixedFiles);
         }, []);
         gulp.watch(tsToWatch, ['ts_watch_handler']);
-        var lessToWatch = config.modules.reduce(function(files, mod) {
-            return files.concat(mod.lessToWatch);
+        let lessToWatch = config.modules.reduce((files, mod) => {
+            let fixedFiles = mod.lessToWatch.map(less => startsWith(less, './') ? less.substr(2) : less);
+            return files.concat(fixedFiles);
         }, []);
         gulp.watch(lessToWatch, ['less_watch_handler']);
         gulp.watch(config.config.src, ['config_watch_handler']);
     }
 
-    var launch = args.launch;
+    let launch = args.launch;
 
-    var open = require('open');
+    let open = require('open');
 
     //If the customHost option is specified, assume that an external web server
     //is already set-up on the config.server.customHostPort port and simply open
     //the browser on that port.
-    var customHost = args.customHost;
+    let customHost = args.customHost;
     if (customHost) {
         if (launch) {
             open('http://localhost:' + config.server.customHostPort);
@@ -240,7 +258,7 @@ function serve(isDev) {
         return;
     }
 
-    var nodeOptions = {
+    let nodeOptions = {
         script: config.server.entryPoint,
         delayTime: 1,
         env: {
