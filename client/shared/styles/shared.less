@@ -1,3 +1,9 @@
 @import "themes/@{theme}/theme.less";
-@import "angular/ng-validations.less";
-@import "angular/ng-animations.less";
+
+& when (@use-stock-ng-validation-styles = true) {
+    @import "angular/ng-validations.less";
+}
+
+& when (@use-stock-ng-animation-styles = true) {
+    @import "angular/ng-animations.less";
+}

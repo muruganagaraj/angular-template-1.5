@@ -2,6 +2,7 @@
 /// <reference path="../../../../typings/app.d.ts" />
 
 namespace app.common.layouts.main {
+    /* @ngInject */
     export class MainLayoutController extends shared.bases.LayoutController<shell.ShellController> {
         constructor($scope: shared.bases.ILayoutControllerScope<shell.ShellController>) {
             super($scope, null);

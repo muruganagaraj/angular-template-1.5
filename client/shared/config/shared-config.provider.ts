@@ -28,9 +28,9 @@ namespace shared.config {
         enableIf: {
             editableElements: string[];
             enableableElements: string[];
-        },
+        };
         inputGroup: {
             condition: string;
-        }
+        };
     }
 }

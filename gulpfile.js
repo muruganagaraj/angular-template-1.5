@@ -157,6 +157,147 @@ gulp.task('copy_static_to_dev', () => {
     return merge(jsCssTasks.concat(assetTasks));
 });
 
+////////// Distribution Build Tasks //////////
+
+gulp.task('serve-dist', ['build-dist'], () => {
+    serve(false);
+});
+
+gulp.task('build-dist', done => {
+    log('Building the distribution deployment of the application.');
+
+    sequence('vet',
+        'clean_dist',
+        'build',
+        'create_env_configs',
+        'copy_to_dist',
+        'inject_ng_templates',
+        'optimize_build',
+        'copy_webserver_configs_to_dist',
+        done);
+});
+
+gulp.task('clean_dist', done => {
+    clean(config.folders.distBuild, done);
+});
+
+gulp.task('create_env_configs', done => {
+    if (!config.config.generateEnvs || config.config.generateEnvs.length === 0) {
+        done();
+        return;
+    }
+
+    log('Creating environment-specific config files.');
+
+    let tasks = config.config.generateEnvs.map(env =>
+        gulp.src(config.config.src)
+            .pipe($.ngConfig(config.config.moduleName, {
+                environment: env,
+                createModule: false
+            }))
+            .pipe($.rename(`config.${env}.js`))
+            .pipe(gulp.dest(config.folders.devBuildScripts))
+    );
+    return merge(tasks);
+});
+
+gulp.task('inject_ng_templates', ['generate_ng_template_caches'], () => {
+    log('Injecting Angular templates caches')
+    let task = gulp.src(config.shell)
+        .pipe($.plumber());
+
+    task = config.modules.reduce((taskResult, mod) => {
+        return taskResult.pipe($.inject(
+            gulp.src(`${config.folders.devBuildScripts}${mod.name}/${mod.name}-templates.js` , {read: false}), {
+                starttag: `<!-- inject:${mod.name}-templates:js -->`
+            }
+        ));
+    }, task);
+
+    return task.pipe(gulp.dest(config.folders.client));
+});
+
+gulp.task('generate_ng_template_caches', () => {
+    log('Generating Angular template caches.');
+
+    let tasks = config.modules.map(mod =>
+        gulp.src(mod.htmls.toCache)
+            .pipe($.minifyHtml({empty: true}))
+            .pipe($.angularTemplatecache(`${mod.name}-templates.js`, {
+                module: mod.name,
+                standAlone: false,
+                root: mod.htmls.root
+            }))
+            .pipe(gulp.dest(config.folders.devBuildScripts + mod.name + '/'))
+    );
+    return merge(tasks);
+});
+
+gulp.task('copy_to_dist', () => {
+    log('Copying config, images, fonts and non-cached HTML templates to the dist folder.');
+    let configCopyTask = gulp.src(config.config.defaultOutput)
+        .pipe(gulp.dest(config.folders.distBuild));
+    return merge(getStyleAssetsCopyTasks(
+        config.folders.distBuild + 'css/',
+        config.folders.distBuild,
+        true).concat(configCopyTask));
+});
+
+gulp.task('optimize_build', () => {
+    log('Performing optimization for dist - bundling, minification and cache busting.');
+
+    let assets = $.useref.assets({searchPath: './'});
+
+    let cssFilter = $.filter('**/*.css', {restore: true});
+    let jsLibFilter = $.filter('**/lib.js', {restore: true});
+    let jsModulesFilter = $.filter('**/modules.js', {restore: true});
+
+    let task = gulp.src(config.shell)
+        .pipe($.plumber())
+        .pipe(assets)
+        .pipe(cssFilter)
+        .pipe($.csso())
+        .pipe(cssFilter.restore)
+        .pipe(jsLibFilter)
+        .pipe($.uglify())
+        .pipe(jsLibFilter.restore)
+        .pipe(jsModulesFilter)
+        .pipe($.ngAnnotate())
+        .pipe($.uglify())
+        .pipe(jsModulesFilter.restore);
+    task = config.modules.reduce((result, mod) => {
+        let filter = $.filter(`**/${mod.name}.js`, {restore: true});
+        return result.pipe(filter)
+            .pipe($.ngAnnotate())
+            .pipe($.uglify())
+            .pipe(filter.restore);
+    }, task);
+    return task
+        .pipe($.rev())
+        .pipe(assets.restore())
+        .pipe($.useref())
+        .pipe($.revReplace())
+        .pipe(gulp.dest(config.folders.distBuild))
+        .pipe($.rev.manifest())
+        .pipe(gulp.dest(config.folders.distBuild));
+});
+
+gulp.task('copy_webserver_configs_to_dist', () => {
+    log('Copying custom web server configurations to the dist folder.');
+    var tasks = [];
+    for (var webServer in config.webServerConfigs) {
+        if (!config.webServerConfigs.hasOwnProperty(webServer)) {
+            continue;
+        }
+        log(`    Found web server: ${webServer}`);
+        var cfg = config.webServerConfigs[webServer];
+        var task = gulp.src(config.folders.webserver + cfg.src)
+            .pipe(gulp.dest(config.folders.distBuild + (cfg.dest || '')));
+        tasks.push(task);
+    }
+    return merge(tasks);
+});
+
 ////////// App definition file generation tasks //////////
 
 gulp.task('generate-app-def', done => {
@@ -186,28 +327,26 @@ gulp.task('app_def_generate', () => {
         .pipe($.inject(tsFilesSrc, {
             starttag: '//{',
             endtag: '//}',
-            transform: function(filePath) {
-                return '/// <reference path="..' + filePath + '" />';
-            }
+            transform: filePath => `/// <reference path="..${filePath}" />`
         }))
         .pipe(gulp.dest(config.folders.typings));
 });
 
 ////////// Serve & watch tasks and helper function //////////
 
-gulp.task('ts_watch_handler', function(done) {
+gulp.task('ts_watch_handler', done => {
     sequence('compile_scripts', 'inject_custom_scripts', 'watch_handler_done', done);
 });
 
-gulp.task('less_watch_handler', function(done) {
+gulp.task('less_watch_handler', done => {
     sequence('compile_styles', 'inject_custom_scripts', 'watch_handler_done', done);
 });
 
-gulp.task('config_watch_handler', function(done) {
+gulp.task('config_watch_handler', done => {
     sequence('create_config', done);
 });
 
-gulp.task('watch_handler_done', function(done) {
+gulp.task('watch_handler_done', done => {
     log('Changes handled! Please reload browser.', $.util.colors.bgGreen);
     done();
 });
@@ -268,10 +407,10 @@ function serve(isDev) {
         watch: ['./server/server.js']
     };
     return $.nodemon(nodeOptions)
-        .on('restart', function(ev) {
+        .on('restart', ev => {
             console.log('[nodemon] Restarted ' + ev);
         })
-        .on('start', function() {
+        .on('start', () => {
             log('[nodemon] Starting on port ' + port);
             if (launch || (typeof launch !== 'undefined')) {
                 if (launch === 1) {
@@ -284,10 +423,10 @@ function serve(isDev) {
             }
 
         })
-        .on('crash', function() {
+        .on('crash', () => {
             log('[nodemon] Crashed')
         })
-        .on('exit', function() {
+        .on('exit', () => {
             log('[nodemon] Exited cleanly')
         });
 }
@@ -341,7 +480,6 @@ gulp.task('vet_lint_ts_run_lint', () =>
 );
 
 gulp.task('vet_lint_ts_increment_counter', done => {
-    log(tslintIndex);
     tslintIndex += 1;
     done();
 });
@@ -353,7 +491,7 @@ gulp.task('vet_compile_less', () => {
         .pipe($.less());
 });
 
-gulp.task('vet_lint_less', function() {
+gulp.task('vet_lint_less', () => {
     log('[Vet] Linting LESS files');
     let lessToLint = config.modules.reduce((files, mod) => files.concat(mod.lessToLint), []);
     return gulp.src(lessToLint)

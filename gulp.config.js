@@ -1,38 +1,42 @@
+'use strict';
+
 module.exports = function () {
     // Root folder
-    var rootFolder = './';
+    let rootFolder = './';
 
     // Other root folders
-    var bowerFolder = rootFolder + 'bower_components/';
-    var clientFolder = rootFolder + 'client/';
-    var nodeModulesFolder = rootFolder + 'node_modules/';
-    var serverFolder = rootFolder + 'server/';
-    var toolsFolder = rootFolder + 'tools/';
-    var typingsFolder = rootFolder + 'typings/';
-    var webserverFolder = rootFolder + 'webserver/';
+    let bowerFolder = rootFolder + 'bower_components/';
+    let clientFolder = rootFolder + 'client/';
+    let nodeModulesFolder = rootFolder + 'node_modules/';
+    let serverFolder = rootFolder + 'server/';
+    let toolsFolder = rootFolder + 'tools/';
+    let typingsFolder = rootFolder + 'typings/';
+    let webserverFolder = rootFolder + 'webserver/';
 
     // Client folders
-    var appFolder = clientFolder + 'app/';
-    var appCommonFolder = clientFolder + 'app-common/';
-    var sharedFolder = clientFolder + 'shared/';
-    var assetsFolder = clientFolder + 'assets/';
+    // let appFolder = clientFolder + 'app/';
+    // let appCommonFolder = clientFolder + 'app-common/';
+    // let sharedFolder = clientFolder + 'shared/';
+    let assetsFolder = clientFolder + 'assets/';
 
     // Output folders
-    var devBuildFolder = clientFolder + '.dev/';
-    var devBuildScriptsFolder = devBuildFolder + 'js/';
-    var devBuildStylesFolder = devBuildFolder + 'css/';
-    var distBuildFolder = rootFolder + '.dist/';
+    let devBuildFolder = clientFolder + '.dev/';
+    let devBuildScriptsFolder = devBuildFolder + 'js/';
+    let devBuildStylesFolder = devBuildFolder + 'css/';
+    let distBuildFolder = rootFolder + '.dist/';
 
     // Typescript definition files
-    var appDefinitionFileName = 'app.d.ts';
-    var appDefinitionFile = typingsFolder + appDefinitionFileName;
-    var typescriptDefinitionFiles = [].concat(
+    let appDefinitionFileName = 'app.d.ts';
+    let appDefinitionFile = typingsFolder + appDefinitionFileName;
+    let typescriptDefinitionFiles = [].concat(
         typingsFolder + 'lib.d.ts',
         appDefinitionFile
     );
 
-    var appModule = {
+    let appFolder = clientFolder + 'app/';
+    let appModule = {
         name: 'app',
+        folder: appFolder,
 
         tsToCompile: [].concat(
             appFolder + '*.module.ts',
@@ -59,13 +63,14 @@ module.exports = function () {
         htmls: {
             all: appFolder + '**/*.html',
             root: '/client/app',
-            toCache: appFolder + '**/*.html',
-            cacheFileName: 'app-templates.js',
+            toCache: appFolder + '**/*.html'
         }
     };
 
-    var appCommonModule = {
+    let appCommonFolder = clientFolder + 'app-common/';
+    let appCommonModule = {
         name: 'app-common',
+        folder: appCommonFolder,
 
         tsToCompile: [].concat(
             appCommonFolder + '*.module.ts',
@@ -85,13 +90,14 @@ module.exports = function () {
         htmls: {
             all: appCommonFolder + '**/*.html',
             root: '/client/app-common',
-            toCache: appCommonFolder + '**/*.html',
-            cacheFileName: 'app-common-templates.js',
+            toCache: appCommonFolder + '**/*.html'
         }
     };
 
-    var sharedModule = {
+    let sharedFolder = clientFolder + 'shared/';
+    let sharedModule = {
         name: 'shared',
+        folder: sharedFolder,
 
         tsToCompile: [].concat(
             sharedFolder + '*.module.ts',
@@ -114,24 +120,23 @@ module.exports = function () {
         lessToLint: [],
 
         lessToWatch: [
-            sharedFolder + '**/*.ts'
+            sharedFolder + '**/*.less'
         ],
         cssToCopy: [],
 
         htmls: {
             all: sharedFolder + '**/*.html',
             root: '/client/shared',
-            toCache: sharedFolder + '**/*.html',
-            cacheFileName: 'shared-templates.js',
+            toCache: sharedFolder + '**/*.html'
         }
     };
 
     // Bower files
-    var bowerConfig = rootFolder + 'bower.json';
-    var wiredep = require('wiredep');
-    var bowerJsFiles = wiredep({devDependencies: true})['js'];
+    let bowerConfig = rootFolder + 'bower.json';
+    let wiredep = require('wiredep');
+    let bowerJsFiles = wiredep({devDependencies: true})['js'];
 
-    var config = {
+    let config = {
         modules: [sharedModule, appCommonModule, appModule],
 
         folders: {
@@ -145,9 +150,9 @@ module.exports = function () {
             server: serverFolder,
             webserver: webserverFolder,
 
-            app: appFolder,
-            appCommon: appCommonFolder,
-            shared: sharedFolder,
+            // app: appFolder,
+            // appCommon: appCommonFolder,
+            // shared: sharedFolder,
             assets: assetsFolder,
 
             devBuild: devBuildFolder,
@@ -242,40 +247,38 @@ module.exports = function () {
     // cssFolder and cssParentFolder represent the build folder where all styles are placed
     // and its parent folder, respectively.
     // If areImages is true, then the images are optimized during a DIST build.
-    config.getStyleAssets = function(cssFolder, cssParentFolder) {
-        return [
-            {
-                src: bowerFolder + 'bootstrap/dist/fonts/**/*.*',
-                dest: cssParentFolder + 'fonts/',
-                areImages: false
-            },
-            {
-                src: bowerFolder + 'font-awesome/fonts/**/*.*',
-                dest: cssParentFolder + 'fonts/',
-                areImages: false
-            },
-            {
-                src: assetsFolder + 'images/**/*.*',
-                dest: cssParentFolder + 'images/',
-                areImages: true
-            },
-            {
-                src: config.folders.assets + 'fonts/*',
-                dest: cssParentFolder + 'fonts/',
-                areImages: false
-            },
-            {
-                src: [
-                    bowerFolder + 'angular-ui-grid/ui-grid.eot',
-                    bowerFolder + 'angular-ui-grid/ui-grid.svg',
-                    bowerFolder + 'angular-ui-grid/ui-grid.ttf',
-                    bowerFolder + 'angular-ui-grid/ui-grid.woff'
-                ],
-                dest: cssFolder,
-                areImages: false
-            }
-        ];
-    };
+    config.getStyleAssets = (cssFolder, cssParentFolder) => [
+        {
+            src: bowerFolder + 'bootstrap/dist/fonts/**/*.*',
+            dest: cssParentFolder + 'fonts/',
+            areImages: false
+        },
+        {
+            src: bowerFolder + 'font-awesome/fonts/**/*.*',
+            dest: cssParentFolder + 'fonts/',
+            areImages: false
+        },
+        {
+            src: assetsFolder + 'images/**/*.*',
+            dest: cssParentFolder + 'images/',
+            areImages: true
+        },
+        {
+            src: config.folders.assets + 'fonts/*',
+            dest: cssParentFolder + 'fonts/',
+            areImages: false
+        },
+        {
+            src: [
+                bowerFolder + 'angular-ui-grid/ui-grid.eot',
+                bowerFolder + 'angular-ui-grid/ui-grid.svg',
+                bowerFolder + 'angular-ui-grid/ui-grid.ttf',
+                bowerFolder + 'angular-ui-grid/ui-grid.woff'
+            ],
+            dest: cssFolder,
+            areImages: false
+        }
+    ];
 
     function exclude(glob) {
         if (typeof glob === 'string') {

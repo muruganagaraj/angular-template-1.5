@@ -3,7 +3,7 @@
 
 namespace shared.directives {
     const inputGroupDirectiveName: string = `${sharedComponentPrefix}InputGroup`;
-    const inputGroupDirectiveAttributeName: string = `${sharedComponentPrefix}-input-group`;
+    // const inputGroupDirectiveAttributeName: string = `${sharedComponentPrefix}-input-group`;
 
     sharedModule.directive(inputGroupDirectiveName, ['$compile', 'sharedConfig',
         ($compile: angular.ICompileService, sharedConfig: config.ISharedConfig) => {
