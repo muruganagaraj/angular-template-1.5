@@ -353,14 +353,11 @@ gulp.task('vet_compile_less', () => {
         .pipe($.less());
 });
 
-//TODO: Possible problem with the recess plugin. If it persists, try another plugin like gulp-lesshint.
 gulp.task('vet_lint_less', function() {
     log('[Vet] Linting LESS files');
     let lessToLint = config.modules.reduce((files, mod) => files.concat(mod.lessToLint), []);
     return gulp.src(lessToLint)
         .pipe($.lesshint());
-        // .pipe($.recess({ strictPropertyOrder: false }))
-        // .pipe($.recess.reporter());
 });
 
 ////////// Helper functions //////////

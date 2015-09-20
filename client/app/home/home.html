@@ -2,8 +2,16 @@
     <form name="homeForm" novalidate>
         <p>This is the home page</p>
         <shared-dropdown ng-model="home.selectedItem" items="home.items" display-text="text" value="value"></shared-dropdown>
-        <div class="input-group" ng-model="home.firstName">
-            <input type="text" name="firstName" ng-model="home.firstName" class="form-control" placeholder="firstName" required />
+        <div class="form-group" shared-input-group="homeForm.firstName">
+            <div class="input-group">
+                <input type="text" name="firstName" ng-model="home.firstName" class="form-control" placeholder="firstName" required />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <div class="input-group">
+            <input type="text" name="firstName2" ng-model="home.firstName" class="form-control" placeholder="firstName" required />
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>

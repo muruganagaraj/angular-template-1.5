@@ -2,34 +2,35 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 namespace shared.config {
-    export interface ISharedConfig {
-        editableElements: string[];
-        enableableElements: string[];
-    }
-
     export class SharedConfig implements angular.IServiceProvider {
-        //HTML elements that can be made editable/read-only using the enable-if directive
-        private _editableElements: string[] = ['INPUT'];
-
-        //HTML elements that can be enabled/disabled using the enable-if directive
-        private _enableableElements: string[] = ['BUTTON'];
+        private _config: ISharedConfig = {
+            enableIf: {
+                editableElements: ['INPUT'],
+                enableableElements: ['BUTTON']
+            },
+            inputGroup: {
+                condition: '{control-name}.$invalid'
+            }
+        };
 
         public $get(): ISharedConfig {
-            let result: ISharedConfig = {
-                editableElements: this._editableElements,
-                enableableElements: this._enableableElements
-            };
-            return result;
+            return this._config;
         }
 
-        public get editableElements(): string[] {
-            return this._editableElements;
-        }
-
-        public get enableableElements(): string[] {
-            return this._enableableElements;
+        public get config(): ISharedConfig {
+            return this._config;
         }
     }
 
     sharedModule.provider('sharedConfig', SharedConfig);
+
+    export interface ISharedConfig {
+        enableIf: {
+            editableElements: string[];
+            enableableElements: string[];
+        },
+        inputGroup: {
+            condition: string;
+        }
+    }
 }

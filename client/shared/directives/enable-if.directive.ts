@@ -10,7 +10,7 @@ namespace shared.directives {
 
     sharedModule.directive(enableIfDirectiveName, ['$compile', '$rootScope', 'sharedConfig',
         ($compile: angular.ICompileService, $rootScope: IEnableIfRootScope, sharedConfig: config.ISharedConfig) => {
-            let allControls: string[] = sharedConfig.editableElements.concat(sharedConfig.enableableElements);
+            let allControls: string[] = sharedConfig.enableIf.editableElements.concat(sharedConfig.enableIf.enableableElements);
             let selector: string = allControls.join(',').toLowerCase();
 
             //Set up a shouldDisable function on the root scope, if it doesn't already exist.
@@ -22,7 +22,7 @@ namespace shared.directives {
             //If the readonly-as-disabled attribute is specified, some elements need to be made
             //read-only instead of disabled.
             function getAttributeName(tagName: string, readonlyAsDisabled: boolean): string {
-                if (sharedConfig.enableableElements.some((tag: string) => tagName === tag)) {
+                if (sharedConfig.enableIf.enableableElements.some((tag: string) => tagName === tag)) {
                     return 'ng-disabled';
                 }
                 return readonlyAsDisabled ? 'ng-readonly' : 'ng-disabled';

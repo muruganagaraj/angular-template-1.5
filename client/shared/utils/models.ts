@@ -3,8 +3,8 @@ type Dictionary = any;
 type StringEnum = any;
 
 interface TextValuePair<TValue> {
-	text: string;
-	value: TValue;
+    text: string;
+    value: TValue;
 }
 
 type TextPair = TextValuePair<string>;
