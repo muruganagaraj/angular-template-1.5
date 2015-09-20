@@ -5,9 +5,10 @@ namespace shared.directives {
     const enableIfDirectiveName: string = `${sharedComponentPrefix}EnableIf`;
     const enableIfDirectiveAttributeName: string = `${sharedComponentPrefix}-enable-if`;
 
+    //Name of the shouldDisable function
     const shouldDisable: string = 'shouldDisable';
 
-    sharedModule().directive(enableIfDirectiveName, ['$compile', '$rootScope', 'sharedConfig',
+    sharedModule.directive(enableIfDirectiveName, ['$compile', '$rootScope', 'sharedConfig',
         ($compile: angular.ICompileService, $rootScope: IEnableIfRootScope, sharedConfig: config.ISharedConfig) => {
             let allControls: string[] = sharedConfig.editableElements.concat(sharedConfig.enableableElements);
             let selector: string = allControls.join(',').toLowerCase();
@@ -62,7 +63,7 @@ namespace shared.directives {
                     }
                     return {};
                 }
-            }
+            };
             return directive;
         }
     ]);

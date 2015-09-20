@@ -292,6 +292,77 @@ function serve(isDev) {
         });
 }
 
+////////// Vetting tasks //////////
+
+gulp.task('vet', done => {
+    sequence('generate-app-def',
+        'vet_compile_ts', 'vet_lint_ts',
+        'vet_compile_less',
+        done);
+});
+
+gulp.task('vet_compile_ts', () => {
+    log('[Vet] Compiling Typescript files');
+    let tsToCompile = config.modules.reduce((files, mod) => files.concat(mod.tsToCompile), config.definitions.all);
+    return gulp.src(tsToCompile)
+        .pipe($.typescript({
+            typescript: require('typescript'),
+            target: config.typescript.targetVersion,
+            declarationFiles: false,
+            noExternalResolve: false
+        }));
+});
+
+let tslintIndex = 0;
+gulp.task('vet_lint_ts', done => {
+    tslintIndex = 0;
+    let tasks = [];
+    for (let i = 0; i < config.tslint.length; i++) {
+        tasks.push('vet_lint_ts_copy_config');
+        tasks.push('vet_lint_ts_run_lint');
+        tasks.push('vet_lint_ts_increment_counter');
+    }
+    tasks.push(done);
+    sequence.apply(this, tasks);
+});
+
+gulp.task('vet_lint_ts_copy_config', () =>
+    gulp.src(config.tslint[tslintIndex].config)
+        .pipe($.rename('tslint.json'))
+        .pipe(gulp.dest(config.folders.root))
+);
+
+gulp.task('vet_lint_ts_run_lint', () =>
+    gulp.src(config.tslint[tslintIndex].files)
+        .pipe($.tslint())
+        .pipe($.tslint.report('verbose', {
+            emitError: false
+        }))
+);
+
+gulp.task('vet_lint_ts_increment_counter', done => {
+    log(tslintIndex);
+    tslintIndex += 1;
+    done();
+});
+
+gulp.task('vet_compile_less', () => {
+    log('[Vet] Compiling LESS files');
+    let lessToCompile = config.modules.reduce((files, mod) => files.concat(mod.lessToCompile), []);
+    return gulp.src(lessToCompile)
+        .pipe($.less());
+});
+
+//TODO: Possible problem with the recess plugin. If it persists, try another plugin like gulp-lesshint.
+gulp.task('vet_lint_less', function() {
+    log('[Vet] Linting LESS files');
+    let lessToLint = config.modules.reduce((files, mod) => files.concat(mod.lessToLint), []);
+    return gulp.src(lessToLint)
+        .pipe($.lesshint());
+        // .pipe($.recess({ strictPropertyOrder: false }))
+        // .pipe($.recess.reporter());
+});
+
 ////////// Helper functions //////////
 
 function getStyleAssetsCopyTasks(cssFolder, cssParentFolder, optimizeImages) {

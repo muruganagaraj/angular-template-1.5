@@ -4,9 +4,11 @@
 declare let appComponentPrefix: string;
 declare let sharedComponentPrefix: string;
 
+/* tslint:disable:no-unused-variable */
+
 /**
  * Registers a route (and optional secondary routes) and registers the associated controller.
- * 
+ *
  * @param {Function} controllerConstructor - The controller class to register.
  * @param {IExtendedState} route - The primary route to register.
  * @param {IExtendedState[]} secondaryRoutes - Optional secondary routes for the controller.

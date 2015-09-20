@@ -1,6 +1,7 @@
 # IDE setting files
 .idea/
 .settings/
+.vscode/
 
 # NPM and Bower
 bower_components/
@@ -10,7 +11,8 @@ node_modules/
 .dist/
 client/.dev/
 
-# Index.html file
+# Generated files
+tslint.json
 client/index.html
 
 # JavaScript and map files, except in the assets folder

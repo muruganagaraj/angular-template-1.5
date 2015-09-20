@@ -59,5 +59,5 @@ namespace shared.popups {
         }
     }
 
-    sharedModule().service('popupServices', PopupServices);
+    sharedModule.service('popupServices', PopupServices);
 }

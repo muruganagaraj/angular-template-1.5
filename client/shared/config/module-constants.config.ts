@@ -2,7 +2,7 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 namespace shared.config {
-    sharedModule().constant('sharedConstants', <ISharedConstants>{
+    sharedModule.constant('sharedConstants', <ISharedConstants>{
         templateUrlRoot: '/client/shared/'
     });
 

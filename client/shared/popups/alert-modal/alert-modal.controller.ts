@@ -25,5 +25,5 @@ namespace shared.popups.alertModal {
         danger
     }
 
-    sharedModule().controller('alertModalController', AlertModalController);
+    sharedModule.controller('alertModalController', AlertModalController);
 }

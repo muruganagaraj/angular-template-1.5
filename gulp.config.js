@@ -38,7 +38,6 @@ module.exports = function () {
             appFolder + '*.module.ts',
             appFolder + '**/*.ts'
         ),
-        tsLintExceptions: appCommonFolder + 'webservices/user-profile.services.ts',
         jsToCopy: [],
         jsOutputFolder: devBuildScriptsFolder + 'app/',
         jsToInject: [
@@ -47,6 +46,9 @@ module.exports = function () {
 
         lessToCompile: [
             bowerFolder + 'font-awesome/less/font-awesome.less',
+            assetsFolder + 'less/styles.less'
+        ],
+        lessToLint: [
             assetsFolder + 'less/styles.less'
         ],
         lessToWatch: [
@@ -74,9 +76,9 @@ module.exports = function () {
         jsToInject: [
             devBuildScriptsFolder + 'app-common/**/*.js'
         ],
-        tsToLint: appCommonFolder + '**/*.ts',
 
         lessToCompile: [],
+        lessToLint: [],
         lessToWatch: [],
         cssToCopy: [],
 
@@ -107,10 +109,13 @@ module.exports = function () {
             devBuildScriptsFolder + 'shared/viewmodel/**/*.js',
             devBuildScriptsFolder + 'shared/**/*.js'
         ],
-        tsToLint: sharedFolder + '**/*.ts',
 
         lessToCompile: [],
-        lessToWatch: [],
+        lessToLint: [],
+
+        lessToWatch: [
+            sharedFolder + '**/*.ts'
+        ],
         cssToCopy: [],
 
         htmls: {
@@ -184,6 +189,17 @@ module.exports = function () {
             appTemplate: typingsFolder + 'app.d.ts.template',
             all: typescriptDefinitionFiles
         },
+
+        tslint: [
+            {
+                config: toolsFolder + 'tslint/tslint-app.json',
+                files: [].concat(appCommonModule.tsToCompile).concat(appModule.tsToCompile)
+            },
+            {
+                config: toolsFolder + 'tslint/tslint-shared.json',
+                files: [].concat(sharedModule.tsToCompile)
+            }
+        ],
 
         webServerConfigs: {
             iis: {

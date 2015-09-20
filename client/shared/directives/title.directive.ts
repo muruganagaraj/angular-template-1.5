@@ -9,7 +9,7 @@ namespace shared.directives {
      * Uses the original text as the suffix for titles and watches the specified attribute value
      * for changes to the title.
      */
-    sharedModule().directive(titleDirectiveName, () => {
+    sharedModule.directive(titleDirectiveName, () => {
         let directive: angular.IDirective = {
             restrict: 'A',
             link: (scope: angular.IScope, elem: angular.IAugmentedJQuery, attrs: angular.IAttributes): void => {

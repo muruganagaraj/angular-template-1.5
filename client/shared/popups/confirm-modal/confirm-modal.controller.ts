@@ -18,5 +18,5 @@ namespace shared.popups.confirmModal {
         messages: string[];
     }
 
-    sharedModule().controller('confirmModalController', ConfirmModalController);
+    sharedModule.controller('confirmModalController', ConfirmModalController);
 }

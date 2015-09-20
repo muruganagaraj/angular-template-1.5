@@ -31,5 +31,5 @@ namespace shared.config {
         }
     }
 
-    sharedModule().provider('sharedConfig', SharedConfig);
+    sharedModule.provider('sharedConfig', SharedConfig);
 }
