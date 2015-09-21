@@ -6,34 +6,34 @@
   "bundle": "typings/lib.d.ts",
   "installed": {
     "jquery/jquery.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "bootstrap/bootstrap.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "angularjs/angular.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "angularjs/angular-animate.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "angularjs/angular-sanitize.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "angular-ui-bootstrap/angular-ui-bootstrap.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "angular-ui-router/angular-ui-router.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "ui-grid/ui-grid.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "moment/moment.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     },
     "moment/moment-node.d.ts": {
-      "commit": "5f480287834a2615274eea31574b713e64decf17"
+      "commit": "09e37435ffb2c56a6f908081194a74756f24f99d"
     }
   }
 }

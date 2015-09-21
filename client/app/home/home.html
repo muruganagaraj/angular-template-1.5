@@ -9,6 +9,9 @@
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
             </div>
+            <div ng-messages="homeForm.firstName.$error">
+                <div ng-message="required">Required</div>
+            </div>
         </div>
         <div class="input-group">
             <input type="text" name="firstName2" ng-model="home.firstName" class="form-control" placeholder="firstName" required />

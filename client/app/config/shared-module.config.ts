@@ -5,7 +5,7 @@ namespace app.config {
     appModule.config(
         /* @ngInject */
         (sharedConfigProvider: shared.config.SharedConfig) => {
-            sharedConfigProvider.config.inputGroup.condition = '{control-name}.$invalid && {control-name}.$touched';
+            // sharedConfigProvider.config.inputGroup.condition = '{control-name}.$invalid && {control-name}.$touched';
         }
     );
 }
