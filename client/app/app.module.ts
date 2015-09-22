@@ -22,8 +22,8 @@ namespace app {
 
     export function registerController(
         controllerConstructor: Function,
-        route: IExtendedState,
-        ...secondaryRoutes: IExtendedState[]): angular.IModule {
+        route: IPageState,
+        ...secondaryRoutes: IPageState[]): angular.IModule {
 
         return registerControllers(controllerConstructor, route, secondaryRoutes, app.appModule, 'appConstants');
     }

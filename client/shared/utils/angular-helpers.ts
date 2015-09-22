@@ -10,8 +10,8 @@ declare let sharedComponentPrefix: string;
  * Registers a route (and optional secondary routes) and registers the associated controller.
  *
  * @param {Function} controllerConstructor - The controller class to register.
- * @param {IExtendedState} route - The primary route to register.
- * @param {IExtendedState[]} secondaryRoutes - Optional secondary routes for the controller.
+ * @param {IPageState} route - The primary route to register.
+ * @param {IPageState[]} secondaryRoutes - Optional secondary routes for the controller.
  * @param {angular.IModule} module - The Angular module to register the controller and configure the route(s)
  * @param {string} constantsName - The name of the constants Angular constant (of type IConstants) that contains the template URL root.
  *
@@ -19,12 +19,12 @@ declare let sharedComponentPrefix: string;
  */
 function registerControllers(
     controllerConstructor: Function,
-    route: IExtendedState,
-    secondaryRoutes: IExtendedState[],
+    route: IPageState,
+    secondaryRoutes: IPageState[],
     module: angular.IModule,
     constantsName: string): angular.IModule {
 
-    let routes: IExtendedState[] = setupRoutes(route, secondaryRoutes);
+    let routes: IPageState[] = setupRoutes(route, secondaryRoutes);
     module.config(['$stateProvider', constantsName,
         ($stateProvider: angular.ui.IStateProvider, constants: IConstants) => {
             for (let i: number = 0; i < routes.length; i++) {
@@ -37,24 +37,29 @@ function registerControllers(
     return module.controller(<string>route.controller, controllerConstructor);
 }
 
-function setupRoutes(route: IExtendedState, secondaryRoutes: IExtendedState[]): IExtendedState[] {
+function setupRoutes(route: IPageState, secondaryRoutes: IPageState[]): IPageState[] {
     if (route.controllerAs === 'layout') {
         return [route].concat(secondaryRoutes || []);
     }
 
     route.controllerAs = route.name.snakeCaseToCamelCase();
     route.controller = `${route.controllerAs}Controller`;
+    if (Boolean(route.layout)) {
+        route.parent = route.layout;
+    }
 
     for (let i: number; i < (secondaryRoutes || []).length; i++) {
         secondaryRoutes[i].controllerAs = route.controllerAs;
         secondaryRoutes[i].controller = route.controller;
+        secondaryRoutes[i].parent = route.parent;
+        secondaryRoutes[i].templateUrl = route.templateUrl;
     }
 
     return [route].concat(secondaryRoutes || []);
 }
 
-function createLayoutRoute(name: string, templateUrl: string): IExtendedState {
-    return <IExtendedState>{
+function createLayoutRoute(name: string, templateUrl: string): IPageState {
+    return <IPageState>{
         name: name,
         url: '^',
         templateUrl: templateUrl,

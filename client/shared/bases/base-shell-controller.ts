@@ -5,7 +5,7 @@ namespace shared.bases {
     export abstract class BaseShellController {
         constructor(protected $rootScope: angular.IRootScopeService,
                     public res: Resources) {
-            $rootScope.$on('$stateChangeSuccess', (event: angular.IAngularEvent, toState: IExtendedState) => {
+            $rootScope.$on('$stateChangeSuccess', (event: angular.IAngularEvent, toState: IPageState) => {
                 this.title = toState.title;
             });
         }

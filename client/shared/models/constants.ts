@@ -1,3 +1,7 @@
+/**
+ * Base interface for all constants registered with each module.
+ * This interface specifies the mandatory members required by any module.
+ */
 interface IConstants {
     /**
      * Root relative URL for all HTML templates under the module.

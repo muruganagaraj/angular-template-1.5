@@ -9,6 +9,6 @@ namespace app.common.layouts.main {
         }
     }
 
-    export const route: IExtendedState = createLayoutRoute('mainLayout', 'layouts/main/main-layout.html');
+    export const route: IPageState = createLayoutRoute('mainLayout', 'layouts/main/main-layout.html');
     registerController(MainLayoutController, route);
 }

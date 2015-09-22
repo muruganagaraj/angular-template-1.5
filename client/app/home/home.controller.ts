@@ -22,7 +22,7 @@ namespace app.home {
     interface IHomeControllerScope extends shared.bases.IPageControllerScope<common.layouts.main.MainLayoutController> {
     }
 
-    export const route: IExtendedState = {
+    export const route: IPageState = {
         name: 'home',
         parent: common.layouts.main.route,
         templateUrl: 'home/home.html',
