@@ -1,7 +1,22 @@
 @import "../../../bower_components/bootstrap/less/bootstrap";
 
-@theme: "default";
+//Variables that control whether to use the stock styles from the shared module
+//or if you want to use your own.
+@use-stock-theme: true;
 @use-stock-ng-validation-styles: true;
 @use-stock-ng-animation-styles: true;
 
+//Variable that decides the stock theme to use.
+//If @use-stock-theme = true, then use this variable to get the theme folder name under shared
+@theme: "default";
+
+//If @use-stock-theme = false, then import the theme/theme.less file under this folder.
+& when (@use-stock-theme = false) {
+    @import "theme/theme";
+}
+
+//Always import the shared.less file. What to use from that file is controlled by the
+//@use-stock- variables.
 @import "../../shared/styles/shared";
+
+// ---------- start adding app-specific less imports below ----------

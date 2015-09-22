@@ -10,12 +10,21 @@ namespace shared.directives {
             let directive: angular.IDirective = {
                 restrict: 'A',
                 compile: (elem: angular.IAugmentedJQuery, attrs: angular.IAttributes): angular.IDirectivePrePost => {
-                    let inputGroup: JQuery = elem.find('DIV.input-group').first();
-                    let ngClass: string = sharedConfig.inputGroup.condition.replace(/\{control-name\}/g, attrs[inputGroupDirectiveName]);
-                    inputGroup.attr('ng-class', `{'ng-input-group': ${ngClass}}`);
+                    let formName: string = attrs[inputGroupDirectiveName];
+                    let inputGroups: angular.IAugmentedJQuery = elem.find('DIV.input-group');
+                    for (let i: number = 0; i < inputGroups.length; i++) {
+                        let inputGroup: JQuery = angular.element(inputGroups[i]);
 
-                    let input: JQuery = elem.find('INPUT[ng-model]').first();
-                    input.attr('no-ng-style', '');
+                        let input: JQuery = inputGroup.find('INPUT[ng-model]').first();
+                        input.addClass('no-ng-style');
+
+                        let ngClass: string = sharedConfig.inputGroup.condition
+                            .replace(/\{form-name\}/g, formName)
+                            .replace(/\{control-name\}/g, `${formName}.${input.attr('name')}`);
+                        angular.element(inputGroup).attr('ng-class', `{'ng-input-group': ${ngClass}}`);
+                    }
+
+                    // input.attr('no-ng-style', '');
 
                     return {};
                 }
