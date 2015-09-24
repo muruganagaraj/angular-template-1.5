@@ -2,39 +2,36 @@
 
 module.exports = function () {
     // Root folder
-    let rootFolder = './';
+    const rootFolder = './';
 
     // Other root folders
-    let bowerFolder = rootFolder + 'bower_components/';
-    let clientFolder = rootFolder + 'client/';
-    let nodeModulesFolder = rootFolder + 'node_modules/';
-    let serverFolder = rootFolder + 'server/';
-    let toolsFolder = rootFolder + 'tools/';
-    let typingsFolder = rootFolder + 'typings/';
-    let webserverFolder = rootFolder + 'webserver/';
+    const bowerFolder = rootFolder + 'bower_components/';
+    const clientFolder = rootFolder + 'client/';
+    const nodeModulesFolder = rootFolder + 'node_modules/';
+    const serverFolder = rootFolder + 'server/';
+    const toolsFolder = rootFolder + 'tools/';
+    const typingsFolder = rootFolder + 'typings/';
+    const webserverFolder = rootFolder + 'webserver/';
 
-    // Client folders
-    // let appFolder = clientFolder + 'app/';
-    // let appCommonFolder = clientFolder + 'app-common/';
-    // let sharedFolder = clientFolder + 'shared/';
-    let assetsFolder = clientFolder + 'assets/';
+    // Assets folders
+    const assetsFolder = clientFolder + 'assets/';
 
     // Output folders
-    let devBuildFolder = clientFolder + '.dev/';
-    let devBuildScriptsFolder = devBuildFolder + 'js/';
-    let devBuildStylesFolder = devBuildFolder + 'css/';
-    let distBuildFolder = rootFolder + '.dist/';
+    const devBuildFolder = clientFolder + '.dev/';
+    const devBuildScriptsFolder = devBuildFolder + 'js/';
+    const devBuildStylesFolder = devBuildFolder + 'css/';
+    const distBuildFolder = rootFolder + '.dist/';
 
     // Typescript definition files
-    let appDefinitionFileName = 'app.d.ts';
-    let appDefinitionFile = typingsFolder + appDefinitionFileName;
-    let typescriptDefinitionFiles = [].concat(
+    const appDefinitionFileName = 'app.d.ts';
+    const appDefinitionFile = typingsFolder + appDefinitionFileName;
+    const typescriptDefinitionFiles = [].concat(
         typingsFolder + 'lib.d.ts',
         appDefinitionFile
     );
 
-    let appFolder = clientFolder + 'app/';
-    let appModule = {
+    const appFolder = clientFolder + 'app/';
+    const appModule = {
         name: 'app',
         folder: appFolder,
 
@@ -67,8 +64,8 @@ module.exports = function () {
         }
     };
 
-    let appCommonFolder = clientFolder + 'app-common/';
-    let appCommonModule = {
+    const appCommonFolder = clientFolder + 'app-common/';
+    const appCommonModule = {
         name: 'app-common',
         folder: appCommonFolder,
 
@@ -78,9 +75,7 @@ module.exports = function () {
         ),
         jsToCopy: [],
         jsOutputFolder: devBuildScriptsFolder + 'app-common/',
-        jsToInject: [
-            devBuildScriptsFolder + 'app-common/**/*.js'
-        ],
+        jsToInject: [devBuildScriptsFolder + 'app-common/**/*.js'],
 
         lessToCompile: [],
         lessToLint: [],
@@ -94,8 +89,9 @@ module.exports = function () {
         }
     };
 
-    let sharedFolder = clientFolder + 'shared/';
-    let sharedModule = {
+    const sharedFolder = `${clientFolder}shared/core/`;
+    const sharedJsOutputFolder = `${devBuildScriptsFolder}shared/`;
+    const sharedModule = {
         name: 'shared',
         folder: sharedFolder,
 
@@ -106,14 +102,14 @@ module.exports = function () {
             sharedFolder + '**/*.ts'
         ),
         jsToCopy: [],
-        jsOutputFolder: devBuildScriptsFolder + 'shared/',
+        jsOutputFolder: sharedJsOutputFolder,
         jsToInject: [
-            devBuildScriptsFolder + 'shared/extensions/**/*.js',
-            devBuildScriptsFolder + 'shared/base-state.js',
-            devBuildScriptsFolder + 'shared/*.js',
-            devBuildScriptsFolder + 'shared/wrappers/**/*.js',
-            devBuildScriptsFolder + 'shared/viewmodel/**/*.js',
-            devBuildScriptsFolder + 'shared/**/*.js'
+            sharedJsOutputFolder + 'extensions/**/*.js',
+            sharedJsOutputFolder + 'base-state.js',
+            sharedJsOutputFolder + '*.js',
+            sharedJsOutputFolder + 'wrappers/**/*.js',
+            sharedJsOutputFolder + 'viewmodel/**/*.js',
+            sharedJsOutputFolder + '**/*.js'
         ],
 
         lessToCompile: [],
@@ -126,18 +122,45 @@ module.exports = function () {
 
         htmls: {
             all: sharedFolder + '**/*.html',
-            root: '/client/shared',
+            root: '/client/shared/core',
             toCache: sharedFolder + '**/*.html'
         }
     };
 
-    // Bower files
-    let bowerConfig = rootFolder + 'bower.json';
-    let wiredep = require('wiredep');
-    let bowerJsFiles = wiredep({devDependencies: true})['js'];
+    const sharedNgUiFolder = clientFolder + 'shared/ng-ui/';
+    const sharedNgUiJsOutputFolder = devBuildScriptsFolder + 'shared-ng-ui/';
+    const sharedNgUiModule = {
+        name: 'shared-ng-ui',
+        folder: sharedNgUiFolder,
 
-    let config = {
-        modules: [sharedModule, appCommonModule, appModule],
+        tsToCompile: [].concat(
+            sharedNgUiFolder + '*.module.ts',
+            sharedNgUiFolder + '**/*.ts'
+        ),
+        jsToCopy: [],
+        jsOutputFolder: sharedNgUiJsOutputFolder,
+        jsToInject: [sharedNgUiJsOutputFolder + '**/*.js'],
+
+        lessToCompile: [],
+        lessToLint: [],
+
+        lessToWatch: [sharedNgUiFolder + '**/*.less'],
+        cssToCopy: [],
+
+        htmls: {
+            all: sharedNgUiFolder + '**/*.html',
+            root: '/client/shared/ng-ui',
+            toCache: sharedNgUiFolder + '**/*.html'
+        }
+    };
+
+    // Bower files
+    const bowerConfig = rootFolder + 'bower.json';
+    const wiredep = require('wiredep');
+    const bowerJsFiles = wiredep({devDependencies: true})['js'];
+
+    const config = {
+        modules: [sharedNgUiModule, sharedModule, appCommonModule, appModule],
 
         folders: {
             root: rootFolder,
@@ -150,9 +173,6 @@ module.exports = function () {
             server: serverFolder,
             webserver: webserverFolder,
 
-            // app: appFolder,
-            // appCommon: appCommonFolder,
-            // shared: sharedFolder,
             assets: assetsFolder,
 
             devBuild: devBuildFolder,
@@ -175,7 +195,9 @@ module.exports = function () {
                 devBuildScriptsFolder + 'app-common/app-common.module.js',
                 devBuildScriptsFolder + 'app-common/config/*.js',
                 devBuildScriptsFolder + 'shared/shared.module.js',
-                devBuildScriptsFolder + 'shared/config/*.js'
+                devBuildScriptsFolder + 'shared/config/*.js',
+                devBuildScriptsFolder + 'shared-ng-ui/shared-ng-ui.module.js',
+                devBuildScriptsFolder + 'shared-ng-ui/config/*.js'
             ],
         },
 

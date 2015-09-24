@@ -1,5 +1,5 @@
-/// <reference path="../../../typings/lib.d.ts" />
-/// <reference path="../../../typings/app.d.ts" />
+/// <reference path="../../../../typings/lib.d.ts" />
+/// <reference path="../../../../typings/app.d.ts" />
 
 namespace shared.bases {
     /**
