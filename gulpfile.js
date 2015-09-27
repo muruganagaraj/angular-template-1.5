@@ -71,6 +71,7 @@ gulp.task('compile_scripts', ['generate-app-def'], () => {
                 noExternalResolve: false
             }));
         return compileTask.js
+            .pipe($.stripLine(`/// <reference path="`))
             .pipe(gulp.dest(mod.jsOutputFolder));
     });
     return merge(tasks);
