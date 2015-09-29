@@ -38,6 +38,10 @@ Array.prototype['findIndex'] = function <T>(predicate: (item: T) => boolean): nu
     return undefined;
 };
 
+Array.prototype['joinTruthy'] = function<T>(separator?: string): string {
+    return this.filter((item: T) => Boolean(item)).join(separator || ' ');
+};
+
 Array.prototype['remove'] = function <T>(item: T): boolean {
     let index: number = this.indexOf(item);
     if (index < 0) {
@@ -65,6 +69,7 @@ interface Array<T> {
     anyFalsy<T>(): boolean;
     find<T>(predicate: (item: T, index?: number, arr?: Array<T>) => boolean): T;
     findIndex<T>(predicate: (item: T) => boolean): number;
+    joinTruthy<T>(separator?: string): string;
     remove<T>(item: T): T;
     removeIf<T>(predicate: (item: T, index?: number, arr?: Array<T>) => boolean): T[];
 }

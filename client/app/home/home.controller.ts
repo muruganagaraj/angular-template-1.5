@@ -11,7 +11,7 @@ namespace app.home {
         public items: TextPair[] = [
             { value: '001', text: 'Item 1'},
             { value: '002', text: 'Item 2'},
-            { value: '003', text: 'Item 3'}
+            { value: '003', text: 'Third Item'}
         ];
 
         public selectedItem: string;

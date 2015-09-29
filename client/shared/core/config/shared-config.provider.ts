@@ -4,6 +4,7 @@
 namespace shared.config {
     export class SharedConfig implements angular.IServiceProvider {
         private _config: ISharedConfig = {
+            dropdownBuilder: null,
             enableIf: {
                 editableElements: ['INPUT'],
                 enableableElements: ['BUTTON']
@@ -25,6 +26,7 @@ namespace shared.config {
     sharedModule.provider('sharedConfig', SharedConfig);
 
     export interface ISharedConfig {
+        dropdownBuilder: (attrs: widgets.IDropdownWidgetAttributes) => JQuery;
         enableIf: {
             editableElements: string[];
             enableableElements: string[];
