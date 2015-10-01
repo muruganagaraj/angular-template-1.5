@@ -11,7 +11,7 @@ namespace shared.popups {
     const warnTitle: string = 'Warning';
     const okButtonTitle: string = 'OK';
 
-    export class PopupServices extends bases.BasePopupService {
+    export class PopupService extends bases.BasePopupService {
         /* @ngInject */
         constructor($modal: angular.ui.bootstrap.IModalService,
                     $window: angular.IWindowService,
@@ -59,5 +59,5 @@ namespace shared.popups {
         }
     }
 
-    sharedModule.service('popupServices', PopupServices);
+    sharedModule.service('popupService', PopupService);
 }
