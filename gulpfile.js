@@ -109,7 +109,8 @@ gulp.task('inject_custom_scripts', () => {
         starttag: '<!-- inject:config:js -->'
     };
 
-    let cssSrc = gulp.src(config.injections.css, {read: false});
+    let cssFiles = config.modules.reduce((result, mod) => result.concat(mod.cssToCopy), config.injections.css);
+    let cssSrc = gulp.src(cssFiles, {read: false});
 
     let firstJsSrc = gulp.src(config.injections.firstJs);
 

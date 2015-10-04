@@ -3,6 +3,13 @@
 
 namespace shared.services {
     export class TextValuePairService {
+        /**
+         * Gets the text of the text-value pair in a text-value pair array whose value is equal
+         * to the specified value.
+         * @param {TextValuePair<TValue>[]} The text-value pair array.
+         * @param {value} The value to search for.
+         * @returns {string} The text of the matched text-value pair or undefined if no match found.
+         */
         public getText<TValue>(pairs: TextValuePair<TValue>[], value: TValue): string {
             if (!pairs || pairs.length === 0) {
                 return undefined;
