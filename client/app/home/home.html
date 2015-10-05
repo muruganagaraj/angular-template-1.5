@@ -1,7 +1,7 @@
 <div>
     <form name="homeForm" novalidate>
         <p>This is the dashboard</p>
-        <shared-dropdown ng-model="home.selectedItem" items="home.items" display-text="text" value="value"></shared-dropdown>
+        <!--<shared-dropdown ng-model="home.selectedItem" items="home.items" display-text="text" value="value"></shared-dropdown>-->
         <div class="form-group" shared-input-group="homeForm">
             <div class="input-group">
                 <input type="text" name="firstName" ng-model="home.firstName" class="form-control" placeholder="first name" autofocus required />
@@ -20,9 +20,11 @@
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
         </div>
+        <div>
+            {{ home.state | json }}
     </form>
-    <button class="btn btn-primary">Primary button</button>
-    <button class="btn btn-info">Info button</button>
+    <button class="btn btn-primary" ng-click="home.onSetStateClicked()">Primary button</button>
+    <button class="btn btn-info" ng-click="home.onGetStateClicked()">Info button</button>
     <button class="btn btn-danger">Danger button</button>
     <button class="btn btn-default">Default button</button>
 </div>

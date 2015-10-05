@@ -4,7 +4,7 @@
 namespace app.home {
     export class HomeController extends shared.bases.PageController<common.layouts.main.MainLayoutController> {
         /* @ngInject */
-        constructor($scope: IHomeControllerScope) {
+        constructor($scope: IHomeControllerScope, private homeState: HomeState) {
             super($scope, null);
         }
 
@@ -17,6 +17,15 @@ namespace app.home {
         public selectedItem: string;
 
         public firstName: string;
+        public state: any;
+
+        public onSetStateClicked() {
+            this.homeState.myState = { text: 'Jeevan', value: '100' };
+        }
+
+        public onGetStateClicked() {
+            this.state = this.homeState.myState;
+        }
     }
 
     interface IHomeControllerScope extends shared.bases.IPageControllerScope<common.layouts.main.MainLayoutController> {
@@ -30,4 +39,22 @@ namespace app.home {
     };
 
     registerController(HomeController, route);
+
+    export class HomeState extends shared.bases.BaseState {
+        constructor() {
+            super([
+                { name: 'myState', type: shared.bases.StateType.persisted }
+            ]);
+        }
+
+        public get myState(): TextPair {
+            return this.getState<TextPair>('myState');
+        }
+
+        public set myState(value: TextPair) {
+            this.setState<TextPair>('myState', value);
+        }
+    }
+
+    appModule.service('homeState', HomeState);
 }
