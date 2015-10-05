@@ -16,6 +16,7 @@ namespace shared.bases {
         }
 
         protected initialize(): void {
+            //Optionally override in derived classes.
         }
 
         public clear(initialize: boolean = false): void {

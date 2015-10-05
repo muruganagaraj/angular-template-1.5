@@ -11,6 +11,9 @@ namespace shared.config {
             },
             inputGroup: {
                 condition: '{control-name}.$invalid'
+            },
+            messaging: {
+                messagePrefix: 'msg-'
             }
         };
 
@@ -33,6 +36,9 @@ namespace shared.config {
         };
         inputGroup: {
             condition: string;
+        };
+        messaging: {
+            messagePrefix: string;
         };
     }
 }

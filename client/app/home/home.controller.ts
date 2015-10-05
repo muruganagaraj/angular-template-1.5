@@ -4,8 +4,12 @@
 namespace app.home {
     export class HomeController extends shared.bases.PageController<common.layouts.main.MainLayoutController> {
         /* @ngInject */
-        constructor($scope: IHomeControllerScope, private homeState: HomeState) {
+        constructor($scope: IHomeControllerScope, private messagingService: shared.messaging.MessagingService) {
             super($scope, null);
+            $scope.$on('$onMessageReceived', (event: angular.IAngularEvent, message: shared.messaging.IMessage<TextPair>) => {
+                this.state = message.message;
+                $scope.$apply();
+            });
         }
 
         public items: TextPair[] = [
@@ -17,14 +21,10 @@ namespace app.home {
         public selectedItem: string;
 
         public firstName: string;
-        public state: any;
+        public state: TextPair;
 
-        public onSetStateClicked() {
-            this.homeState.myState = { text: 'Jeevan', value: '100' };
-        }
-
-        public onGetStateClicked() {
-            this.state = this.homeState.myState;
+        public onSetStateClicked(): void {
+            this.messagingService.send('test', { text: this.firstName, value: this.firstName });
         }
     }
 
