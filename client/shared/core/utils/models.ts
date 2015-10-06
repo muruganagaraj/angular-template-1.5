@@ -9,8 +9,3 @@ interface TextValuePair<TValue> {
 
 type TextPair = TextValuePair<string>;
 type TextNumberPair = TextValuePair<number>;
-
-enum SortOrder {
-    ascending,
-    descending
-}
