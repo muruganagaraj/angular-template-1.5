@@ -31,7 +31,7 @@ namespace shared.messaging {
                 if (!value) {
                     return;
                 }
-                let message: IMessage<any> = {
+                let message: IMessage = {
                     id: id,
                     message: typeof(value) === 'string' ? angular.fromJson(value) : value
                 };

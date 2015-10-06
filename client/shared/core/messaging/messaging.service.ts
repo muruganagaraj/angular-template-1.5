@@ -17,11 +17,8 @@ namespace shared.messaging {
             }
             //TODO: Do we need to delete the local storage item first?
             let storageKey: string = `${this.sharedConfig.messaging.messagePrefix || ''}${id}`;
-            this.$window.localStorage.setItem(storageKey, JSON.stringify(value));
-            //TODO: Can we remove the token without using the timeout?
-            // this.$timeout((): void => {
+            this.$window.localStorage.setItem(storageKey, angular.toJson(value));
             this.$window.localStorage.removeItem(storageKey);
-            // }, 400);
         }
     }
 

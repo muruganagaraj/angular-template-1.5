@@ -39,6 +39,19 @@ namespace shared.services {
             let year: string = dt.getFullYear().toString().padLeft(4, '0');
             return `${month}/${day}/${year}`;
         }
+
+        public vmSortOrderToSortOrder(sortOrder: SortOrder): string {
+            return !sortOrder || sortOrder === SortOrder.ascending ? 'ASC' : 'DESC';
+        }
+
+        public sortOrderToVmSortOrder(sortOrder: string): SortOrder {
+            return !sortOrder || sortOrder === 'ASC' ? SortOrder.ascending : SortOrder.descending;
+        }
+
+        public getServerField(fields: ServerFieldMapping[], clientField: string): string {
+            let match: ServerFieldMapping = fields.find((field: ServerFieldMapping) => field.client === clientField);
+            return Boolean(match) ? match.server : undefined;
+        }
     }
 
     sharedModule.service('viewModelService', ViewModelService);

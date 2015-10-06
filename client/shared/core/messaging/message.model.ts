@@ -2,8 +2,8 @@
 /// <reference path="../../../../typings/app.d.ts" />
 
 namespace shared.messaging {
-    export interface IMessage<T> {
+    export interface IMessage {
         id: string;
-        message: T;
+        message: any;
     }
 }

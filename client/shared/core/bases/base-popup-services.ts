@@ -4,18 +4,38 @@
 namespace shared.bases {
     export abstract class BasePopupService {
         constructor(private $modal: angular.ui.bootstrap.IModalService,
-                    private $window: angular.IWindowService) {
+                    private $window: angular.IWindowService,
+                    private messagingService: messaging.MessagingService) {
         }
 
-        protected showWindow(url: string, width: number, height: number, options?: IWindowPopupOptions): void {
-            let specs: string = `width=${width || 500},height=${height || 400}`;
+        protected showWindow(url: string, options?: IWindowPopupOptions): void {
             options = options || {};
+            let specs: string = `width=${options.width || 500},height=${options.height || 400}`;
+            let inputs: IWindowInput = undefined;
+            if (Boolean(options.input)) {
+                inputs = {
+                    windowId: this.getUniqueWindowId(),
+                    input: options.input
+                };
+                if (!options.queryParams) {
+                    options.queryParams = {};
+                }
+                options.queryParams.__u = inputs.windowId;
+            }
             url += this.buildQueryParams(options.queryParams);
             if (options.scrollbars === undefined || options.scrollbars) {
                 specs += `,scrollbars=1`;
             }
             let target: string = options.target || '_blank';
             this.$window.open(url, target, specs);
+            if (Boolean(inputs)) {
+                this.messagingService.send('$windowInput', inputs);
+            }
+        }
+
+        private getUniqueWindowId(): string {
+            let generator: () => string = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            return `w${generator()}${generator()}`;
         }
 
         private buildQueryParams(queryParams: any): string {
@@ -57,8 +77,16 @@ namespace shared.bases {
     }
 
     export interface IWindowPopupOptions {
+        width?: number;
+        height?: number;
         queryParams?: any;
+        input?: any;
         target?: string;
         scrollbars?: boolean;
+    }
+
+    export interface IWindowInput {
+        windowId: string;
+        input: any;
     }
 }

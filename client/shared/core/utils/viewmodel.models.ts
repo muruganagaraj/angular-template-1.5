@@ -13,6 +13,11 @@ interface SearchCriteria {
     sortField?: string;
 }
 
+enum SortOrder {
+    ascending,
+    descending
+}
+
 /**
  * Interface representing a generic search resultset.
  */

@@ -6,7 +6,7 @@ namespace app.home {
         /* @ngInject */
         constructor($scope: IHomeControllerScope, private messagingService: shared.messaging.MessagingService) {
             super($scope, null);
-            $scope.$on('$onMessageReceived', (event: angular.IAngularEvent, message: shared.messaging.IMessage<TextPair>) => {
+            $scope.$on('$onMessageReceived', (event: angular.IAngularEvent, message: shared.messaging.IMessage) => {
                 this.state = message.message;
                 $scope.$apply();
             });

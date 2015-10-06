@@ -15,8 +15,9 @@ namespace shared.popups {
         /* @ngInject */
         constructor($modal: angular.ui.bootstrap.IModalService,
                     $window: angular.IWindowService,
+                    messagingService: messaging.MessagingService,
                     private sharedConstants: config.ISharedConstants) {
-            super($modal, $window);
+            super($modal, $window, messagingService);
         }
 
         public showConfirmation(message: string|string[], title: string = confirmTitle, okTitle: string = yesButtonTitle, cancelTitle: string = noButtonTitle): angular.IPromise<boolean> {

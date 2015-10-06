@@ -19,7 +19,7 @@
     "member-ordering": false,
     "no-any": false,
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-conditional-assignment": true,
     "no-console": [true,
         "debug",
