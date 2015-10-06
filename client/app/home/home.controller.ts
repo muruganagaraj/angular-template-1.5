@@ -4,8 +4,12 @@
 namespace app.home {
     export class HomeController extends shared.bases.PageController<common.layouts.main.MainLayoutController> {
         /* @ngInject */
-        constructor($scope: IHomeControllerScope, private messagingService: shared.messaging.MessagingService) {
+        constructor($scope: IHomeControllerScope, private homePopupService: HomePopupService) {
             super($scope, null);
+            console.log(this.layout.shell.input);
+            if (Boolean(this.layout.shell.input)) {
+                this.firstName = this.layout.shell.input;
+            }
             $scope.$on('$onMessageReceived', (event: angular.IAngularEvent, message: shared.messaging.IMessage) => {
                 this.state = message.message;
                 $scope.$apply();
@@ -24,7 +28,11 @@ namespace app.home {
         public state: TextPair;
 
         public onSetStateClicked(): void {
-            this.messagingService.send('test', { text: this.firstName, value: this.firstName });
+            this.homePopupService.showHomePopup(this.firstName);
+        }
+
+        public onButton2Clicked(): void {
+            console.log(this.layout.shell.input);
         }
     }
 
@@ -40,21 +48,21 @@ namespace app.home {
 
     registerController(HomeController, route);
 
-    export class HomeState extends shared.bases.BaseState {
-        constructor() {
-            super([
-                { name: 'myState', type: shared.bases.StateType.persisted }
-            ]);
+    export class HomePopupService extends shared.bases.BasePopupService {
+        /* @ngInject */
+        constructor($modal: angular.ui.bootstrap.IModalService,
+                    $window: angular.IWindowService,
+                    storageService: shared.services.StorageService) {
+            super($modal, $window, storageService);
+        }
+        public showHomePopup(name: string): void {
+            this.showWindow('/', { input: name });
         }
 
-        public get myState(): TextPair {
-            return this.getState<TextPair>('myState');
-        }
-
-        public set myState(value: TextPair) {
-            this.setState<TextPair>('myState', value);
+        protected getTemplateUrl(modalName: string): string {
+            return undefined;
         }
     }
 
-    appModule.service('homeState', HomeState);
+    appModule.service('homePopupService', HomePopupService);
 }

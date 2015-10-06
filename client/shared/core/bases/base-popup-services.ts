@@ -5,32 +5,29 @@ namespace shared.bases {
     export abstract class BasePopupService {
         constructor(private $modal: angular.ui.bootstrap.IModalService,
                     private $window: angular.IWindowService,
-                    private messagingService: messaging.MessagingService) {
+                    private storageService: services.StorageService) {
         }
 
         protected showWindow(url: string, options?: IWindowPopupOptions): void {
             options = options || {};
             let specs: string = `width=${options.width || 500},height=${options.height || 400}`;
-            let inputs: IWindowInput = undefined;
+            let windowId: string;
             if (Boolean(options.input)) {
-                inputs = {
-                    windowId: this.getUniqueWindowId(),
-                    input: options.input
-                };
+                windowId = this.getUniqueWindowId();
                 if (!options.queryParams) {
                     options.queryParams = {};
                 }
-                options.queryParams.__u = inputs.windowId;
+                options.queryParams.__u = windowId;
             }
             url += this.buildQueryParams(options.queryParams);
             if (options.scrollbars === undefined || options.scrollbars) {
                 specs += `,scrollbars=1`;
             }
             let target: string = options.target || '_blank';
-            this.$window.open(url, target, specs);
-            if (Boolean(inputs)) {
-                this.messagingService.send('$windowInput', inputs);
+            if (Boolean(windowId)) {
+                this.storageService.setLocal(`$window-input-${windowId}`, options.input);
             }
+            this.$window.open(url, target, specs);
         }
 
         private getUniqueWindowId(): string {
@@ -83,10 +80,5 @@ namespace shared.bases {
         input?: any;
         target?: string;
         scrollbars?: boolean;
-    }
-
-    export interface IWindowInput {
-        windowId: string;
-        input: any;
     }
 }

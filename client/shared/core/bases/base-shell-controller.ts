@@ -12,15 +12,19 @@ namespace shared.bases {
                 this.title = toState.title;
             });
 
-            //If a window input message is received, broadcast it to all scopes.
-            this.$rootScope.$on('$onMessageReceived', (event: angular.IAngularEvent, message: messaging.IMessage) => {
-                if (message.id === '$windowInput') {
-                    this.$rootScope.$broadcast('$onWindowInput', (<IWindowInput>message.message).input);
-                }
-            });
+            let $location: angular.ILocationService = $injector.get<angular.ILocationService>('$location');
+            let windowId: string = $location.search()['__u'];
+            if (Boolean(windowId)) {
+                let storageService: services.StorageService = $injector.get<services.StorageService>('storageService');
+                this.input = storageService.getLocal(`$window-input-${windowId}`);
+                storageService.removeLocal(`$window-input-${windowId}`);
+            }
         }
 
         public title: string;
+
+        public input: any;
+
         protected $rootScope: angular.IRootScopeService;
     }
 }

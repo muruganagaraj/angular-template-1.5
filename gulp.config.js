@@ -13,7 +13,7 @@ module.exports = function () {
     const typingsFolder = rootFolder + 'typings/';
     const webserverFolder = rootFolder + 'webserver/';
 
-    // Assets folders
+    // Client folders
     const assetsFolder = clientFolder + 'assets/';
 
     // Output folders
@@ -30,37 +30,31 @@ module.exports = function () {
         appDefinitionFile
     );
 
-    const appFolder = clientFolder + 'app/';
+    const appFolder = `${clientFolder}app/`;
     const appModule = {
         name: 'app',
         folder: appFolder,
 
         tsToCompile: [].concat(
-            appFolder + '*.module.ts',
-            appFolder + '**/*.ts'
+            `${appFolder}*.module.ts`,
+            `${appFolder}**/*.ts`
         ),
         jsToCopy: [],
-        jsOutputFolder: devBuildScriptsFolder + 'app/',
-        jsToInject: [
-            devBuildScriptsFolder + 'app/**/*.js'
-        ],
+        jsOutputFolder: `${devBuildScriptsFolder}app/`,
+        jsToInject: [`${devBuildScriptsFolder}app/**/*.js`],
 
         lessToCompile: [
-            bowerFolder + 'font-awesome/less/font-awesome.less',
-            assetsFolder + 'less/styles.less'
+            `${bowerFolder}font-awesome/less/font-awesome.less`,
+            `${assetsFolder}less/styles.less`
         ],
-        lessToLint: [
-            assetsFolder + 'less/styles.less'
-        ],
-        lessToWatch: [
-            assetsFolder + 'less/styles.less'
-        ],
+        lessToLint: [`${assetsFolder}less/styles.less`],
+        lessToWatch: [`${assetsFolder}less/**/*.less`],
         cssToCopy: [],
 
         htmls: {
-            all: appFolder + '**/*.html',
+            all: `${appFolder}**/*.html`,
             root: '/client/app',
-            toCache: appFolder + '**/*.html'
+            toCache: `${appFolder}**/*.html`
         }
     };
 
@@ -97,7 +91,7 @@ module.exports = function () {
 
         tsToCompile: [].concat(
             sharedFolder + '*.module.ts',
-            sharedFolder + 'utils/**/*.ts',
+            sharedFolder + 'globals/**/*.ts',
             sharedFolder + 'bases/**/*.ts',
             sharedFolder + '**/*.ts'
         ),
@@ -107,8 +101,6 @@ module.exports = function () {
             sharedJsOutputFolder + 'extensions/**/*.js',
             sharedJsOutputFolder + 'base-state.js',
             sharedJsOutputFolder + '*.js',
-            sharedJsOutputFolder + 'wrappers/**/*.js',
-            sharedJsOutputFolder + 'viewmodel/**/*.js',
             sharedJsOutputFolder + '**/*.js'
         ],
 
@@ -127,40 +119,13 @@ module.exports = function () {
         }
     };
 
-    const sharedNgUiFolder = clientFolder + 'shared/ng-ui/';
-    const sharedNgUiJsOutputFolder = devBuildScriptsFolder + 'shared-ng-ui/';
-    const sharedNgUiModule = {
-        name: 'shared-ng-ui',
-        folder: sharedNgUiFolder,
-
-        tsToCompile: [].concat(
-            sharedNgUiFolder + '*.module.ts',
-            sharedNgUiFolder + '**/*.ts'
-        ),
-        jsToCopy: [],
-        jsOutputFolder: sharedNgUiJsOutputFolder,
-        jsToInject: [sharedNgUiJsOutputFolder + '**/*.js'],
-
-        lessToCompile: [],
-        lessToLint: [],
-
-        lessToWatch: [sharedNgUiFolder + '**/*.less'],
-        cssToCopy: [],
-
-        htmls: {
-            all: sharedNgUiFolder + '**/*.html',
-            root: '/client/shared/ng-ui',
-            toCache: sharedNgUiFolder + '**/*.html'
-        }
-    };
-
     // Bower files
     const bowerConfig = rootFolder + 'bower.json';
     const wiredep = require('wiredep');
     const bowerJsFiles = wiredep({devDependencies: true})['js'];
 
     const config = {
-        modules: [sharedNgUiModule, sharedModule, appCommonModule, appModule],
+        modules: [sharedModule, appCommonModule, appModule],
 
         folders: {
             root: rootFolder,
@@ -195,9 +160,7 @@ module.exports = function () {
                 devBuildScriptsFolder + 'app-common/app-common.module.js',
                 devBuildScriptsFolder + 'app-common/config/*.js',
                 devBuildScriptsFolder + 'shared/shared.module.js',
-                devBuildScriptsFolder + 'shared/config/*.js',
-                devBuildScriptsFolder + 'shared-ng-ui/shared-ng-ui.module.js',
-                devBuildScriptsFolder + 'shared-ng-ui/config/*.js'
+                devBuildScriptsFolder + 'shared/config/*.js'
             ],
         },
 
