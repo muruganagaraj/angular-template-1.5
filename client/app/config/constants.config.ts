@@ -6,6 +6,9 @@ namespace app.config {
         templateUrlRoot: '/client/app/'
     });
 
+    /**
+     * Well-known constants for the app module.
+     */
     export interface IAppConstants extends IConstants {
     }
 }

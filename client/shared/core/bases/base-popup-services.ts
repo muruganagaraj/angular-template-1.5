@@ -3,14 +3,25 @@
 
 namespace shared.bases {
     export abstract class BasePopupService {
-        constructor(private $modal: angular.ui.bootstrap.IModalService,
-                    private $window: angular.IWindowService,
-                    private storageService: services.StorageService) {
+        private $modal: angular.ui.bootstrap.IModalService;
+        private $window: angular.IWindowService;
+        private storageService: services.StorageService;
+        protected sharedConfig: config.ISharedConfig;
+
+        constructor($injector: angular.auto.IInjectorService) {
+            let injector: angular.auto.IInjectorService = angular.injector(['ng', 'ui.bootstrap', 'shared']);
+            this.$modal = injector.get<angular.ui.bootstrap.IModalService>('$modal');
+            this.$window = injector.get<angular.IWindowService>('$window');
+            this.storageService = injector.get<services.StorageService>('storageService');
+            this.sharedConfig = injector.get<config.ISharedConfig>('sharedConfig');
         }
 
         protected showWindow(url: string, options?: IWindowPopupOptions): void {
+            //TODO: Try using state instead of URL to navigate. Or provide an overload.
             options = options || {};
-            let specs: string = `width=${options.width || 500},height=${options.height || 400}`;
+            let height: number = options.height || this.sharedConfig.popups.windowDefaults.height || 400;
+            let width: number = options.width || this.sharedConfig.popups.windowDefaults.width || 500;
+            let specs: string = `width=${width},height=${height}`;
             let windowId: string;
             if (Boolean(options.input)) {
                 windowId = this.getUniqueWindowId();
@@ -25,14 +36,14 @@ namespace shared.bases {
             }
             let target: string = options.target || '_blank';
             if (Boolean(windowId)) {
-                this.storageService.setLocal(`$window-input-${windowId}`, options.input);
+                this.storageService.setLocal(windowInputKey(windowId), options.input);
             }
             this.$window.open(url, target, specs);
         }
 
         private getUniqueWindowId(): string {
             let generator: () => string = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-            return `w${generator()}${generator()}`;
+            return `${generator()}${generator()}`;
         }
 
         private buildQueryParams(queryParams: any): string {
@@ -81,4 +92,6 @@ namespace shared.bases {
         target?: string;
         scrollbars?: boolean;
     }
+
+    export const windowInputKey: (id: string) => string = (id: string) => `$window-input-${id}`;
 }

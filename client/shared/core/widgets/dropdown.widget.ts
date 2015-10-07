@@ -10,8 +10,8 @@ namespace shared.widgets {
             require: 'ngModel',
             compile: (elem: angular.IAugmentedJQuery, attrs: IDropdownWidgetAttributes): angular.IDirectivePrePost => {
                 let dropdown: JQuery;
-                if (Boolean(sharedConfig.dropdownBuilder)) {
-                    dropdown = sharedConfig.dropdownBuilder(attrs);
+                if (Boolean(sharedConfig.dropdownWidgets.singleSelectBuilder)) {
+                    dropdown = sharedConfig.dropdownWidgets.singleSelectBuilder(attrs);
                 } else {
                     dropdown = $('<select></select>')
                         .attr('ng-options', `x.${attrs.displayText} for x in ${attrs.items} track by x.${attrs.value}`);

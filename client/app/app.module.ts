@@ -20,15 +20,7 @@ namespace app {
 
     export const appModule: angular.IModule = angular.module('app');
 
-    export function registerController(
-        controllerConstructor: Function,
-        route: IPageState,
-        ...secondaryRoutes: IPageState[]): angular.IModule {
-
+    export function registerController(controllerConstructor: Function, route: IPageState, ...secondaryRoutes: IPageState[]): angular.IModule {
         return registerControllers(controllerConstructor, route, secondaryRoutes, app.appModule, 'appConstants');
-    }
-
-    export interface IConfig {
-        apiBaseUrl: string;
     }
 }

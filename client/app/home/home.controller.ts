@@ -16,11 +16,7 @@ namespace app.home {
             });
         }
 
-        public items: TextPair[] = [
-            { value: '001', text: 'Item 1'},
-            { value: '002', text: 'Item 2'},
-            { value: '003', text: 'Third Item'}
-        ];
+        public tbValue: string;
 
         public selectedItem: string;
 
@@ -33,6 +29,10 @@ namespace app.home {
 
         public onButton2Clicked(): void {
             console.log(this.layout.shell.input);
+        }
+
+        public onSubmitted() {
+            alert('Submitted');
         }
     }
 
@@ -50,10 +50,8 @@ namespace app.home {
 
     export class HomePopupService extends shared.bases.BasePopupService {
         /* @ngInject */
-        constructor($modal: angular.ui.bootstrap.IModalService,
-                    $window: angular.IWindowService,
-                    storageService: shared.services.StorageService) {
-            super($modal, $window, storageService);
+        constructor($injector: angular.auto.IInjectorService) {
+            super($injector);
         }
         public showHomePopup(name: string): void {
             this.showWindow('/', { input: name });

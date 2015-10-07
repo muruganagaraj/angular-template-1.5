@@ -1,9 +1,11 @@
-input:not(.no-ng-style).ng-invalid {
-    border: @brand-danger 2px solid;
+input.no-ng-style.ng-invalid.ng-touched {
+    border: transparent 0px none;
 }
 
-div.ng-input-group {
-    border: @brand-danger 2px solid;
+input:not(.no-ng-style).ng-invalid.ng-touched,
+.ng-input-error,
+.ng-input-group-error {
+    border: @brand-danger 1px solid;
 }
 
 div[ng-messages] {

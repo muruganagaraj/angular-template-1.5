@@ -2,9 +2,9 @@
     <form name="homeForm" novalidate>
         <p>This is the dashboard</p>
         <!--<shared-dropdown ng-model="home.selectedItem" items="home.items" display-text="text" value="value"></shared-dropdown>-->
-        <div class="form-group" shared-input-group="homeForm">
+        <div shared-form-group="homeForm">
             <div class="input-group">
-                <input type="text" name="firstName" ng-model="home.firstName" class="form-control" placeholder="first name" autofocus required />
+                <input name="firstName" type="text" ng-model="home.firstName" class="form-control" placeholder="first name" required />
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -13,15 +13,24 @@
                 <div ng-message="required">Required</div>
             </div>
         </div>
-        <div class="input-group">
-            <input type="text" name="firstName2" ng-model="home.firstName" class="form-control" placeholder="first name" required
-                ng-disabled="homeForm.firstName.$invalid"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+        <div shared-form-group="homeForm">
+            <div class="input-group">
+                <input type="text" name="firstName2" ng-model="home.firstName" class="form-control" placeholder="first name" required/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         </div>
-        <div>
-            {{ home.state | json }}
+        <div shared-form-group="homeForm">
+            <input name="tbValue" type="url" ng-model="home.tbValue" required minlength="5"/><br/>
+            <div ng-messages="homeForm.tbValue.$error" multiple>
+                <div ng-message="url">Should be valid email</div>
+                <div ng-message="required">Required</div>
+                <div ng-message="minlength">Requires at least 5 characters</div>
+            </div>
+            <pre>{{ homeForm.tbValue.$error | json }}</pre>
+        </div>
+        <button type="submit" class="btn btn-primary" ng-click="home.onSubmitted()">Submit</button>
     </form>
     <button class="btn btn-primary" ng-click="home.onSetStateClicked()">Primary button</button>
     <button class="btn btn-info" ng-click="home.onGetStateClicked()">Info button</button>

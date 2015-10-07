@@ -2,10 +2,15 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 namespace app.config {
+    /**
+     * Configuration for the shared module.
+     * See the readme in the shared/core/config folder for documentation.
+     */
     appModule.config(
         /* @ngInject */
         (sharedConfigProvider: shared.config.SharedConfig) => {
-            sharedConfigProvider.config.dropdownBuilder = (attrs: shared.widgets.IDropdownWidgetAttributes): JQuery => {
+            sharedConfigProvider.config.forms.errorCondition = '{control-name}.$invalid && ({control-name}.$touched || {form-name}.$submitted)';
+            sharedConfigProvider.config.dropdownWidgets.singleSelectBuilder = (attrs: shared.widgets.IDropdownWidgetAttributes): JQuery => {
                 let uiSelect: JQuery = $('<ui-select></ui-select>');
 
                 let valueProperty: string = attrs.value || 'value';
