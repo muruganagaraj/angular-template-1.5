@@ -27,9 +27,8 @@ function registerControllers(
     let routes: IPageState[] = setupRoutes(route, secondaryRoutes);
     module.config(['$stateProvider', constantsName,
         ($stateProvider: angular.ui.IStateProvider, constants: IConstants) => {
-            let templateUrl: string = `${constants.templateUrlRoot}${routes[0].templateUrl}`;
             for (let i: number = 0; i < routes.length; i++) {
-                routes[i].templateUrl = templateUrl;
+                routes[i].templateUrl = `${constants.templateUrlRoot}${routes[i].templateUrl}`;
                 $stateProvider.state(routes[i]);
             }
         }
