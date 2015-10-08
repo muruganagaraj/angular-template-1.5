@@ -31,7 +31,7 @@ namespace app.home {
             console.log(this.layout.shell.input);
         }
 
-        public onSubmitted() {
+        public onSubmitted(): void {
             alert('Submitted');
         }
     }

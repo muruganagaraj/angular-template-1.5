@@ -64,6 +64,6 @@ namespace shared.config {
                 height: number;
                 width: number;
             }
-        }
+        };
     }
 }

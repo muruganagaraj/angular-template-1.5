@@ -2,6 +2,8 @@
 /// <reference path="../../../../typings/app.d.ts" />
 
 namespace shared.bases {
+    export const windowInputKey: (id: string) => string = (id: string) => `$window-input-${id}`;
+
     export abstract class BasePopupService {
         private $modal: angular.ui.bootstrap.IModalService;
         private $window: angular.IWindowService;
@@ -92,6 +94,4 @@ namespace shared.bases {
         target?: string;
         scrollbars?: boolean;
     }
-
-    export const windowInputKey: (id: string) => string = (id: string) => `$window-input-${id}`;
 }

@@ -23,7 +23,7 @@ namespace shared.directives {
                     let input: JQuery = inputGroup.find('INPUT[ng-model]').first();
                     if (!input.attr('name')) {
                         console.error(input);
-                        throw new Error(`Name attribute needs to be specified on the above element when using the ${formGroupDirectiveAttributeName} directive.`)
+                        throw new Error(`Name attribute needs to be specified on the above element when using the ${formGroupDirectiveAttributeName} directive.`);
                     }
                     input.addClass('no-ng-style');
 
@@ -57,6 +57,6 @@ namespace shared.directives {
                 return {};
             }
         })
-    ])
+    ]);
 
 }
