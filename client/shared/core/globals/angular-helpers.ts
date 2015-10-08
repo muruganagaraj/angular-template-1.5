@@ -71,11 +71,12 @@ function createLayoutRoute(name: string, templateUrl: string): IPageState {
 
 /**
  * Shortcut to create a promise with only a resolved value.
- * @param value The value that will be resolved by the promise.
- * @param $q Instance of the $q service needed to create the promise.
+ * @param {T} value The value that will be resolved by the promise.
  * @returns {IPromise<T>}
  */
-function promiseOf<T>(value: T, $q: angular.IQService): angular.IPromise<T> {
+function promiseOf<T>(value: T): angular.IPromise<T> {
+    let injector: angular.auto.IInjectorService = angular.injector(['ng']);
+    let $q: angular.IQService = injector.get<angular.IQService>('$q');
     return new $q((resolve: angular.IQResolveReject<T>) => {
         resolve(value);
     });
