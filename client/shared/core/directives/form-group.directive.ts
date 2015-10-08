@@ -14,6 +14,12 @@ namespace shared.directives {
                     throw new Error(`Form name must be specified for the ${formGroupDirectiveAttributeName} directive in the ${elem[0].tagName} tag.`);
                 }
 
+                function buildErrorCondition(controlName: string): string {
+                    return sharedConfig.forms.errorCondition
+                        .replace(/\{form-name\}/g, formName)
+                        .replace(/\{control-name\}/g, `${formName}.${controlName}`);
+                }
+
                 //Find all elements with input-group class and set up their styles.
                 let inputGroups: angular.IAugmentedJQuery = elem.find('.input-group');
                 for (let i: number = 0; i < inputGroups.length; i++) {
@@ -27,10 +33,8 @@ namespace shared.directives {
                     }
                     input.addClass('no-ng-style');
 
-                    //Add the ng-class attribute to the input group to specify the error condition.
-                    let errorCondition: string = sharedConfig.forms.errorCondition
-                        .replace(/\{form-name\}/g, formName)
-                        .replace(/\{control-name\}/g, `${formName}.${input.attr('name')}`);
+                    //Build the error condition and add a ng-class attribute using it.
+                    let errorCondition: string = buildErrorCondition(input.attr('name'));
                     angular.element(inputGroup).attr('ng-class', `{'ng-input-group-error': ${errorCondition}}`);
                 }
 
@@ -40,12 +44,19 @@ namespace shared.directives {
                     let inputs: angular.IAugmentedJQuery = elem.find('INPUT:not(.no-ng-style)');
                     for (let i: number = 0; i < inputs.length; i++) {
                         let input: JQuery = angular.element(inputs[i]);
-                        // input.addClass('no-ng-style');
-                        let errorCondition: string = sharedConfig.forms.errorCondition
-                            .replace(/\{form-name\}/g, formName)
-                            .replace(/\{control-name\}/g, `${formName}.${input.attr('name')}`);
+                        let errorCondition: string = buildErrorCondition(input.attr('name'));
                         input.attr('ng-class', `{'ng-input-error': ${errorCondition}}`);
                     }
+                }
+
+                let allNgMessages: angular.IAugmentedJQuery = elem.find('[ng-messages]');
+                if (Boolean(allNgMessages) && allNgMessages.length > 0) {
+                    let ngMessages: JQuery = allNgMessages.first();
+                    let ngMessagesAttr: string = ngMessages.attr('ng-messages').trim();
+                    let controlName: string = ngMessagesAttr.substring(formName.length + 1, ngMessagesAttr.length - '.$error'.length);
+                    console.info(`Control Name: ${controlName}`);
+                    let errorCondition: string = buildErrorCondition(controlName);
+                    ngMessages.attr('ng-show', errorCondition);
                 }
 
                 if (!elem.hasClass('form-group')) {
