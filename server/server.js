@@ -38,8 +38,8 @@ if (environment === 'dev') {
         express.static('./.dist/js/', staticOptions));
     app.use('/css',
         express.static('./.dist/css/', staticOptions));
-    app.use('/img',
-        express.static('./.dist/img/', staticOptions));
+    app.use('/images',
+        express.static('./.dist/images/', staticOptions));
     app.use('/fonts',
         express.static('./.dist/fonts/', staticOptions));
     app.get('/**', function(req, res) {

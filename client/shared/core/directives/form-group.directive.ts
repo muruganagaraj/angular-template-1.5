@@ -54,7 +54,6 @@ namespace shared.directives {
                     let ngMessages: JQuery = allNgMessages.first();
                     let ngMessagesAttr: string = ngMessages.attr('ng-messages').trim();
                     let controlName: string = ngMessagesAttr.substring(formName.length + 1, ngMessagesAttr.length - '.$error'.length);
-                    console.info(`Control Name: ${controlName}`);
                     let errorCondition: string = buildErrorCondition(controlName);
                     ngMessages.attr('ng-show', errorCondition);
                 }

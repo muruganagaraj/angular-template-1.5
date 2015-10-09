@@ -63,7 +63,8 @@ gulp.task('compile_scripts', ['generate-app-def'], () => {
     log('Transpiling Typescript code to JavaScript');
 
     let tasks = config.modules.map(mod => {
-        let compileTask = gulp.src([].concat(config.definitions.all, mod.tsToCompile))
+        let tsToCompile = mod.tsToCompile || [`${mod.folder}**/*.ts`];
+        let compileTask = gulp.src([].concat(config.definitions.all, tsToCompile))
             .pipe($.typescript({
                 typescript: require('typescript'),
                 target: config.typescript.targetVersion,
@@ -322,7 +323,7 @@ gulp.task('app_def_copy_template', () =>
 
 gulp.task('app_def_generate', () => {
     let tsFiles = config.modules.reduce((files, mod) =>
-        files.concat(mod.tsToCompile)
+        files.concat(mod.tsToCompile || [`${mod.folder}**/*.ts`])
     , []);
     let tsFilesSrc = gulp.src(tsFiles, {read: false});
     return gulp.src(config.definitions.appFile)
@@ -372,7 +373,7 @@ function serve(isDev) {
     //See: http://stackoverflow.com/a/26851844
     if (isDev) {
         let tsToWatch = config.modules.reduce((files, mod) => {
-            let fixedFiles = mod.tsToCompile.map(ts => startsWith(ts, './') ? ts.substr(2) : ts);
+            let fixedFiles = (mod.tsToCompile || [`${mod.folder}**/*.ts`]).map(ts => startsWith(ts, './') ? ts.substr(2) : ts);
             return files.concat(fixedFiles);
         }, []);
         gulp.watch(tsToWatch, ['ts_watch_handler']);
@@ -473,13 +474,14 @@ gulp.task('vet_lint_ts_copy_config', () =>
         .pipe(gulp.dest(config.folders.root))
 );
 
-gulp.task('vet_lint_ts_run_lint', () =>
-    gulp.src(config.tslint[tslintIndex].files)
+gulp.task('vet_lint_ts_run_lint', () => {
+    log(config.tslint[tslintIndex].description);
+    return gulp.src(config.tslint[tslintIndex].files)
         .pipe($.tslint())
         .pipe($.tslint.report('verbose', {
             emitError: false
         }))
-);
+});
 
 gulp.task('vet_lint_ts_increment_counter', done => {
     tslintIndex += 1;

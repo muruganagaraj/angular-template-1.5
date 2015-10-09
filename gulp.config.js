@@ -30,15 +30,21 @@ module.exports = function () {
         appDefinitionFile
     );
 
+    // Bower files
+    const bowerConfig = rootFolder + 'bower.json';
+    const wiredep = require('wiredep');
+    const bowerJsFiles = wiredep({devDependencies: true})['js'];
+
     const appFolder = `${clientFolder}app/`;
     const appModule = {
+        //Name of the module
         name: 'app',
+        //Base folder for the module
         folder: appFolder,
 
-        tsToCompile: [].concat(
-            `${appFolder}*.module.ts`,
-            `${appFolder}**/*.ts`
-        ),
+        //List of all Typescript files to compile. If not specified, defaults to all *.ts files
+        //under the module base folder.
+        tsToCompile: null,
         jsToCopy: [],
         jsOutputFolder: `${devBuildScriptsFolder}app/`,
         jsToInject: [`${devBuildScriptsFolder}app/**/*.js`],
@@ -48,7 +54,10 @@ module.exports = function () {
             `${assetsFolder}less/styles.less`
         ],
         lessToLint: [`${assetsFolder}less/styles.less`],
-        lessToWatch: [`${assetsFolder}less/**/*.less`],
+        lessToWatch: [
+            `${assetsFolder}less/**/*.less`,
+            `${appFolder}styles/**/*.less`
+        ],
         cssToCopy: [],
 
         htmls: {
@@ -80,6 +89,34 @@ module.exports = function () {
             all: appCommonFolder + '**/*.html',
             root: '/client/app-common',
             toCache: appCommonFolder + '**/*.html'
+        }
+    };
+
+    const appDemoFolder = clientFolder + 'app-demo/';
+    const appDemoModule = {
+        name: 'app-demo',
+        folder: appDemoFolder,
+
+        tsToCompile: [].concat(
+            appDemoFolder + '*.module.ts',
+            appDemoFolder + '**/*.ts'
+        ),
+        jsToCopy: [],
+        jsOutputFolder: devBuildScriptsFolder + 'app-demo/',
+        jsToInject: [
+            devBuildScriptsFolder + 'app-demo/layouts/**/*.js',
+            devBuildScriptsFolder + 'app-demo/**/*.js'
+        ],
+
+        lessToCompile: [],
+        lessToLint: [],
+        lessToWatch: [],
+        cssToCopy: [],
+
+        htmls: {
+            all: appDemoFolder + '**/*.html',
+            root: '/client/app-demo',
+            toCache: appDemoFolder + '**/*.html'
         }
     };
 
@@ -119,17 +156,18 @@ module.exports = function () {
         }
     };
 
-    // Bower files
-    const bowerConfig = rootFolder + 'bower.json';
-    const wiredep = require('wiredep');
-    const bowerJsFiles = wiredep({devDependencies: true})['js'];
+    const modules = [sharedModule, appCommonModule, appDemoModule, appModule];
 
     const config = {
-        modules: [sharedModule, appCommonModule, appModule],
+        //List of modules ordered from least dependent to most.
+        //The main application module should come last.
+        modules: modules,
 
+        //Common folders
         folders: {
             root: rootFolder,
 
+            //All top-level folders
             client: clientFolder,
             bower: bowerFolder,
             nodeModules: nodeModulesFolder,
@@ -138,56 +176,96 @@ module.exports = function () {
             server: serverFolder,
             webserver: webserverFolder,
 
+            //Application assets folder
             assets: assetsFolder,
 
+            //Build output folders
             devBuild: devBuildFolder,
             devBuildScripts: devBuildScriptsFolder,
             devBuildStyles: devBuildStylesFolder,
             distBuild: distBuildFolder,
         },
 
+        //Path to the shell file.
         shell: clientFolder + 'index.html',
 
+        //Special injections into the shell file that are independent of modules.
         injections: {
+            //All CSS to be injected in the correct order.
+            //This includes compiled LESS, CSS from bower_components and 3rd-party CSS from the assets folder.
             css: [
                 devBuildStylesFolder + 'styles.css',
                 devBuildStylesFolder + '**/*.css'
             ],
 
-            firstJs: [
-                devBuildScriptsFolder + 'app/app.module.js',
-                devBuildScriptsFolder + 'app/config/*.js',
-                devBuildScriptsFolder + 'app-common/app-common.module.js',
-                devBuildScriptsFolder + 'app-common/config/*.js',
-                devBuildScriptsFolder + 'shared/shared.module.js',
-                devBuildScriptsFolder + 'shared/config/*.js'
-            ],
+            //Application script files that must be injected before all other scripts (except bower scripts).
+            //Typically, these include module registrations and configurations.
+            //Note: Do not include the environment config file that is generated from config.json.
+            //      This is handled separately.
+            //Note: Order is important here. Typically modules come first, followed by config.
+            firstJs: [].concat(
+                modules.reduce((files, mod) => {
+                    files.unshift(`${devBuildScriptsFolder}${mod.name}/config/*.js`);
+                    files.unshift(`${devBuildScriptsFolder}${mod.name}/${mod.name}.module.js`);
+                    return files;
+                }, [])
+            ),
         },
 
+        //Environment-specific config handling
         config: {
+            //Path to the environment-specific config data.
             src: clientFolder + 'config.json',
+
+            //Path to generated script file for the config.
             defaultOutput: devBuildScriptsFolder + 'config.js',
-            moduleName: appModule.name,
+
+            //Environment-specific config is generated as an AngularJS constants service.
+            //<moduleName> specifies the name of the module under which to create the service.
+            //Typically, this will be the main module.
+            moduleName: modules[modules.length - 1].name,
+
+            //Environment to use to generate the config script file if one is not specified.
             defaultEnv: 'local',
+
+            //List of additional environments to create config scripts for during a dist build.
+            //These additional config files will be named 'config.<env>.js'
             generateEnvs: ['dev', 'qa', 'uat', 'prod'],
+
+            //Path to the additional config files.
             generatedFiles: devBuildScriptsFolder + 'config*.js'
         },
 
+        //Typescript definition file config
         definitions: {
+            //File name of the definition file for application files.
             appFileName: appDefinitionFileName,
+
+            //Path to the definition file for application files.
             appFile: appDefinitionFile,
+
+            //Empty template of the definition file for application files.
+            //Contains only the necessary placeholders for the injector.
             appTemplate: typingsFolder + 'app.d.ts.template',
+
+            //List of all definition files (application, bower, etc.)
             all: typescriptDefinitionFiles
         },
 
         tslint: [
             {
+                description: 'Application script files',
                 config: toolsFolder + 'tslint/tslint-app.json',
-                files: [].concat(appCommonModule.tsToCompile).concat(appModule.tsToCompile)
+                files: modules
+                    .filter(mod => mod.name.substr(0, 'app'.length) === 'app')
+                    .reduce((files, mod) => files.concat(mod.tsToCompile), [])
             },
             {
+                description: 'Shared module script files',
                 config: toolsFolder + 'tslint/tslint-shared.json',
-                files: [].concat(sharedModule.tsToCompile)
+                files: modules
+                    .filter(mod => mod.name.substr(0, 'shared'.length) === 'shared')
+                    .reduce((files, mod) => files.concat(mod.tsToCompile), [])
             }
         ],
 
@@ -252,19 +330,13 @@ module.exports = function () {
             src: config.folders.assets + 'fonts/*',
             dest: cssParentFolder + 'fonts/',
             areImages: false
-        },
-        {
-            src: [
-                bowerFolder + 'angular-ui-grid/ui-grid.eot',
-                bowerFolder + 'angular-ui-grid/ui-grid.svg',
-                bowerFolder + 'angular-ui-grid/ui-grid.ttf',
-                bowerFolder + 'angular-ui-grid/ui-grid.woff'
-            ],
-            dest: cssFolder,
-            areImages: false
         }
     ];
 
+    /**
+     * Accepts a glob and marks it as excluded by prepending it with a bang symbol.
+     * @param glob The string or string array that represents the glob
+     */
     function exclude(glob) {
         if (typeof glob === 'string') {
             return '!' + glob;

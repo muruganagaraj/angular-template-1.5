@@ -42,6 +42,13 @@
     <!-- endinject -->
     <!-- endbuild -->
 
+    <!-- build:js js/app-demo.js -->
+    <!-- inject:app-demo:js -->
+    <!-- endinject -->
+    <!-- inject:app-demo-templates:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
+
     <!-- build:js js/app.js -->
     <!-- inject:app:js -->
     <!-- endinject -->

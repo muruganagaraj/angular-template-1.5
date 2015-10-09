@@ -10,7 +10,7 @@ namespace shared.bases {
         private storageService: services.StorageService;
         protected sharedConfig: config.ISharedConfig;
 
-        constructor($injector: angular.auto.IInjectorService) {
+        constructor() {
             let injector: angular.auto.IInjectorService = angular.injector(['ng', 'ui.bootstrap', 'shared']);
             this.$modal = injector.get<angular.ui.bootstrap.IModalService>('$modal');
             this.$window = injector.get<angular.IWindowService>('$window');

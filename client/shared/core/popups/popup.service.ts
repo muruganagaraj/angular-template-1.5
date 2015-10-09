@@ -13,9 +13,8 @@ namespace shared.popups {
 
     export class PopupService extends bases.BasePopupService {
         /* @ngInject */
-        constructor($injector: angular.auto.IInjectorService,
-                    private sharedConstants: config.ISharedConstants) {
-            super($injector);
+        constructor(private sharedConstants: config.ISharedConstants) {
+            super();
         }
 
         public showConfirmation(message: string|string[], title: string = confirmTitle, okTitle: string = yesButtonTitle, cancelTitle: string = noButtonTitle): angular.IPromise<boolean> {
