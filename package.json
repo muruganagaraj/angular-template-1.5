@@ -16,7 +16,7 @@
   "devDependencies": {
     "del": "^2.0.2",
     "gulp": "^3.9.0",
-    "gulp-angular-templatecache": "^1.7.0",
+    "gulp-angular-templatecache": "^1.8.0",
     "gulp-csso": "^1.0.0",
     "gulp-filter": "^3.0.1",
     "gulp-inject": "^1.5.0",

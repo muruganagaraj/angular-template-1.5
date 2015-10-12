@@ -244,7 +244,7 @@ gulp.task('generate_ng_template_caches', () => {
 
 gulp.task('copy_to_dist', () => {
     log('Copying config, images, fonts and non-cached HTML templates to the dist folder.');
-    let configCopyTask = gulp.src(config.config.defaultOutput)
+    let configCopyTask = gulp.src(config.config.generatedFiles)
         .pipe(gulp.dest(config.folders.distBuild));
     return merge(getStyleAssetsCopyTasks(
         config.folders.distBuild + 'css/',
