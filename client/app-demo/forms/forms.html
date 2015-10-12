@@ -1,3 +1,112 @@
-<div>
-    <p>This is the forms page</p>
-</div>
+<form name="formsForm" class="form-horizontal" novalidate>
+    <fieldset>
+        <legend>Legend</legend>
+
+        <div shared-form-group="formsForm">
+            <label for="email" class="col-lg-2 control-label">Email</label>
+            <div class="col-lg-10">
+                <input id="email" name="email" type="email" class="form-control"
+                    ng-model="forms.email" placeholder="email" autofocus required>
+                <div ng-messages="formsForm.email.$error" class="help-block">
+                    <div ng-message="email">Enter valid email id</div>
+                </div>
+            </div>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="password" class="col-lg-2 control-label">Password</label>
+            <div class="col-lg-10">
+                <input id="password" name="password" type="password" class="form-control"
+                    ng-model="forms.password" placeholder="password" required minlength="8">
+                <div ng-messages="formsForm.password.$error" class="help-block">
+                    <span ng-message="minlength">Password should be at least 8 characters.</span>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Checkbox
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="url" class="col-lg-2 control-label">Homepage</label>
+            <div class="col-lg-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                    <input id="url" name="url" type="url" class="form-control"
+                        ng-model="forms.url" placeholder="homepage address" required>
+                </div>
+                <div ng-messages="formsForm.url.$error" class="help-block">
+                    <div ng-message="url">Invalid homepage URL</div>
+                </div>
+            </div>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="phone" class="col-lg-2 control-label">Phone</label>
+            <div class="col-lg-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                    <input id="phone" name="phone" type="tel" class="form-control"
+                        ng-model="forms.phone" placeholder="phone" required>
+                </div>
+                <div ng-messages="formsForm.phone.$error" class="help-block">
+                    <div ng-message="tel">Invalid phone number</div>
+                </div>
+            </div>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="textArea" class="col-lg-2 control-label">Textarea</label>
+            <div class="col-lg-10">
+                <textarea class="form-control" rows="3" id="textArea"></textarea>
+                <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+            </div>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label class="col-lg-2 control-label">Radios</label>
+            <div class="col-lg-10">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked=""> Option one is this
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> Option two can be something else
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="select" class="col-lg-2 control-label">Selects</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="select">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <br>
+                <select multiple="" class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </fieldset>
+</form>

@@ -159,6 +159,10 @@ module.exports = function () {
     const modules = [sharedModule, appCommonModule, appDemoModule, appModule];
 
     const config = {
+        options: {
+            vetBeforeDevBuild: false
+        },
+
         //List of modules ordered from least dependent to most.
         //The main application module should come last.
         modules: modules,
@@ -184,6 +188,11 @@ module.exports = function () {
             devBuildScripts: devBuildScriptsFolder,
             devBuildStyles: devBuildStylesFolder,
             distBuild: distBuildFolder,
+        },
+
+
+        files: {
+
         },
 
         //Path to the shell file.
@@ -258,7 +267,7 @@ module.exports = function () {
                 config: toolsFolder + 'tslint/tslint-app.json',
                 files: modules
                     .filter(mod => mod.name.substr(0, 'app'.length) === 'app')
-                    .reduce((files, mod) => files.concat(mod.tsToCompile), [])
+                    .reduce((files, mod) => files.concat(mod.tsToCompile || `${mod.folder}**/*.ts`), [])
             },
             {
                 description: 'Shared module script files',

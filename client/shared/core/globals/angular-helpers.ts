@@ -58,14 +58,15 @@ function setupRoutes(route: IPageState, secondaryRoutes: IPageState[]): IPageSta
     return [route].concat(secondaryRoutes || []);
 }
 
-function createLayoutRoute(name: string, templateUrl: string): IPageState {
-    return <IPageState>{
+function createLayoutRoute(name: string, templateUrl: string, resolve?: {}): IPageState {
+    return {
         name: name,
         url: '^',
         templateUrl: templateUrl,
         controller: `${name}Controller`,
         controllerAs: 'layout',
-        abstract: true
+        abstract: true,
+        resolve: resolve
     };
 }
 

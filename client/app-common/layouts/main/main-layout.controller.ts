@@ -3,12 +3,12 @@
 
 namespace app.common.layouts.main {
     /* @ngInject */
-    export class MainLayoutController extends shared.bases.LayoutController<shell.ShellController> {
+    export class LayoutController extends shared.bases.LayoutController<shell.ShellController> {
         constructor($scope: shared.bases.ILayoutControllerScope<shell.ShellController>) {
             super($scope, null);
         }
     }
 
     export const route: IPageState = createLayoutRoute('mainLayout', 'layouts/main/main-layout.html');
-    registerController(MainLayoutController, route);
+    registerController(LayoutController, route);
 }

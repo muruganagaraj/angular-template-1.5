@@ -9,6 +9,10 @@ let merge = require('merge2');
 let $ = require('gulp-load-plugins')({lazy: true});
 
 let port = process.env.PORT || config.server.nodeHostPort;
+let environment = args.env || config.config.defaultEnv;
+let launch = args.launch;
+let customHost = args.customHost;
+let failOnVetError = args.failOnVetError;
 
 ////////// Task Listing & Default Task //////////
 
@@ -23,12 +27,15 @@ gulp.task('serve', ['build'], () => {
 });
 
 gulp.task('build', done => {
-    sequence('clean_dev',
-        'generate_shell_html',
+    let tasks = ['clean_dev', 'generate_shell_html',
         ['inject_bower_scripts', 'compile_scripts', 'compile_styles'],
         'create_config',
         ['inject_custom_scripts', 'copy_static_to_dev'],
-        done);
+        done];
+    if (config.options.vetBeforeDevBuild) {
+        tasks.unshift('vet');
+    }
+    sequence.apply(this, tasks);
 });
 
 gulp.task('clean_dev', done => {
@@ -93,7 +100,6 @@ gulp.task('compile_styles', () => {
 gulp.task('create_config', () => {
     log('Generating AngularJS constants file to store environment-specific configuration.');
 
-    let environment = args.env || config.config.defaultEnv;
     return gulp.src(config.config.src)
         .pipe($.ngConfig(config.config.moduleName, {
             environment: environment,
@@ -385,14 +391,11 @@ function serve(isDev) {
         gulp.watch(config.config.src, ['config_watch_handler']);
     }
 
-    let launch = args.launch;
-
     let open = require('open');
 
     //If the customHost option is specified, assume that an external web server
     //is already set-up on the config.server.customHostPort port and simply open
     //the browser on that port.
-    let customHost = args.customHost;
     if (customHost) {
         if (launch) {
             open('http://localhost:' + config.server.customHostPort);
@@ -445,13 +448,14 @@ gulp.task('vet', done => {
 
 gulp.task('vet_compile_ts', () => {
     log('[Vet] Compiling Typescript files');
-    let tsToCompile = config.modules.reduce((files, mod) => files.concat(mod.tsToCompile), config.definitions.all);
+    let tsToCompile = config.modules.reduce((files, mod) => files.concat(mod.tsToCompile || [`${mod.folder}**/*.ts`]), config.definitions.all);
     return gulp.src(tsToCompile)
         .pipe($.typescript({
             typescript: require('typescript'),
             target: config.typescript.targetVersion,
             declarationFiles: false,
-            noExternalResolve: false
+            noExternalResolve: false,
+            noEmitOnError: !failOnVetError
         }));
 });
 
@@ -468,6 +472,7 @@ gulp.task('vet_lint_ts', done => {
     sequence.apply(this, tasks);
 });
 
+
 gulp.task('vet_lint_ts_copy_config', () =>
     gulp.src(config.tslint[tslintIndex].config)
         .pipe($.rename('tslint.json'))
@@ -479,7 +484,7 @@ gulp.task('vet_lint_ts_run_lint', () => {
     return gulp.src(config.tslint[tslintIndex].files)
         .pipe($.tslint())
         .pipe($.tslint.report('verbose', {
-            emitError: false
+            emitError: failOnVetError
         }))
 });
 
@@ -500,6 +505,20 @@ gulp.task('vet_lint_less', () => {
     let lessToLint = config.modules.reduce((files, mod) => files.concat(mod.lessToLint), []);
     return gulp.src(lessToLint)
         .pipe($.lesshint());
+});
+
+////////// Misc tasks //////////
+
+gulp.task('clean', ['clean_dist']);
+
+gulp.task('setup', () => {
+    log('Creating GIT hooks.');
+    return merge([
+        gulp.src('./.pre-commit')
+            .pipe($.symlink('./.git/hooks/pre-commit', {force: true})),
+        gulp.src('./.pre-push')
+            .pipe($.symlink('./.git/hooks/pre-push', {force: true}))
+    ]);
 });
 
 ////////// Helper functions //////////
