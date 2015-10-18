@@ -1,7 +1,5 @@
-Angular Training
-================
-1. Development environment set-up
-	- Node and NPM
-	- Gulp.js
-	- Bower.js
-	- Git
+Angular Application Template
+============================
+Opiniated template for a large AngularJS 1.x application written using Typescript and LESS.
+
+The application uses Gulp for its build and automation system.
