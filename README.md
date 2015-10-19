@@ -1,1 +1,5 @@
-Template for developing a large application using AngularJS 1.4 and Typescript 1.6, with a full automation process set-up using Gulp.
+Angular Application Template
+============================
+Opiniated template for a large AngularJS 1.x application written using Typescript and LESS.
+
+The application uses Gulp for its build and automation system.
