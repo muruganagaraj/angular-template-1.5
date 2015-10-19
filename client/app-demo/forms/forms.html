@@ -84,6 +84,9 @@
         <div shared-form-group="formsForm">
             <label for="select" class="col-lg-2 control-label">Selects</label>
             <div class="col-lg-10">
+                <shared-dropdown id="select" name="select" class="form-control" ng-model="forms.selectedValue"
+                    items="forms.singleSelectData" display-text="text" value="value" multiple></shared-dropdown>
+                <br/>
                 <select class="form-control" id="select">
                     <option>1</option>
                     <option>2</option>

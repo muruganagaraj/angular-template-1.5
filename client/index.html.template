@@ -14,16 +14,15 @@
 </head>
 <body>
     <div ui-view></div>
-    <script type="text/javascript">
-    var appComponentPrefix = 'app';
-    var sharedComponentPrefix = 'shared';
-    </script>
+
     <!-- build:js js/lib.js -->
     <!-- bower:js -->
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js js/modules.js -->
+    <!-- inject:globals:js -->
+    <!-- endinject -->
     <!-- inject:js -->
     <!-- endinject -->
     <!-- endbuild -->

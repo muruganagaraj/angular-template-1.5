@@ -9,6 +9,14 @@ namespace app.demo.forms {
         constructor($scope: IFormsControllerScope) {
             super($scope, null);
         }
+
+        public singleSelectData: TextPair[] = [
+            { value: '001', text: 'First Item' },
+            { value: '002', text: 'Second Item' },
+            { value: '003', text: 'Third Item' },
+            { value: '004', text: 'Fourth Item' },
+            { value: '005', text: 'Fifth Item' },
+        ];
     }
 
     export interface IFormsControllerScope extends shared.bases.IPageControllerScope<layout.LayoutController> {

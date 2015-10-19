@@ -221,6 +221,13 @@ module.exports = function () {
             ),
         },
 
+        globals: {
+            file: `${devBuildScriptsFolder}globals.js`,
+            appComponentPrefix: 'app',
+            sharedComponentPrefix: 'shared',
+            appPrefix: undefined
+        },
+
         //Environment-specific config handling
         config: {
             //Path to the environment-specific config data.

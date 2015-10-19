@@ -27,11 +27,13 @@ gulp.task('serve', ['build'], () => {
 });
 
 gulp.task('build', done => {
-    let tasks = ['clean_dev', 'generate_shell_html',
+    let tasks = [
+        'clean_dev', 'generate_shell_html',
         ['inject_bower_scripts', 'compile_scripts', 'compile_styles'],
-        'create_config',
+        ['create_config', 'create_globals'],
         ['inject_custom_scripts', 'copy_static_to_dev'],
-        done];
+        done
+    ];
     if (config.options.vetBeforeDevBuild) {
         tasks.unshift('vet');
     }
@@ -56,6 +58,10 @@ gulp.task('copy_shell_html_template', () =>
         .pipe($.rename('index.html'))
         .pipe(gulp.dest(config.folders.client))
 );
+
+//TODO:
+// gulp.task('inject_module_injects_in_shell', () =>
+// );
 
 gulp.task('inject_bower_scripts', () => {
     log('Wiring up Bower script dependencies.');
@@ -97,6 +103,16 @@ gulp.task('compile_styles', () => {
     return merge(tasks);
 });
 
+gulp.task('create_globals', done => {
+    let Writer = require('simple-file-writer');
+    let w = new Writer(`${config.folders.devBuildScripts}globals.js`);
+    w.write(`var appComponentPrefix = '${config.globals.appComponentPrefix || 'app'}';`);
+    w.write(`var sharedComponentPrefix = '${config.globals.sharedComponentPrefix || 'shared'}';`);
+    let appProfile = config.globals.appProfile ? `'${config.globals.appProfile}'` : 'null';
+    w.write(`var appProfile = ${appProfile};`);
+    done();
+});
+
 gulp.task('create_config', () => {
     log('Generating AngularJS constants file to store environment-specific configuration.');
 
@@ -111,6 +127,11 @@ gulp.task('create_config', () => {
 gulp.task('inject_custom_scripts', () => {
     log('Injecting local script and CSS references.');
 
+    let globalsSrc = gulp.src(config.globals.file);
+    let globalsOptions = {
+        starttag: '<!-- inject:globals:js -->'
+    };
+
     let configSrc = gulp.src(config.config.defaultOutput);
     let configOptions = {
         starttag: '<!-- inject:config:js -->'
@@ -122,6 +143,7 @@ gulp.task('inject_custom_scripts', () => {
     let firstJsSrc = gulp.src(config.injections.firstJs);
 
     let injectTask = gulp.src(config.shell)
+        .pipe($.inject(globalsSrc, globalsOptions))
         .pipe($.inject(configSrc, configOptions))
         .pipe($.inject(cssSrc))
         .pipe($.inject(firstJsSrc));
@@ -549,7 +571,7 @@ function log(message, color) {
     if (typeof(message) === 'object') {
         for (let item in message) {
             if (message.hasOwnProperty(item)) {
-                $.util.log(color(message[item]))
+                $.util.log(color(message[item]));
             }
         }
     } else {
