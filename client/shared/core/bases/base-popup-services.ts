@@ -68,7 +68,9 @@ namespace shared.bases {
             return this.$modal.open(settings).result;
         }
 
-        protected abstract getTemplateUrl(modalName: string): string;
+        protected getTemplateUrl(modalName: string): string {
+            throw new Error('Need to override the getTemplateUrl method in your popup service, when using HTML popups.');
+        }
 
         protected getModalSettings<TModalData extends IHtmlPopupData>(modalName: string, modalData: TModalData): angular.ui.bootstrap.IModalSettings {
             let size: string = modalData.size ? HtmlPopupSize[modalData.size] : HtmlPopupSize[HtmlPopupSize.Large];

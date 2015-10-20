@@ -1,0 +1,28 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">HTML Modals</h3>
+    </div>
+    <div class="panel-body">
+        <p>HTML modals are modal popups that are displayed within the browser.</p>
+        <p>The Angular Template ships with 4 commonly-used templates that are available through the popupService.</p>
+        <div>
+            <button class="btn btn-default" ng-click="popups.onConfirmClicked()">Confirmation</button>
+            <button class="btn btn-info" ng-click="popups.onInfoAlertClicked()">Information Alert</button>
+            <button class="btn btn-warning" ng-click="popups.onWarningAlertClicked()">Warning Alert</button>
+            <button class="btn btn-danger" ng-click="popups.onErrorAlertClicked()">Error Alert</button>
+        </div>
+    </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Popup Windows</h3>
+    </div>
+    <div class="panel-body">
+        <p>You can use the popup service to open a browser window or tab to any web site.</p>
+        <p>Click on this button to launch the forms demo page in a separate window or tab</p>
+        <p class="text-muted"><small>Note: Whether a window or tab is opened depends on the specific browser and how it is set.</small></p>
+        <div>
+            <button class="btn btn-default" ng-click="popups.onWindowPopupClicked()">Open New Window/Tab</button>
+        </div>
+    </div>
+</div>

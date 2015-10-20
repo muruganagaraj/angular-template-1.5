@@ -2,7 +2,7 @@
 /// <reference path="../../../typings/app.d.ts" />
 
 namespace app.demo.forms {
-    import layout = common.layouts.main;
+    import layout = layouts.sample;
 
     export class FormsController extends shared.bases.PageController<layout.LayoutController> {
         /* @ngInject */
@@ -31,7 +31,7 @@ namespace app.demo.forms {
         name: 'forms',
         layout: layout.route,
         templateUrl: 'forms/forms.html',
-        url: '/forms',
+        url: '/demos/forms',
         title: 'Forms Demo'
     };
 

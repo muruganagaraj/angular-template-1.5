@@ -21,6 +21,11 @@ namespace shared.directives {
                         .replace(/\{control-name\}/g, `${formName}.${controlName}`);
                 }
 
+                //If the element doesn't already have a form-group class, add one.
+                if (!elem.hasClass('form-group')) {
+                    elem.addClass('form-group');
+                }
+
                 //Find all elements with input-group class and set up their styles.
                 let inputGroups: angular.IAugmentedJQuery = elem.find('.input-group');
                 for (let i: number = 0; i < inputGroups.length; i++) {
@@ -59,11 +64,6 @@ namespace shared.directives {
                     let controlName: string = ngMessagesAttr.substring(formName.length + 1, ngMessagesAttr.length - '.$error'.length);
                     let errorCondition: string = buildErrorCondition(controlName);
                     ngMessages.attr('ng-show', errorCondition);
-                }
-
-                //If the element doesn't already have a form-group class, add one.
-                if (!elem.hasClass('form-group')) {
-                    elem.addClass('form-group');
                 }
 
                 //Remove the directive attribute
