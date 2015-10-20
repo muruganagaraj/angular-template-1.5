@@ -82,26 +82,41 @@
         </div>
 
         <div shared-form-group="formsForm">
-            <label for="select" class="col-lg-2 control-label">Selects</label>
+            <label for="select" class="col-lg-2 control-label">Single Select</label>
             <div class="col-lg-10">
                 <shared-dropdown id="select" name="select" class="form-control" ng-model="forms.selectedValue"
-                    items="forms.singleSelectData" display-text="text" value="value" multiple></shared-dropdown>
-                <br/>
-                <select class="form-control" id="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-                <br>
-                <select multiple="" class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+                    items="forms.selectData" display-text="text" value="value"></shared-dropdown>
+            </div>
+            <pre>{{forms.selectedValue | json}}</pre>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="select" class="col-lg-2 control-label">Multiple Select</label>
+            <div class="col-lg-10">
+                <shared-dropdown id="select" name="select" class="form-control" ng-model="forms.selectedValues"
+                    items="forms.selectData" display-text="text" value="value" multiple></shared-dropdown>
+            </div>
+            <pre>{{forms.selectedValues | json}}</pre>
+        </div>
+
+        <div shared-form-group="formsForm">
+            <label for="checkbox" class="col-lg-2 control-label">Checkboxes and toggles</label>
+            <div class="col-lg-10">
+                <div>
+                    <label>
+                        <shared-checkbox id="checkbox" name="checkbox" ng-model="forms.checkedValue"
+                            true-value="'YES'" false-value="'NO'">
+                        </shared-checkbox> Checkbox label
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <shared-checkbox id="toggle" name="toggle" ng-model="forms.checkedValue" toggle
+                            true-value="'YES'" false-value="'NO'">
+                        </shared-checkbox> Toggle label
+                    </label>
+                </div>
+                <pre>{{forms.checkedValue | json}}</pre>
             </div>
         </div>
 

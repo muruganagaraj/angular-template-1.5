@@ -10,13 +10,18 @@ namespace app.demo.forms {
             super($scope, null);
         }
 
-        public singleSelectData: TextPair[] = [
+        public selectData: TextPair[] = [
             { value: '001', text: 'First Item' },
             { value: '002', text: 'Second Item' },
             { value: '003', text: 'Third Item' },
             { value: '004', text: 'Fourth Item' },
             { value: '005', text: 'Fifth Item' },
         ];
+
+        public selectedValue: string;
+        public selectedValues: string[];
+
+        public checkedValue: string = 'YES';
     }
 
     export interface IFormsControllerScope extends shared.bases.IPageControllerScope<layout.LayoutController> {

@@ -5,8 +5,8 @@ namespace shared.directives {
     const formGroupDirectiveName: string = `${sharedComponentPrefix}FormGroup`;
     const formGroupDirectiveAttributeName: string = `${sharedComponentPrefix}-form-group`;
 
-    sharedModule.directive(formGroupDirectiveName, ['$compile', 'sharedConfig',
-        ($compile: angular.ICompileService, sharedConfig: config.ISharedConfig): angular.IDirective => ({
+    sharedModule.directive(formGroupDirectiveName, ['$compile', 'sharedConfig', '$log',
+        ($compile: angular.ICompileService, sharedConfig: config.ISharedConfig, $log: angular.ILogService): angular.IDirective => ({
             restrict: 'A',
             compile: (elem: angular.IAugmentedJQuery, attrs: angular.IAttributes): angular.IDirectivePrePost => {
                 let formName: string = attrs[formGroupDirectiveName];
@@ -14,6 +14,7 @@ namespace shared.directives {
                     throw new Error(`Form name must be specified for the ${formGroupDirectiveAttributeName} directive in the ${elem[0].tagName} tag.`);
                 }
 
+                //Builds an error condition based on the configured template.
                 function buildErrorCondition(controlName: string): string {
                     return sharedConfig.forms.errorCondition
                         .replace(/\{form-name\}/g, formName)
@@ -28,7 +29,7 @@ namespace shared.directives {
                     //Find the input element within this group and add the no-ng-style class.
                     let input: JQuery = inputGroup.find('INPUT[ng-model]').first();
                     if (!input.attr('name')) {
-                        console.error(input);
+                        $log.error(input);
                         throw new Error(`Name attribute needs to be specified on the above element when using the ${formGroupDirectiveAttributeName} directive.`);
                     }
                     input.addClass('no-ng-style');
@@ -38,8 +39,8 @@ namespace shared.directives {
                     angular.element(inputGroup).attr('ng-class', `{'ng-input-group-error': ${errorCondition}}`);
                 }
 
-                //Now go through all remaining inputs and see if an error condition needs to be
-                //added for them.
+                //If the configured error condition uses the form name, we cannot use the ng-
+                //classes to style it, so we need to use ng-class.
                 if (sharedConfig.forms.errorCondition.indexOf('{form-name}') >= 0) {
                     let inputs: angular.IAugmentedJQuery = elem.find('INPUT:not(.no-ng-style)');
                     for (let i: number = 0; i < inputs.length; i++) {
@@ -49,6 +50,8 @@ namespace shared.directives {
                     }
                 }
 
+                //Find all elements that have an ng-messages attribute and configure them to be
+                //shown only when the configured error condition is true.
                 let allNgMessages: angular.IAugmentedJQuery = elem.find('[ng-messages]');
                 if (Boolean(allNgMessages) && allNgMessages.length > 0) {
                     let ngMessages: JQuery = allNgMessages.first();
@@ -58,9 +61,11 @@ namespace shared.directives {
                     ngMessages.attr('ng-show', errorCondition);
                 }
 
+                //If the element doesn't already have a form-group class, add one.
                 if (!elem.hasClass('form-group')) {
                     elem.addClass('form-group');
                 }
+
                 //Remove the directive attribute
                 elem.removeAttr(formGroupDirectiveAttributeName);
 

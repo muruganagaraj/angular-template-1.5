@@ -4,6 +4,10 @@
 namespace shared.config {
     export class SharedConfig implements angular.IServiceProvider {
         private _config: ISharedConfig = {
+            checkboxWidgets: {
+                checkboxBuilder: null,
+                toggleBuilder: null
+            },
             dropdownWidgets: {
                 singleSelectBuilder: null,
                 multiSelectBuilder: null
@@ -38,6 +42,12 @@ namespace shared.config {
     sharedModule.provider('sharedConfig', SharedConfig);
 
     export interface ISharedConfig {
+        checkboxWidgets: {
+            //Function to build a regular checkbox DOM. If not specified, a HTML input[type=checkbox] element is used.
+            checkboxBuilder: (attrs: widgets.ICheckboxWidgetAttributes) => JQuery;
+            //Function to build a toggle checkbox DOM. If not specified, a HTML input[type=checkbox] element is used.
+            toggleBuilder: (attrs: widgets.ICheckboxWidgetAttributes) => JQuery;
+        };
         dropdownWidgets: {
             //Function to build a single select dropdown DOM. If not specified, a HTML select element is used.
             singleSelectBuilder: (attrs: widgets.IDropdownWidgetAttributes) => JQuery;

@@ -6,10 +6,10 @@ namespace shared.widgets {
     // const dropdownWidgetAttributeName: string = `${sharedComponentPrefix}-dropdown`;
 
     sharedModule.directive(dropdownWidgetName, ['sharedConfig', (sharedConfig: config.ISharedConfig) => {
-        //Stock function for building a dropdown. Uses the html select element.
+        //Stock function for building a dropdown. Uses the HTML select element.
         function buildStockDropdown(attrs: IDropdownWidgetAttributes, multiple: boolean): JQuery {
             let dropdown: JQuery = $('<select></select>')
-                .attr('ng-options', `x.${attrs.displayText} for x in ${attrs.items} track by x.${attrs.value}`);
+                .attr('ng-options', `x.${attrs.value} as x.${attrs.displayText} for x in ${attrs.items}`);
             if (multiple) {
                 dropdown.attr('multiple', '');
             }
