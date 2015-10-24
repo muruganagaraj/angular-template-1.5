@@ -14,7 +14,7 @@ namespace shared.widgets {
                 dropdown.attr('multiple', '');
             }
             return dropdown;
-        };
+        }
 
         let directive: angular.IDirective = {
             require: 'ngModel',
