@@ -45,7 +45,7 @@
     "simple-file-writer": "^2.0.0",
     "typescript": "^1.6.2",
     "wiredep": "^2.2.2",
-    "yargs": "^3.27.0"
+    "yargs": "^3.29.0"
   },
   "dependencies": {
     "compression": "^1.6.0",

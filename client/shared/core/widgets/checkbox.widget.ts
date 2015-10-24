@@ -9,15 +9,15 @@ namespace shared.widgets {
         function buildStockCheckbox(attrs: ICheckboxWidgetAttributes): JQuery {
             let checkbox: JQuery = $('<input></input>')
                 .attr('type', 'checkbox');
-                checkbox.addClass('checkbox')
+            checkbox.addClass('checkbox');
             if (Boolean(attrs.trueValue) && Boolean(attrs.falseValue)) {
                 checkbox.attr('ng-true-value', attrs.trueValue);
                 checkbox.attr('ng-false-value', attrs.falseValue);
             } else if (Boolean(attrs.trueValue) || Boolean(attrs.falseValue)) {
-                $log.warn(`Checkbox widget (${attrs['id'] || attrs['name'] || 'unknown'}) should specify both true-value and false-value attributes or none at all.`)
+                $log.warn(`Checkbox widget (${attrs['id'] || attrs['name'] || 'unknown'}) should specify both true-value and false-value attributes or none at all.`);
             }
             return checkbox;
-        };
+        }
 
         let directive: angular.IDirective =  {
             require: 'ngModel',
@@ -55,7 +55,7 @@ namespace shared.widgets {
             }
         };
         return directive;
-    }])
+    }]);
 
     export interface ICheckboxWidgetAttributes extends angular.IAttributes {
         ngModel: string;
