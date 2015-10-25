@@ -3,25 +3,37 @@
   "repo": "borisyankov/DefinitelyTyped",
   "ref": "master",
   "path": "typings",
-  "bundle": "typings/tsd.d.ts",
+  "bundle": "typings/lib.d.ts",
   "installed": {
-    "angularjs/angular.d.ts": {
-      "commit": "b04ad99e8b389bf377a2bd3ae582e7ecb553c09a"
-    },
     "jquery/jquery.d.ts": {
-      "commit": "b04ad99e8b389bf377a2bd3ae582e7ecb553c09a"
-    },
-    "angularjs/angular-route.d.ts": {
-      "commit": "be0b6b394f77a59e192ad7cfec18078706e44db5"
-    },
-    "angularjs/angular-sanitize.d.ts": {
-      "commit": "be0b6b394f77a59e192ad7cfec18078706e44db5"
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
     },
     "bootstrap/bootstrap.d.ts": {
-      "commit": "be0b6b394f77a59e192ad7cfec18078706e44db5"
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "angularjs/angular.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "angularjs/angular-animate.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "angularjs/angular-sanitize.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "angular-ui-bootstrap/angular-ui-bootstrap.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
     },
     "angular-ui-router/angular-ui-router.d.ts": {
-      "commit": "b04ad99e8b389bf377a2bd3ae582e7ecb553c09a"
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "ui-grid/ui-grid.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "moment/moment.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
+    },
+    "moment/moment-node.d.ts": {
+      "commit": "32029fcb4e1a3ef8968711b545d77b584435729d"
     }
   }
 }

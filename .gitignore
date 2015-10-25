@@ -1,13 +1,32 @@
-.dev
-.dist
-node_modules
-bower_components
-build
-public
-typings
+# IDE setting files
+.idea/
+.settings/
+.vs/
+.vscode/
 
-.idea
-*.iml
+# NPM and Bower
+bower_components/
+node_modules/
 
-client/app/**/*.js
-client/app/**/*.js.map
+# Build output
+.dist/
+client/.dev/
+
+# Generated files
+tslint.json
+client/index.html
+
+# JavaScript and map files, except in the assets folder
+client/**/*.js
+client/**/*.js.map
+!client/assets/**/*.js
+!client/assets/**/*.js.map
+
+# LESS files, except in the assets folder
+client/**/*.css
+!client/assets/**/*.css
+
+# Typescript definition files
+typings/app.d.ts
+typings/**/*.js
+typings/**/*.js.map
