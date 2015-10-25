@@ -35,10 +35,10 @@ namespace app.demo.popups {
         public onBingPopupClicked(): void {
             this.demoPopupService.showBingWindow();
         }
-        
+
         public email: string;
 
-        public onWindowPopupInputsClicked() {
+        public onWindowPopupInputsClicked(): void {
             this.demoPopupService.showFormsWindowWithInputs(this.email);
         }
     }

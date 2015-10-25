@@ -15,8 +15,8 @@ namespace app.demo.popups {
         public showBingWindow(): void {
             this.showWindow('http://bing.com');
         }
-        
-        public showFormsWindowWithInputs(email: string) {
+
+        public showFormsWindowWithInputs(email: string): void {
             this.showWindow(this.$state.href(forms.route), {
                 input: { email: email }
             });
