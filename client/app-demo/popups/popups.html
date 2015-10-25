@@ -19,10 +19,29 @@
     </div>
     <div class="panel-body">
         <p>You can use the popup service to open a browser window or tab to any web site.</p>
-        <p>Click on this button to launch the forms demo page in a separate window or tab</p>
         <p class="text-muted"><small>Note: Whether a window or tab is opened depends on the specific browser and how it is set.</small></p>
+        <p>Click on this button to launch the forms demo page in a separate window or tab</p>
         <div>
-            <button class="btn btn-default" ng-click="popups.onWindowPopupClicked()">Open New Window/Tab</button>
+            <button class="btn btn-default" ng-click="popups.onWindowPopupClicked()">Open forms page in new window</button>
         </div>
+        <p>Click on this button to launch the Bing homepage in a separate window or tab</p>
+        <div>
+            <button class="btn btn-default" ng-click="popups.onBingPopupClicked()">Open Bing homepage in new window</button>
+        </div>
+        <hr/>
+        <p>The framework also allows browser popups to accept inputs. This only applies to pages under the same domain.</p>
+        <p>In the popup window, the input value is available in the shell controller through a variable called <em>input</em>.</p>
+        <p>Enter an email address below and click on the button to open the popup and pass the email value to it.</p>
+        <form name="popupsForm" novalidate shared-form-init>
+            <div class="form-group">
+                <label for="email" class="control-label">Email address</label>
+                <div class="input-group">
+                    <input id="email" name="email" type="email" ng-model="popups.email" class="form-control" required/>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary" ng-click="popups.onWindowPopupInputsClicked()" ng-disabled="popupsForm.email.$invalid">Open New Window/Tab with Inputs</button>
+                    </span>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

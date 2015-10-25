@@ -8,7 +8,12 @@ namespace app.demo.forms {
         /* @ngInject */
         constructor($scope: IFormsControllerScope) {
             super($scope, null);
+            if (Boolean(this.layout.shell.input)) {
+                this.email = this.layout.shell.input['email'];
+            }
         }
+
+        public email: string;
 
         public selectData: TextPair[] = [
             { value: '001', text: 'First Item' },

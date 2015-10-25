@@ -31,6 +31,16 @@ namespace app.demo.popups {
         public onWindowPopupClicked(): void {
             this.demoPopupService.showFormsWindow();
         }
+
+        public onBingPopupClicked(): void {
+            this.demoPopupService.showBingWindow();
+        }
+        
+        public email: string;
+
+        public onWindowPopupInputsClicked() {
+            this.demoPopupService.showFormsWindowWithInputs(this.email);
+        }
     }
 
     export interface IPopupsControllerScope extends shared.bases.IPageControllerScope<layout.LayoutController> {
