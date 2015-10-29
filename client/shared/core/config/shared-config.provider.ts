@@ -17,7 +17,9 @@ namespace shared.config {
                 enableableElements: ['BUTTON']
             },
             forms: {
-                errorCondition: '{control-name}.$invalid'
+                changedCondition: null,
+                errorCondition: '{control-name}.$invalid',
+                validCondition: null
             },
             messaging: {
                 messagePrefix: 'msg-'
@@ -61,8 +63,12 @@ namespace shared.config {
             enableableElements: string[];
         };
         forms: {
+            //Condition under which a form input element is considered changed.
+            changedCondition: string;
             //Condition under which a form input element is considered invalid.
             errorCondition: string;
+            //Condition under which a form input element is considered valid.
+            validCondition: string;
         };
         messaging: {
             //Prefix for message keys stored in local storage.

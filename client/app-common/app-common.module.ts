@@ -17,10 +17,14 @@ namespace app.common {
 
     export const appCommonModule: angular.IModule = angular.module('app-common');
 
-    export function registerController(
-        controllerConstructor: Function,
-        route: IPageState,
-        ...secondaryRoutes: IPageState[]): angular.IModule {
+    export function registerController(controllerConstructor: Function, route: IPageState, ...secondaryRoutes: IPageState[]): angular.IModule {
         return registerControllers(controllerConstructor, route, secondaryRoutes, app.common.appCommonModule, 'appCommonConstants');
+    }
+
+    appCommonModule.constant('appCommonConstants', <IAppCommonConstants>{
+        templateUrlRoot: '/client/app-common/'
+    });
+
+    export interface IAppCommonConstants extends IConstants {
     }
 }
