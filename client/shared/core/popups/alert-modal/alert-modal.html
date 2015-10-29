@@ -1,0 +1,13 @@
+<div class="modal-header bg-{{modal.data.alertType}}">
+    <h4>{{modal.data.title}}</h4>
+</div>
+
+<div class="modal-body">
+    <div ng-repeat="message in modal.data.messages">
+    {{message}}
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-{{modal.data.alertType}}" ng-click="modal.ok()">{{modal.data.okTitle}}</button>
+</div>
