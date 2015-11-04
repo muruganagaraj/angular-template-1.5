@@ -21,7 +21,7 @@ namespace app.demo {
     export function registerController(controllerConstructor: Function, route: IPageState, ...secondaryRoutes: IPageState[]): angular.IModule {
         return registerControllers(controllerConstructor, route, secondaryRoutes, app.demo.appDemoModule, 'appDemoConstants');
     }
-    
+
     appDemoModule.constant('appDemoConstants', <IAppDemoConstants>{
         templateUrlRoot: '/client/app-demo/'
     });
