@@ -59,10 +59,6 @@ gulp.task('copy_shell_html_template', () =>
         .pipe(gulp.dest(config.folders.client))
 );
 
-//TODO:
-// gulp.task('inject_module_injects_in_shell', () =>
-// );
-
 gulp.task('inject_bower_scripts', () => {
     log('Wiring up Bower script dependencies.');
 
@@ -100,6 +96,10 @@ gulp.task('compile_styles', () => {
             .pipe($.less())
             .pipe(gulp.dest(config.folders.devBuildStyles))
     );
+    tasks.unshift(gulp.src(config.styles.lessToCompile)
+        .pipe($.plumber())
+        .pipe($.less())
+        .pipe(gulp.dest(config.folders.devBuildStyles)));
     return merge(tasks);
 });
 
@@ -108,8 +108,8 @@ gulp.task('create_globals', done => {
     let w = new Writer(`${config.folders.devBuildScripts}globals.js`);
     w.write(`var appComponentPrefix = '${config.globals.appComponentPrefix || 'app'}';`);
     w.write(`var sharedComponentPrefix = '${config.globals.sharedComponentPrefix || 'shared'}';`);
-    let appProfile = config.globals.appProfile ? `'${config.globals.appProfile}'` : 'null';
-    w.write(`var appProfile = ${appProfile};`);
+    let appProfiles = config.globals.appProfiles ? `'${config.globals.appProfile}'` : '[]';
+    w.write(`var appProfile = ${appProfiles};`);
     done();
 });
 
@@ -137,10 +137,11 @@ gulp.task('inject_custom_scripts', () => {
         starttag: '<!-- inject:config:js -->'
     };
 
-    let cssFiles = config.modules.reduce((result, mod) => result.concat(mod.cssToCopy), config.injections.css);
+    let cssFiles = config.modules.reduce((result, mod) => result.concat(mod.cssToCopy), config.styles.cssToInject);
     let cssSrc = gulp.src(cssFiles, {read: false});
 
-    let firstJsSrc = gulp.src(config.injections.firstJs);
+    let firstJsFiles = config.modules.reduce((result, mod) => result.concat(mod.firstInjectJs), []);
+    let firstJsSrc = gulp.src(firstJsFiles, {read: false});
 
     let injectTask = gulp.src(config.shell)
         .pipe($.inject(globalsSrc, globalsOptions))
@@ -152,10 +153,10 @@ gulp.task('inject_custom_scripts', () => {
     config.modules.forEach(mod => {
         jsSrc = gulp.src([].concat(
             mod.jsToInject,
-            config.exclude(config.injections.firstJs)
+            config.exclude(mod.firstInjectJs)
         ));
         jsOptions = {
-            starttag: '<!-- inject:' + mod.name + ':js -->'
+            starttag: `<!-- inject:${mod.name}:js -->`
         };
         injectTask = injectTask
             .pipe($.inject(jsSrc, jsOptions));

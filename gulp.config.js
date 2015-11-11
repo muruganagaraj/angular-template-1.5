@@ -5,156 +5,124 @@ module.exports = function () {
     const rootFolder = './';
 
     // Other root folders
-    const bowerFolder = rootFolder + 'bower_components/';
-    const clientFolder = rootFolder + 'client/';
-    const nodeModulesFolder = rootFolder + 'node_modules/';
-    const serverFolder = rootFolder + 'server/';
-    const toolsFolder = rootFolder + 'tools/';
-    const typingsFolder = rootFolder + 'typings/';
-    const webserverFolder = rootFolder + 'webserver/';
+    const bowerFolder = `${rootFolder}bower_components/`;
+    const clientFolder = `${rootFolder}client/`;
+    const nodeModulesFolder = `${rootFolder}node_modules/`;
+    const serverFolder = `${rootFolder}server/`;
+    const toolsFolder = `${rootFolder}tools/`;
+    const typingsFolder = `${rootFolder}typings/`;
+    const webserverFolder = `${rootFolder}webserver/`;
 
     // Client folders
-    const assetsFolder = clientFolder + 'assets/';
+    const assetsFolder = `${clientFolder}assets/`;
 
     // Output folders
-    const devBuildFolder = clientFolder + '.dev/';
-    const devBuildScriptsFolder = devBuildFolder + 'js/';
-    const devBuildStylesFolder = devBuildFolder + 'css/';
-    const distBuildFolder = rootFolder + '.dist/';
+    const devBuildFolder = `${clientFolder}.dev/`;
+    const devBuildScriptsFolder = `${devBuildFolder}js/`;
+    const devBuildStylesFolder = `${devBuildFolder}css/`;
+    const distBuildFolder = `${rootFolder}.dist/`;
 
     // Typescript definition files
     const appDefinitionFileName = 'app.d.ts';
     const appDefinitionFile = typingsFolder + appDefinitionFileName;
     const typescriptDefinitionFiles = [].concat(
-        typingsFolder + 'lib.d.ts',
+        `${typingsFolder}lib.d.ts`,
         appDefinitionFile
     );
 
     // Bower files
-    const bowerConfig = rootFolder + 'bower.json';
+    const bowerConfig = `${rootFolder}bower.json`;
     const wiredep = require('wiredep');
     const bowerJsFiles = wiredep({devDependencies: true})['js'];
 
-    const appFolder = `${clientFolder}app/`;
-    const appModule = {
-        //Name of the module
-        name: 'app',
-        //Base folder for the module
-        folder: appFolder,
+    function createModule(moduleName, options) {
+        function assignDefaults(name, opts) {
+            //Base source folder for the module
+            opts.folder = opts.folder || name;
 
-        //List of all Typescript files to compile. If not specified, defaults to all *.ts files
-        //under the module base folder.
-        tsToCompile: null,
-        jsToCopy: [],
-        jsOutputFolder: `${devBuildScriptsFolder}app/`,
-        jsToInject: [`${devBuildScriptsFolder}app/**/*.js`],
+            //List of all Typescript files to compile.
+            opts.tsToCompile = opts.tsToCompile || ['**/*.ts'];
+            //Additional JavaScript files to copy to the output folder.
+            opts.jsToCopy = opts.jsToCopy || [];
+            //Folder where the Typescript files are compiled to and the additional JavaScript files are copied to.
+            opts.jsOutputFolder = opts.jsOutputFolder || `${devBuildScriptsFolder}${name}/`;
+            //All the JavaScript files from the output folder to inject into the shell HTML, in the correct order.
+            opts.jsToInject = opts.jsToInject || ['**/*.js'];
+            //List of JavaScript files to inject before any other scripts.
+            opts.firstInjectJs = opts.firstInjectJs || [
+                `${name}.module.js`,
+                `config/*.config.js`
+            ],
 
-        lessToCompile: [
-            `${bowerFolder}font-awesome/less/font-awesome.less`,
-            `${assetsFolder}less/styles.less`
-        ],
-        lessToLint: [`${assetsFolder}less/styles.less`],
-        lessToWatch: [
-            `${assetsFolder}less/**/*.less`,
-            `${appFolder}styles/**/*.less`
-        ],
-        cssToCopy: [],
+            opts.lessToCompile = opts.lessToCompile || [];
+            opts.lessToLint = opts.lessToLint || [];
+            opts.lessToWatch = opts.lessToWatch || ['**/*.ts'];
+            opts.cssToCopy = opts.cssToCopy || [];
 
-        htmls: {
-            all: `${appFolder}**/*.html`,
-            root: '/client/app',
-            toCache: `${appFolder}**/*.html`
+            opts.htmls = opts.htmls || {
+                all: '**/*.html',
+                root: `/client/${name}`,
+                toCache: '**/*.html'
+            };
+
+            return opts;
         }
-    };
 
-    const appCommonFolder = clientFolder + 'app-common/';
-    const appCommonModule = {
-        name: 'app-common',
-        folder: appCommonFolder,
-
-        tsToCompile: [].concat(
-            appCommonFolder + '*.module.ts',
-            appCommonFolder + '**/*.ts'
-        ),
-        jsToCopy: [],
-        jsOutputFolder: devBuildScriptsFolder + 'app-common/',
-        jsToInject: [devBuildScriptsFolder + 'app-common/**/*.js'],
-
-        lessToCompile: [],
-        lessToLint: [],
-        lessToWatch: [],
-        cssToCopy: [],
-
-        htmls: {
-            all: appCommonFolder + '**/*.html',
-            root: '/client/app-common',
-            toCache: appCommonFolder + '**/*.html'
+        function prefixAll(list, prefix) {
+            return list.map((item, index, array) => prefix + item);
         }
-    };
 
-    const appDemoFolder = clientFolder + 'app-demo/';
-    const appDemoModule = {
-        name: 'app-demo',
-        folder: appDemoFolder,
+        function makeFolder(folder) {
+            return folder[folder.length - 1] === '/' ? folder : folder + '/';
+        }
 
-        tsToCompile: [].concat(
-            appDemoFolder + '*.module.ts',
-            appDemoFolder + '**/*.ts'
-        ),
-        jsToCopy: [],
-        jsOutputFolder: devBuildScriptsFolder + 'app-demo/',
+        function makeAbsolutePaths(name, opts) {
+            opts.folder = makeFolder(`${clientFolder}${opts.folder}`);
+
+            opts.tsToCompile = prefixAll(opts.tsToCompile, opts.folder);
+            //TODO: opts.jsToCopy
+            opts.jsOutputFolder = makeFolder(`${devBuildScriptsFolder}${opts.jsOutputFolder}`);
+            opts.jsToInject = prefixAll(opts.jsToInject, opts.jsOutputFolder);
+            opts.firstInjectJs = prefixAll(opts.firstInjectJs, opts.jsOutputFolder);
+
+            opts.lessToCompile = prefixAll(opts.lessToCompile, opts.folder);
+            opts.lessToLint = prefixAll(opts.lessToLint, opts.folder);
+            opts.lessToWatch = prefixAll(opts.lessToWatch, opts.folder);
+            //TODO: opts.cssToCopy
+
+            opts.htmls.all = `${opts.folder}${opts.htmls.all}`;
+            opts.htmls.toCache = `${opts.folder}${opts.htmls.toCache}`;
+
+            return opts;
+        }
+
+        options = options || {};
+        options.name = moduleName;
+        options = assignDefaults(moduleName, options);
+        options = makeAbsolutePaths(moduleName, options);
+        return options;
+    }
+
+    const appModule = createModule('app');
+
+    const appCommonModule = createModule('app-common');
+
+    const appDemoModule = createModule('app-demo', {
         jsToInject: [
-            devBuildScriptsFolder + 'app-demo/layouts/**/*.js',
-            devBuildScriptsFolder + 'app-demo/**/*.js'
+            'layouts/**/*.js',
+            '**/*.js'
         ],
+    });
 
-        lessToCompile: [],
-        lessToLint: [],
-        lessToWatch: [],
-        cssToCopy: [],
-
-        htmls: {
-            all: appDemoFolder + '**/*.html',
-            root: '/client/app-demo',
-            toCache: appDemoFolder + '**/*.html'
-        }
-    };
-
-    const sharedFolder = `${clientFolder}shared/core/`;
-    const sharedJsOutputFolder = `${devBuildScriptsFolder}shared/`;
-    const sharedModule = {
-        name: 'shared',
-        folder: sharedFolder,
-
-        tsToCompile: [].concat(
-            sharedFolder + '*.module.ts',
-            sharedFolder + 'globals/**/*.ts',
-            sharedFolder + 'bases/**/*.ts',
-            sharedFolder + '**/*.ts'
-        ),
-        jsToCopy: [],
-        jsOutputFolder: sharedJsOutputFolder,
+    const sharedModule = createModule('shared', {
+        folder: 'shared/core',
         jsToInject: [
-            sharedJsOutputFolder + 'extensions/**/*.js',
-            sharedJsOutputFolder + 'base-state.js',
-            sharedJsOutputFolder + '*.js',
-            sharedJsOutputFolder + '**/*.js'
+            'extensions/**/*.js',
+            'base-state.js',
+            '*.js',
+            '**/*.js'
         ],
-
-        lessToCompile: [],
-        lessToLint: [],
-
-        lessToWatch: [
-            sharedFolder + '**/*.less'
-        ],
-        cssToCopy: [],
-
-        htmls: {
-            all: sharedFolder + '**/*.html',
-            root: '/client/shared/core',
-            toCache: sharedFolder + '**/*.html'
-        }
-    };
+    });
 
     const modules = [sharedModule, appCommonModule, appDemoModule, appModule];
 
@@ -190,51 +158,45 @@ module.exports = function () {
             distBuild: distBuildFolder,
         },
 
-
-        files: {
-
-        },
-
         //Path to the shell file.
-        shell: clientFolder + 'index.html',
+        shell: `${clientFolder}index.html`,
 
-        //Special injections into the shell file that are independent of modules.
-        injections: {
-            //All CSS to be injected in the correct order.
-            //This includes compiled LESS, CSS from bower_components and 3rd-party CSS from the assets folder.
-            css: [
-                devBuildStylesFolder + 'styles.css',
-                devBuildStylesFolder + '**/*.css'
+        styles: {
+            lessToCompile: [
+                `${bowerFolder}font-awesome/less/font-awesome.less`,
+                `${assetsFolder}less/styles.less`
             ],
-
-            //Application script files that must be injected before all other scripts (except bower scripts).
-            //Typically, these include module registrations and configurations.
-            //Note: Do not include the environment config file that is generated from config.json.
-            //      This is handled separately.
-            //Note: Order is important here. Typically modules come first, followed by config.
-            firstJs: [].concat(
-                modules.reduce((files, mod) => {
-                    files.unshift(`${devBuildScriptsFolder}${mod.name}/config/*.js`);
-                    files.unshift(`${devBuildScriptsFolder}${mod.name}/${mod.name}.module.js`);
-                    return files;
-                }, [])
-            ),
+            lessToLint: [`${assetsFolder}less/styles.less`],
+            lessToWatch: [`${assetsFolder}less/**/*.less`],
+            cssToCopy: [],
+            cssToInject: [
+                `${devBuildStylesFolder}styles.css`,
+                `${devBuildStylesFolder}**/*.css`
+            ]
         },
 
+        //Global variables
         globals: {
+            //File where the global variables are outputted
             file: `${devBuildScriptsFolder}globals.js`,
+
+            //Prefix for all app components
             appComponentPrefix: 'app',
+
+            //Prefix for all shared components
             sharedComponentPrefix: 'shared',
-            appPrefix: undefined
+
+            //Profiles to control the behaviour of the applications
+            appProfiles: []
         },
 
         //Environment-specific config handling
         config: {
             //Path to the environment-specific config data.
-            src: clientFolder + 'config.json',
+            src: `${clientFolder}config.json`,
 
             //Path to generated script file for the config.
-            defaultOutput: devBuildScriptsFolder + 'config.js',
+            defaultOutput: `${devBuildScriptsFolder}config.js`,
 
             //Environment-specific config is generated as an AngularJS constants service.
             //<moduleName> specifies the name of the module under which to create the service.
@@ -249,7 +211,7 @@ module.exports = function () {
             generateEnvs: ['dev', 'qa', 'uat', 'prod'],
 
             //Path to the additional config files.
-            generatedFiles: devBuildScriptsFolder + 'config*.js'
+            generatedFiles: `${devBuildScriptsFolder}config*.js`
         },
 
         //Typescript definition file config
@@ -262,7 +224,7 @@ module.exports = function () {
 
             //Empty template of the definition file for application files.
             //Contains only the necessary placeholders for the injector.
-            appTemplate: typingsFolder + 'app.d.ts.template',
+            appTemplate: `${typingsFolder}app.d.ts.template`,
 
             //List of all definition files (application, bower, etc.)
             all: typescriptDefinitionFiles
@@ -271,14 +233,14 @@ module.exports = function () {
         tslint: [
             {
                 description: 'Application script files',
-                config: toolsFolder + 'tslint/tslint-app.json',
+                config: `${toolsFolder}tslint/tslint-app.json`,
                 files: modules
                     .filter(mod => mod.name.substr(0, 'app'.length) === 'app')
                     .reduce((files, mod) => files.concat(mod.tsToCompile || `${mod.folder}**/*.ts`), [])
             },
             {
                 description: 'Shared module script files',
-                config: toolsFolder + 'tslint/tslint-shared.json',
+                config: `${toolsFolder}tslint/tslint-shared.json`,
                 files: modules
                     .filter(mod => mod.name.substr(0, 'shared'.length) === 'shared')
                     .reduce((files, mod) => files.concat(mod.tsToCompile), [])
@@ -314,7 +276,7 @@ module.exports = function () {
 
         // Configuration for the Node.js server
         server: {
-            entryPoint: serverFolder + 'server.js',
+            entryPoint: `${serverFolder}server.js`,
             watch: serverFolder,
             nodeHostPort: 7709,
             customHostPort: 7710
@@ -328,23 +290,23 @@ module.exports = function () {
     // If areImages is true, then the images are optimized during a DIST build.
     config.getStyleAssets = (cssFolder, cssParentFolder) => [
         {
-            src: bowerFolder + 'bootstrap/dist/fonts/**/*.*',
-            dest: cssParentFolder + 'fonts/',
+            src: `${bowerFolder}bootstrap/dist/fonts/**/*.*`,
+            dest: `${cssParentFolder}fonts/`,
             areImages: false
         },
         {
-            src: bowerFolder + 'font-awesome/fonts/**/*.*',
-            dest: cssParentFolder + 'fonts/',
+            src: `${bowerFolder}font-awesome/fonts/**/*.*`,
+            dest: `${cssParentFolder}fonts/`,
             areImages: false
         },
         {
-            src: assetsFolder + 'images/**/*.*',
-            dest: cssParentFolder + 'images/',
+            src: `${assetsFolder}images/**/*.*`,
+            dest: `${cssParentFolder}images/`,
             areImages: true
         },
         {
-            src: config.folders.assets + 'fonts/*',
-            dest: cssParentFolder + 'fonts/',
+            src: `${assetsFolder}fonts/*`,
+            dest: `${cssParentFolder}fonts/`,
             areImages: false
         }
     ];
