@@ -1,3 +1,9 @@
+String.prototype['allCapsToCamelCase'] = function(): string {
+    return this.toLowerCase().replace(/_\w/g, (match: string) =>
+        match[1].toUpperCase()
+    );
+};
+
 String.prototype['endsWith'] = function(str: string): boolean {
     if (!str) {
         return true;
@@ -35,6 +41,7 @@ String.prototype['startsWith'] = function(str: string): boolean {
 };
 
 interface String {
+    allCapsToCamelCase(): string;
     endsWith(str: string): boolean;
     padLeft(width: number, padChar: string): string;
     padRight(width: number, padChar: string): string;
