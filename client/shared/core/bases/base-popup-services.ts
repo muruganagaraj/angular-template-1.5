@@ -18,7 +18,7 @@ namespace shared.bases {
             this.sharedConfig = injector.get<config.ISharedConfig>('sharedConfig');
         }
 
-        protected showWindow(url: string, options?: IWindowPopupOptions): void {
+        protected showWindow(url: string, options?: IWindowPopupOptions): Window {
             //TODO: Try using state instead of URL to navigate. Or provide an overload.
             options = options || {};
             let height: number = options.height || this.sharedConfig.popups.windowDefaults.height || 400;
@@ -40,7 +40,7 @@ namespace shared.bases {
             if (Boolean(windowId)) {
                 this.storageService.setLocal(windowInputKey(windowId), options.input);
             }
-            this.$window.open(url, target, specs);
+            return this.$window.open(url, target, specs);
         }
 
         private getUniqueWindowId(): string {
