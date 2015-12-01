@@ -7,6 +7,7 @@ namespace shared.bases {
     export abstract class BasePopupService {
         private $modal: angular.ui.bootstrap.IModalService;
         private $window: angular.IWindowService;
+        private $state: angular.ui.IStateService;
         private storageService: services.StorageService;
         protected sharedConfig: config.ISharedConfig;
 
@@ -14,13 +15,21 @@ namespace shared.bases {
             let injector: angular.auto.IInjectorService = angular.injector(['ng', 'ui.bootstrap', 'shared']);
             this.$modal = injector.get<angular.ui.bootstrap.IModalService>('$modal');
             this.$window = injector.get<angular.IWindowService>('$window');
+            // this.$state = injector.get<angular.ui.IStateService>('$state');
             this.storageService = injector.get<services.StorageService>('storageService');
             this.sharedConfig = injector.get<config.ISharedConfig>('sharedConfig');
         }
 
-        protected showWindow(url: string, options?: IWindowPopupOptions): Window {
-            //TODO: Try using state instead of URL to navigate. Or provide an overload.
+        protected showWindow(url: string | IPageState, options?: IWindowPopupOptions): Window {
             options = options || {};
+
+            let resolvedUrl: string;
+            if (typeof url === 'string') {
+                resolvedUrl = url;
+            } else {
+                // resolvedUrl = this.$state.href(url, options.stateParams);
+            }
+
             let height: number = options.height || this.sharedConfig.popups.windowDefaults.height || 400;
             let width: number = options.width || this.sharedConfig.popups.windowDefaults.width || 500;
             let specs: string = `width=${width},height=${height}`;
@@ -32,7 +41,7 @@ namespace shared.bases {
                 }
                 options.queryParams.__u = windowId;
             }
-            url += this.buildQueryParams(options.queryParams);
+            resolvedUrl += this.buildQueryParams(options.queryParams);
             if (options.scrollbars === undefined || options.scrollbars) {
                 specs += `,scrollbars=1`;
             }
@@ -40,7 +49,7 @@ namespace shared.bases {
             if (Boolean(windowId)) {
                 this.storageService.setLocal(windowInputKey(windowId), options.input);
             }
-            return this.$window.open(url, target, specs);
+            return this.$window.open(resolvedUrl, target, specs);
         }
 
         private getUniqueWindowId(): string {
@@ -95,5 +104,6 @@ namespace shared.bases {
         input?: any;
         target?: string;
         scrollbars?: boolean;
+        stateParams?: {};
     }
 }

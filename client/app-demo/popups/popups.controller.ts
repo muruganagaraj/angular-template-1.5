@@ -21,7 +21,7 @@ namespace app.demo.popups {
         }
 
         public onWarningAlertClicked(): void {
-            this.popupService.showWarning(`This is awarning alert.`, 'Warning Alert');
+            this.popupService.showWarning(`This is a warning alert.`, 'Warning Alert');
         }
 
         public onErrorAlertClicked(): void {

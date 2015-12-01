@@ -209,7 +209,7 @@ gulp.task('build-dist', done => {
         done);
 });
 
-gulp.task('clean_dist', done => {
+gulp.task('clean_dist', ['clean_dev'], done => {
     clean(config.folders.distBuild, done);
 });
 

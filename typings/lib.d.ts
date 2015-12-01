@@ -8,3 +8,4 @@
 /// <reference path="angular-ui-router/angular-ui-router.d.ts" />
 /// <reference path="moment/moment-node.d.ts" />
 /// <reference path="moment/moment.d.ts" />
+/// <reference path="ui-grid/ui-grid.d.ts" />

@@ -3,13 +3,12 @@
 
 namespace app.demo.popups {
     export class DemoPopupService extends shared.bases.BasePopupService {
-        /* @ngInject */
-        constructor(private $state: angular.ui.IStateService) {
+        constructor() {
             super();
         }
 
         public showFormsWindow(): void {
-            this.showWindow(this.$state.href(forms.route));
+            this.showWindow(forms.route);
         }
 
         public showBingWindow(): void {
@@ -17,7 +16,7 @@ namespace app.demo.popups {
         }
 
         public showFormsWindowWithInputs(email: string): void {
-            this.showWindow(this.$state.href(forms.route), {
+            this.showWindow(forms.route, {
                 input: { email: email }
             });
         }
