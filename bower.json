@@ -26,6 +26,7 @@
     "bootstrap": "~3.3.6",
     "font-awesome": "~4.5.0",
     "jquery": "~2.1.4",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "angular-ui-grid": "~3.0.7"
   }
 }

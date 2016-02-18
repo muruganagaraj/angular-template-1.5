@@ -35,78 +35,8 @@ module.exports = function () {
     const wiredep = require('wiredep');
     const bowerJsFiles = wiredep({devDependencies: true})['js'];
 
-    function createModule(moduleName, options) {
-        function assignDefaults(name, opts) {
-            //Base source folder for the module
-            opts.folder = opts.folder || name;
-
-            //List of all Typescript files to compile.
-            opts.tsToCompile = opts.tsToCompile || ['**/*.ts'];
-            //Additional JavaScript files to copy to the output folder.
-            opts.jsToCopy = opts.jsToCopy || [];
-            //Folder where the Typescript files are compiled to and the additional JavaScript files are copied to.
-            opts.jsOutputFolder = opts.jsOutputFolder || `${devBuildScriptsFolder}${name}/`;
-            //All the JavaScript files from the output folder to inject into the shell HTML, in the correct order.
-            opts.jsToInject = opts.jsToInject || ['**/*.js'];
-            //List of JavaScript files to inject before any other scripts.
-            opts.firstInjectJs = opts.firstInjectJs || [
-                `${name}.module.js`,
-                `config/*.config.js`
-            ],
-
-            opts.lessToCompile = opts.lessToCompile || [];
-            opts.lessToLint = opts.lessToLint || [];
-            opts.lessToWatch = opts.lessToWatch || ['**/*.ts'];
-            opts.cssToCopy = opts.cssToCopy || [];
-
-            opts.htmls = opts.htmls || {
-                all: '**/*.html',
-                root: `/client/${name}`,
-                toCache: '**/*.html'
-            };
-
-            return opts;
-        }
-
-        function prefixAll(list, prefix) {
-            return list.map((item, index, array) => prefix + item);
-        }
-
-        function makeFolder(folder) {
-            return folder[folder.length - 1] === '/' ? folder : folder + '/';
-        }
-
-        function makeAbsolutePaths(name, opts) {
-            opts.folder = makeFolder(`${clientFolder}${opts.folder}`);
-
-            opts.tsToCompile = prefixAll(opts.tsToCompile, opts.folder);
-            //TODO: opts.jsToCopy
-            opts.jsOutputFolder = makeFolder(`${devBuildScriptsFolder}${opts.jsOutputFolder}`);
-            opts.jsToInject = prefixAll(opts.jsToInject, opts.jsOutputFolder);
-            opts.firstInjectJs = prefixAll(opts.firstInjectJs, opts.jsOutputFolder);
-
-            opts.lessToCompile = prefixAll(opts.lessToCompile, opts.folder);
-            opts.lessToLint = prefixAll(opts.lessToLint, opts.folder);
-            opts.lessToWatch = prefixAll(opts.lessToWatch, opts.folder);
-            //TODO: opts.cssToCopy
-
-            opts.htmls.all = `${opts.folder}${opts.htmls.all}`;
-            opts.htmls.toCache = `${opts.folder}${opts.htmls.toCache}`;
-
-            return opts;
-        }
-
-        options = options || {};
-        options.name = moduleName;
-        options = assignDefaults(moduleName, options);
-        options = makeAbsolutePaths(moduleName, options);
-        return options;
-    }
-
     const appModule = createModule('app');
-
     const appCommonModule = createModule('app-common');
-
     const appDemoModule = createModule('app-demo', {
         jsToInject: [
             'layouts/**/*.js',
@@ -337,6 +267,77 @@ module.exports = function () {
 
     config.exclude = exclude;
     config.excludeSpecs = excludeSpecs;
+
+    //Creates a module object with defaults for missing values.
+    function createModule(moduleName, options) {
+        function assignDefaults(name, opts) {
+            //Base source folder for the module
+            opts.folder = opts.folder || name;
+
+            //List of all Typescript files to compile.
+            opts.tsToCompile = opts.tsToCompile || ['**/*.ts'];
+            //Additional JavaScript files to copy to the output folder.
+            opts.jsToCopy = opts.jsToCopy || [];
+            //Folder where the Typescript files are compiled to and the additional JavaScript files are copied to.
+            opts.jsOutputFolder = opts.jsOutputFolder || `${devBuildScriptsFolder}${name}/`;
+            //All the JavaScript files from the output folder to inject into the shell HTML, in the correct order.
+            opts.jsToInject = opts.jsToInject || ['**/*.js'];
+            //List of JavaScript files to inject before any other scripts.
+            opts.firstInjectJs = opts.firstInjectJs || [
+                `${name}.module.js`,
+                `config/*.config.js`
+            ],
+
+            opts.lessToCompile = opts.lessToCompile || [];
+            opts.lessToLint = opts.lessToLint || [];
+            opts.lessToWatch = opts.lessToWatch || ['**/*.ts'];
+            opts.cssToCopy = opts.cssToCopy || [];
+
+            opts.htmls = opts.htmls || {
+                all: '**/*.html',
+                root: `/client/${name}`,
+                toCache: '**/*.html'
+            };
+
+            return opts;
+        }
+
+        //Prefixes all string items in an array with the specified prefix.
+        function prefixAll(list, prefix) {
+            return list.map((item, index, array) => prefix + item);
+        }
+
+        //Makes a path a folder path by ensuring it has a trailing slash.
+        function makeFolder(folder) {
+            return folder[folder.length - 1] === '/' ? folder : folder + '/';
+        }
+
+        function makeAbsolutePaths(name, opts) {
+            opts.folder = makeFolder(`${clientFolder}${opts.folder}`);
+
+            opts.tsToCompile = prefixAll(opts.tsToCompile, opts.folder);
+            //TODO: opts.jsToCopy
+            opts.jsOutputFolder = makeFolder(`${devBuildScriptsFolder}${opts.jsOutputFolder}`);
+            opts.jsToInject = prefixAll(opts.jsToInject, opts.jsOutputFolder);
+            opts.firstInjectJs = prefixAll(opts.firstInjectJs, opts.jsOutputFolder);
+
+            opts.lessToCompile = prefixAll(opts.lessToCompile, opts.folder);
+            opts.lessToLint = prefixAll(opts.lessToLint, opts.folder);
+            opts.lessToWatch = prefixAll(opts.lessToWatch, opts.folder);
+            //TODO: opts.cssToCopy
+
+            opts.htmls.all = `${opts.folder}${opts.htmls.all}`;
+            opts.htmls.toCache = `${opts.folder}${opts.htmls.toCache}`;
+
+            return opts;
+        }
+
+        options = options || {};
+        options.name = moduleName;
+        options = assignDefaults(moduleName, options);
+        options = makeAbsolutePaths(moduleName, options);
+        return options;
+    }
 
     return config;
 };

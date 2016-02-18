@@ -7,13 +7,13 @@ namespace shared.bases {
     export abstract class BasePopupService {
         private $modal: angular.ui.bootstrap.IModalService;
         private $window: angular.IWindowService;
-        private $state: angular.ui.IStateService;
+        // private $state: angular.ui.IStateService;
         private storageService: services.StorageService;
         protected sharedConfig: config.ISharedConfig;
 
-        constructor() {
+        constructor(private $state: angular.ui.IStateService) {
             let injector: angular.auto.IInjectorService = angular.injector(['ng', 'ui.bootstrap', 'shared']);
-            this.$modal = injector.get<angular.ui.bootstrap.IModalService>('$modal');
+            this.$modal = injector.get<angular.ui.bootstrap.IModalService>('$uibModal');
             this.$window = injector.get<angular.IWindowService>('$window');
             // this.$state = injector.get<angular.ui.IStateService>('$state');
             this.storageService = injector.get<services.StorageService>('storageService');
@@ -27,7 +27,7 @@ namespace shared.bases {
             if (typeof url === 'string') {
                 resolvedUrl = url;
             } else {
-                // resolvedUrl = this.$state.href(url, options.stateParams);
+                resolvedUrl = this.$state.href(url, options.stateParams);
             }
 
             let height: number = options.height || this.sharedConfig.popups.windowDefaults.height || 400;

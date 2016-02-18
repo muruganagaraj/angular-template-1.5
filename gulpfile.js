@@ -278,7 +278,7 @@ gulp.task('copy_to_dist', () => {
 gulp.task('optimize_build', () => {
     log('Performing optimization for dist - bundling, minification and cache busting.');
 
-    let assets = $.useref.assets({searchPath: './'});
+    let assets = $.useref({searchPath: './'});
 
     let cssFilter = $.filter('**/*.css', {restore: true});
     let jsLibFilter = $.filter('**/lib.js', {restore: true});

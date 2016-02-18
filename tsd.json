@@ -6,13 +6,13 @@
   "bundle": "typings/lib.d.ts",
   "installed": {
     "jquery/jquery.d.ts": {
-      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
+      "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
     },
     "bootstrap/bootstrap.d.ts": {
       "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
     },
     "angularjs/angular.d.ts": {
-      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
+      "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
     },
     "angularjs/angular-animate.d.ts": {
       "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
@@ -27,7 +27,7 @@
       "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
     },
     "ui-grid/ui-grid.d.ts": {
-      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
+      "commit": "e850b6ac0d59fee86dd7cb6a1be2caf6400bde14"
     },
     "moment/moment.d.ts": {
       "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"

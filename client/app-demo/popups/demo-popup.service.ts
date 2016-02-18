@@ -3,8 +3,9 @@
 
 namespace app.demo.popups {
     export class DemoPopupService extends shared.bases.BasePopupService {
-        constructor() {
-            super();
+        /* @ngInject */
+        constructor($state: angular.ui.IStateService) {
+            super($state);
         }
 
         public showFormsWindow(): void {

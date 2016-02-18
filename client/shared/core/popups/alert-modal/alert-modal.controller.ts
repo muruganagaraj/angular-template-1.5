@@ -4,9 +4,9 @@
 namespace shared.popups.alertModal {
     export class AlertModalController extends bases.BaseModalPopupController<IAlertModalData, boolean> {
         /* @ngInject */
-        constructor($modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+        constructor($uibModalInstance: angular.ui.bootstrap.IModalServiceInstance,
                     data: IAlertModalData) {
-            super($modalInstance, data);
+            super($uibModalInstance, data);
         }
 
         protected getSuccessResult(): boolean {

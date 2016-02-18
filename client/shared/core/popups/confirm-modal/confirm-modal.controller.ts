@@ -4,9 +4,9 @@
 namespace shared.popups.confirmModal {
     export class ConfirmModalController extends bases.BaseModalPopupController<IConfirmModalData, boolean> {
         /* @ngInject */
-        constructor($modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+        constructor($uibModalInstance: angular.ui.bootstrap.IModalServiceInstance,
                     data: IConfirmModalData) {
-            super($modalInstance, data);
+            super($uibModalInstance, data);
         }
 
         protected getSuccessResult(): boolean {

@@ -3,21 +3,21 @@
 
 namespace shared.bases {
     export abstract class BaseModalPopupController<TModalData extends IHtmlPopupData, TSuccess> {
-        constructor(public $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+        constructor(public $uibModalInstance: angular.ui.bootstrap.IModalServiceInstance,
                     public data: TModalData) {
         }
 
         public ok(): void {
             let result: TSuccess = this.getSuccessResult();
             if (result) {
-                this.$modalInstance.close(result);
+                this.$uibModalInstance.close(result);
             } else {
-                this.$modalInstance.close();
+                this.$uibModalInstance.close();
             }
         }
 
         public cancel(): void {
-            this.$modalInstance.dismiss();
+            this.$uibModalInstance.dismiss();
         }
 
         protected getSuccessResult(): TSuccess {
